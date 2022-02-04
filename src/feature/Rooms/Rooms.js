@@ -1,14 +1,13 @@
 import React from "react";
-import MainHeader from "../Rooms/MainHeader";
 import ChatRoomList from "../Rooms/ChatRoomList";
-
+import Header from "../../common/components/Header";
 import styled from "styled-components";
 import Room from "../Rooms/Room";
 
 const Rooms = () => {
   return (
     <Entry>
-      <MainHeader />
+      <Header />
       <MainBody>
         <button>🔙</button>
         <ChatRoomList />
@@ -22,7 +21,7 @@ const Rooms = () => {
 const Entry = styled.main`
   width: 100vw;
   height: 100vh;
-  // padding: 5% 0;
+  padding: 5% 0;
   background-color: #f6f8f9;
 `;
 
