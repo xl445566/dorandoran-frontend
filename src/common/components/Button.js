@@ -13,10 +13,26 @@ const Button = ({ text, type, size, color, img }) => {
           {text}
         </Logout>
       )}
-      {}
+      {type === "direction" && <Direction type={type} img={img}></Direction>}
     </>
   );
 };
+
+const Direction = styled.button`
+  width: 50px;
+  height: 50px;
+  background: url("./assets/nextButton.png") no-repeat 50% 50%;
+
+  ${({ img }) => {
+    return img === "prev"
+      ? `
+      width: 50px;
+      height: 50px;
+      background: url('./assets/${img}Button.png') no-repeat 50% 50%;
+      `
+      : null;
+  }};
+`;
 
 const Small = styled.button`
   width: 85px;

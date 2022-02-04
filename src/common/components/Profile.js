@@ -2,47 +2,35 @@ import React from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 
-const Profile = ({ img, name }) => {
+const Profile = ({ type, text }) => {
+  console.log(type);
   return (
     <>
-      {img === "women" && (
-        <ProfileContent img={img}>
-          <div>{name}</div>
-        </ProfileContent>
-      )}
+      <ProfileContent>
+        <img src={type} />
+        <div>{text}</div>
+      </ProfileContent>
     </>
   );
 };
 
 const ProfileContent = styled.div`
-  width: 1px;
-  height: 1px;
-  border-radius: 50%;
-  background: red url("./assets/women.png") no-repeat 0% 45% 100% 100%;
-
   div {
-    width: 200px;
-    height: 20px;
-    color: red;
-    background: grey;
+    width: 100%;
+    padding: 10px 0;
+    border-radius: 20px;
+    background-color: var(--black-color);
+    color: var(--white-color);
+    font-size: 20px;
+    text-align: center;
+    opacity: 0.6;
   }
-
-  ${({ img }) => {
-    return img
-      ? `
-      background: red url('./assets/women.png');
-      background-position:center;
-      background-size:cover;
-      background-repeat:no-repeat;
-
-      `
-      : null;
-  }}
 `;
 
 Profile.propTypes = {
-  img: PropTypes.string,
-  name: PropTypes.string,
+  type: PropTypes.string,
+  gender: PropTypes.string,
+  text: PropTypes.string,
 };
 
 export default Profile;
