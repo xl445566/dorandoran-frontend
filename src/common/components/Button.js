@@ -2,54 +2,118 @@ import React from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 
-const Button = ({ text, size, login }) => {
+const Button = ({ text, type, size, color, img }) => {
   return (
     <>
-      {size === "small" && <Small>{text}</Small>}
-      {size === "medium" && <Medium>{text}</Medium>}
-      {size === "large" && <Large login={login}>{text}</Large>}
+      {size === "small" && <Small type={type}>{text}</Small>}
+      {size === "medium" && <Medium type={type}>{text}</Medium>}
+      {size === "large" && <Large type={type}>{text}</Large>}
+      {type === "logout" && (
+        <Logout color={color} img={img}>
+          {text}
+        </Logout>
+      )}
+      {}
     </>
   );
 };
 
 const Small = styled.button`
-  width: 80px;
-  background-color: var(--dark-orange-color);
-  font-size: 16px;
-`;
-
-const Medium = styled.button`
-  width: 125px;
+  width: 85px;
   border-radius: 20px;
   background-color: var(--dark-orange-color);
   color: var(--white-color);
   font-size: 18px;
+
+  ${({ type }) => {
+    return type === "refresh"
+      ? `
+      border-radius: 0;
+      border-bottom: 2px solid var(--black-color);
+      background: url('./assets/refresh.png') no-repeat 0% 45%;
+      color: var(--black-color);
+      font-weight: bold;
+      text-align: right;
+      `
+      : null;
+  }};
 `;
 
-const Large = styled.button`
-  width: 150px;
-  border-radius: 24px;
+const Medium = styled.button`
+  width: 120px;
+  border-radius: 20px;
   background-color: var(--dark-orange-color);
   color: var(--white-color);
-  font-size: 20px;
+  font-size: 18px;
+  font-weight: bold;
+  &:hover {
+    border: 2px solid var(--scarlet-color);
+    background-color: var(--white-color);
+    color: var(--dark-orange-color);
+  }
 
-  ${({ login }) => {
-    return login ? `color: red` : null;
+  ${({ type }) => {
+    return type === "cancel"
+      ? `
+      border 2px solid var(--scarlet-color);
+      background: none;
+      color: var(--scarlet-color);
+      &:hover {
+        background-color: var(--dark-orange-color);
+        color: var(--white-color);
+      }
+      `
+      : null;
   }}
 `;
 
-// const Logout = styled.button`
-//   border-bottom: 2px solid var(--black-color);
-//   color: var(--black-color);
-//   font-size: 20px;
-//   font-weight: bold;
-// `;
+const Large = styled.button`
+  width: 160px;
+  border-radius: 20px;
+  background-color: var(--dark-orange-color);
+  color: var(--white-color);
+  font-size: 24px;
+  font-weight: bold;
+
+  &:hover {
+    border: 2px solid var(--scarlet-color);
+    background-color: var(--white-color);
+    color: var(--dark-orange-color);
+  }
+
+  ${({ type }) => {
+    return type === "color"
+      ? `
+    background-color: var(--white-color);
+    color: var(--scarlet-color);
+    `
+      : null;
+  }}
+`;
+
+const Logout = styled.button`
+  ${({ color, img }) => {
+    return color
+      ? `
+    width: 95px;
+    border-radius: 0;
+    border-bottom: 2px solid ${color};
+    background: url(${img}) no-repeat 0% 45%;
+    color: ${color};
+    font-size: 20px;
+    font-weight: bold;
+    text-align: right;
+    `
+      : null;
+  }}
+`;
 
 Button.propTypes = {
   text: PropTypes.string,
+  type: PropTypes.string,
   size: PropTypes.string,
+  color: PropTypes.string,
   img: PropTypes.string,
-  login: PropTypes.string,
 };
 
 export default Button;

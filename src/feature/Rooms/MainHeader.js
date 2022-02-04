@@ -6,11 +6,19 @@ const MainHeader = () => {
   return (
     <HeaderContainer>
       <Button text="방 만들기" size="medium" />
+      <Button text="방 만들기" size="medium" type="cancel" />
       <RoomInfo>
-        <Button text="새로고침" size="small" />
+        <Button text="새로고침" size="small" type="refresh" />
+        <Button text="셀렉토" size="small" />
         <h1>강남구 대치노인정</h1>
       </RoomInfo>
-      <Button text="로그아웃" size="large" login={true} />
+      <Button text="셀렉토큰사이" size="large" />
+      <Button
+        type="logout"
+        text="로그아웃"
+        color="black"
+        img="./assets/logout.png"
+      />
     </HeaderContainer>
   );
 };
