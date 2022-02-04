@@ -24,7 +24,9 @@ const GlobalStyle = createGlobalStyle`
     font-family: 'Noto Sans', sans-serif;
   }
 
-  html, body {
+  html,
+  body,
+  #root {
     width: 100%;
     height: 100%;
   }
