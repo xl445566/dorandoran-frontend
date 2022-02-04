@@ -6,13 +6,13 @@ const Header = () => {
   return (
     <HeaderContainer>
       <Button text="방 만들기" size="medium" />
-      <Button text="방 만들기" size="medium" type="cancel" />
+      {/* <Button text="방 만들기" size="medium" type="cancel" /> */}
       <RoomInfo>
-        {/* {/* <Button text="새로고침" size="small" type="refresh" /> */}
-        <Button text="셀렉토" size="small" />
-        <h1>강남구 대치노인정</h1>
+        <Button text="새로고침" size="small" type="refresh" />
+        {/* <Button text="셀렉토" size="small" /> */}
+        <Title>강남구 대치경로당</Title>
       </RoomInfo>
-      <Button text="셀렉토사이즈" size="large" />
+      {/* <Button text="라지사이즈" size="large" /> */}
       <Button
         type="logout"
         text="로그아웃"
@@ -27,6 +27,10 @@ const HeaderContainer = styled.header`
   display: flex;
   justify-content: space-around;
   padding: 30px 0;
+`;
+
+const Title = styled.h1`
+  border-bottom: 3px solid var(--scarlet-color);
 `;
 
 const RoomInfo = styled.div`

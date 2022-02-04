@@ -3,16 +3,21 @@ import ChatRoomList from "../Rooms/ChatRoomList";
 import Header from "../../common/components/Header";
 import styled from "styled-components";
 import Room from "../Rooms/Room";
-import Button from "../../common/components/Button";
+
+import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 
 const Rooms = () => {
   return (
     <Entry>
       <Header />
       <MainBody>
-        <Button type="direction" img="prev" />
+        <button>
+          <FaChevronLeft size="60" className="icons" />
+        </button>
         <ChatRoomList />
-        <Button type="direction" img="next" />
+        <button>
+          <FaChevronRight size="60" className="icons" />
+        </button>
       </MainBody>
       <Room />
     </Entry>
@@ -31,6 +36,10 @@ const MainBody = styled.section`
   justify-content: space-around;
   width: 100%;
   align-items: center;
+
+  .icons {
+    color: var(--black-color);
+  }
 `;
 
 export default Rooms;

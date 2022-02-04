@@ -3,7 +3,6 @@ import styled from "styled-components";
 import PropTypes from "prop-types";
 
 const Profile = ({ type, text }) => {
-  console.log(type);
   return (
     <>
       <ProfileContent>
@@ -18,10 +17,10 @@ const ProfileContent = styled.div`
   div {
     width: 100%;
     padding: 10px 0;
-    border-radius: 20px;
+    border-radius: 25px;
     background-color: var(--black-color);
     color: var(--white-color);
-    font-size: 20px;
+    font-size: 24px;
     text-align: center;
     opacity: 0.6;
   }

@@ -20,7 +20,6 @@ const GlobalStyle = createGlobalStyle`
     padding: 0;
     background: none;
     border: none;
-    color: #3c4043;
     font-family: 'Noto Sans', sans-serif;
   }
 

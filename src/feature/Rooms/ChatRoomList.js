@@ -1,8 +1,11 @@
-import React from "react";
+import React, { useEffect } from "react";
+import axios from "axios";
 import styled from "styled-components";
+
 import Card from "../../common/components/Card";
 
 const ChatRoomList = () => {
+  useEffect(() => {});
   return (
     <>
       <ChatRoomContainer>

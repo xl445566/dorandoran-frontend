@@ -27,7 +27,8 @@ const ChatRoom = styled.li`
   overflow: hidden;
 
   h1 {
-    margin: 3px 0 15px 0;
+    padding: 0 0 5px;
+    margin: 10px 0 15px 0;
     border-bottom: 1px solid var(--dark-grey-shadow-color);
   }
 `;
