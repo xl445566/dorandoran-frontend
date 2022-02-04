@@ -13,7 +13,7 @@ const GlobalStyle = createGlobalStyle`
     --dark-orange-color: #FC903D;
   }
 
-  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans&display=swap');
+  /* @import url('https://fonts.googleapis.com/css2?family=Noto+Sans&display=swap'); */
 
   * {
     margin: 0;
@@ -21,7 +21,7 @@ const GlobalStyle = createGlobalStyle`
     background: none;
     border: none;
     color: #3c4043;
-    font-family: 'Noto Sans', sans-serif;
+    /* font-family: 'Noto Sans', sans-serif; */
   }
 
   html,

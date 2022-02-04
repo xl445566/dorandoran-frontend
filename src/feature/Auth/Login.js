@@ -1,8 +1,13 @@
 import React from "react";
 import styled from "styled-components";
+import { useDispatch, useSelector } from "react-redux";
+import { authSliceActions } from "../../modules/slice/authSlice";
 import kakaoApi from "../../modules/api/kakaoApi";
 
 const Auth = () => {
+  const auth = useSelector((state) => state.auth.isLoggedIn);
+  const dispatch = useDispatch();
+
   const scope =
     "profile_nickname, profile_image, account_email, gender, age_range";
 
@@ -11,8 +16,30 @@ const Auth = () => {
       scope,
       success: async function (response) {
         window.Kakao.Auth.setAccessToken(response.access_token);
-        console.log(`is set?: ${window.Kakao.Auth.getAccessToken()}`);
-        kakaoApi.getUser();
+        // console.log(`is set?: ${window.Kakao.Auth.getAccessToken()}`);
+        // kakaoApi.getUser();
+        window.Kakao.API.request({
+          url: "/v2/user/me",
+          success: function (response) {
+            console.log(
+              "response!!!!!!!!!!!!!!",
+              response.kakao_account.age_range,
+              response.kakao_account.email,
+              response.kakao_account.gender,
+              response.kakao_account.profile.nickname,
+              response.kakao_account.profile.thumbnail_image_url
+            );
+            kakaoApi.getUserLocation();
+            dispatch(
+              authSliceActions.loginRequest({
+                email: response.kakao_account.email,
+              })
+            );
+          },
+          fail: function (error) {
+            console.log("error", error);
+          },
+        });
       },
       fail: function (error) {
         console.log(error);
@@ -39,6 +66,7 @@ const Auth = () => {
             도란
             <p>우리동네 어르신들의 화상 채팅 방</p>
           </Title>
+          {auth}
           <TitleImg>
             <img src="/assets/cards/card12.png" alt="title img" />
           </TitleImg>

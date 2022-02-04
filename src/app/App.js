@@ -2,8 +2,14 @@ import React from "react";
 import { Switch, Route, Link } from "react-router-dom";
 import Rooms from "../feature/Rooms/Rooms";
 import Login from "../feature/Auth/Login";
-
+// import kakaoApi from "../modules/api/kakaoApi";
 function App() {
+  // const [location, setLocation] = useState("");
+
+  // useEffect(async () => {
+  //   console.log("kakaoApi.getUserLocation()", await kakaoApi.getUserLocation());
+  //   setLocation(kakaoApi.getUserLocation());
+  // }, [location]);
   return (
     <>
       <ul>
