@@ -1,20 +1,35 @@
-import React from "react";
+import React, { useState } from "react";
+import axios from "axios";
+import styled from "styled-components";
+import PropTypes from "prop-types";
+import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import ChatRoomList from "../Rooms/ChatRoomList";
 import Header from "../../common/components/Header";
-import styled from "styled-components";
 import Room from "../Rooms/Room";
 
-import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
-
 const Rooms = () => {
+  const [data, setData] = useState("");
+
+  const handleFresh = async (e) => {
+    e.preventDefault();
+    setData(null);
+    try {
+      // 테스트중
+      const result = await axios.get("http://localhost:4000/rooms");
+      console.log(result.data);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   return (
     <Entry>
       <Header />
       <MainBody>
-        <button>
+        <button onClick={handleFresh}>
           <FaChevronLeft size="60" className="icons" />
         </button>
-        <ChatRoomList />
+        <ChatRoomList data={data} />
         <button>
           <FaChevronRight size="60" className="icons" />
         </button>
@@ -41,5 +56,9 @@ const MainBody = styled.section`
     color: var(--black-color);
   }
 `;
+
+Rooms.propTypes = {
+  handleFresh: PropTypes.string,
+};
 
 export default Rooms;

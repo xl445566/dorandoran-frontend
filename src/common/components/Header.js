@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import PropTypes from "prop-types";
 import Button from "./Button";
 
 const Header = () => {
@@ -40,5 +41,9 @@ const RoomInfo = styled.div`
     margin: 0 10px;
   }
 `;
+
+Header.propTypes = {
+  handleRefresh: PropTypes.string,
+};
 
 export default Header;

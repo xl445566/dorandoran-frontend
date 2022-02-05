@@ -1,11 +1,10 @@
-import React, { useEffect } from "react";
-import axios from "axios";
+import React from "react";
 import styled from "styled-components";
-
+import PropTypes from "prop-types";
 import Card from "../../common/components/Card";
 
-const ChatRoomList = () => {
-  useEffect(() => {});
+const ChatRoomList = ({ data }) => {
+  console.log(data);
   return (
     <>
       <ChatRoomContainer>
@@ -26,5 +25,10 @@ const ChatRoomContainer = styled.ul`
   gap: 10px;
   width: 70%;
 `;
+
+ChatRoomList.propTypes = {
+  handleFresh: PropTypes.string,
+  data: PropTypes.string,
+};
 
 export default ChatRoomList;
