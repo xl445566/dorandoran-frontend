@@ -1,12 +1,23 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
 import { authSliceActions } from "../../modules/slice/authSlice";
 import kakaoApi from "../../modules/api/kakaoApi";
 
-const Auth = () => {
+const Login = () => {
+  const [address, setAddress] = useState("");
+  const [userEmail, setUserEmail] = useState("");
   const auth = useSelector((state) => state.auth.isLoggedIn);
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(
+      authSliceActions.loginRequest({
+        email: userEmail,
+        address,
+      })
+    );
+  }, [address, userEmail]);
 
   const scope =
     "profile_nickname, profile_image, account_email, gender, age_range";
@@ -16,25 +27,11 @@ const Auth = () => {
       scope,
       success: async function (response) {
         window.Kakao.Auth.setAccessToken(response.access_token);
-        // console.log(`is set?: ${window.Kakao.Auth.getAccessToken()}`);
-        // kakaoApi.getUser();
         window.Kakao.API.request({
           url: "/v2/user/me",
           success: function (response) {
-            console.log(
-              "response!!!!!!!!!!!!!!",
-              response.kakao_account.age_range,
-              response.kakao_account.email,
-              response.kakao_account.gender,
-              response.kakao_account.profile.nickname,
-              response.kakao_account.profile.thumbnail_image_url
-            );
-            kakaoApi.getUserLocation();
-            dispatch(
-              authSliceActions.loginRequest({
-                email: response.kakao_account.email,
-              })
-            );
+            kakaoApi.getUserLocation(setAddress);
+            setUserEmail(response.kakao_account.email);
           },
           fail: function (error) {
             console.log("error", error);
@@ -118,4 +115,4 @@ const Button = styled.button`
   width: 150px;
 `;
 
-export default Auth;
+export default Login;

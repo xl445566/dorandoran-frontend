@@ -1,15 +1,10 @@
 import React from "react";
 import { Switch, Route, Link } from "react-router-dom";
 import Rooms from "../feature/Rooms/Rooms";
-import Login from "../feature/Auth/Login";
-// import kakaoApi from "../modules/api/kakaoApi";
-function App() {
-  // const [location, setLocation] = useState("");
+import Login from "../feature/auth/Login";
+import VideoChat from "../feature/videochat/VideoChat";
 
-  // useEffect(async () => {
-  //   console.log("kakaoApi.getUserLocation()", await kakaoApi.getUserLocation());
-  //   setLocation(kakaoApi.getUserLocation());
-  // }, [location]);
+function App() {
   return (
     <>
       <ul>
@@ -42,6 +37,7 @@ function App() {
         </Route>
         <Route path="/video">
           <h1>화상채팅</h1>
+          <VideoChat />
         </Route>
         <Route path="/error">
           <h1>에러페이지</h1>

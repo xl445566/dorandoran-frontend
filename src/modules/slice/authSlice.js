@@ -23,12 +23,12 @@ export const authSlice = createSlice({
       state.isLoggingIn = false;
       state.isLoggedIn = true;
       state.isLoading = false;
-      state.user = action;
+      state.user = action.payload;
     },
     loginFailure: (state, action) => {
       state.isLoggingIn = false;
       state.isLoggedIn = false;
-      state.loginErrorReason = action;
+      state.loginErrorReason = action.payload;
       state.user = null;
     },
     logoutRequest: (state) => {

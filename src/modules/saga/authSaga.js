@@ -5,7 +5,6 @@ import { authSliceActions } from "../slice/authSlice";
 const loginSaga = function* ({ payload }) {
   try {
     console.log("payload", payload);
-    // const { email } = payload;
     const request = yield call(() =>
       axios.post("http://localhost:4000/auth/login", payload)
     );

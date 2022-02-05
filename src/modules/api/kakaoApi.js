@@ -1,17 +1,4 @@
-// const getUser = async () => {
-//   await window.Kakao.API.request({
-//     url: "/v2/user/me",
-//     success: async function (response) {
-//       console.log("response", response);
-//       getUserLocation();
-//     },
-//     fail: function (error) {
-//       console.log("error", error);
-//     },
-//   });
-// };
-
-const getUserLocation = () => {
+const getUserLocation = (setAddress) => {
   let lat = 0;
   let lng = 0;
   const onGeoOk = (position) => {
@@ -26,26 +13,20 @@ const getUserLocation = () => {
   };
 
   const getAddr = (lat, lng) => {
-    let geocoder = new window.kakao.maps.services.Geocoder();
+    const geocoder = new window.kakao.maps.services.Geocoder();
+    const coord = new window.kakao.maps.LatLng(lat, lng);
 
-    let coord = new window.kakao.maps.LatLng(lat, lng);
-
-    let callback = function (result, status) {
+    const callback = function (result, status) {
       if (status === window.kakao.maps.services.Status.OK) {
-        // console.log(
-        //   "location",
-        //   result[0].address.address_name.split(" ", 2).join(" ")
-        // );
-        const location = result[0].address.address_name.split(" ", 2).join(" ");
-        console.log("location", location);
-        return location;
+        const address = result[0].address.address_name.split(" ", 2).join(" ");
+        setAddress(address);
       }
     };
 
     return geocoder.coord2Address(coord.getLng(), coord.getLat(), callback);
   };
 
-  return window.navigator.geolocation.getCurrentPosition(onGeoOk, onGeoError);
+  window.navigator.geolocation.getCurrentPosition(onGeoOk, onGeoError);
 };
 
 const kakaoApi = { getUserLocation };
