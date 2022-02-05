@@ -127,7 +127,7 @@ const VideoWrapper = styled.section`
   justify-content: space-evenly;
   align-content: space-evenly;
   grid-template-columns: repeat(2, minmax(600px, auto));
-  /* grid-template-rows: repeat(2, minmax(400px, auto)); */
+  grid-template-rows: repeat(2, minmax(400px, auto));
   gap: 10px;
   width: 1200px;
   margin: auto;
@@ -139,8 +139,8 @@ const VideoWrapper = styled.section`
 
     span {
       position: absolute;
-      bottom: 10px;
-      left: 20px;
+      bottom: 30px;
+      left: 30px;
       padding: 5px 15px;
       border-radius: 15px;
       background: var(--orange-color);
@@ -148,12 +148,14 @@ const VideoWrapper = styled.section`
     }
 
     video {
-      width: 100%;
-      height: 100%;
-      border: 2px solid var(--orange-color);
+      width: 600px;
+      height: 400px;
+      border: 3px solid var(--orange-color);
       border-radius: 20px;
       box-sizing: border-box;
       background: var(--white-color);
+      box-shadow: 1px 1px 10px 1px var(--dark-grey-shadow-color);
+      object-fit: cover;
     }
   }
 `;
