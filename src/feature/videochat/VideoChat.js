@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
-import MainHeader from "../Rooms/MainHeader";
 import Peer from "peerjs";
+import MainHeader from "../Rooms/MainHeader";
 
 const VideoChat = () => {
   const [peerId, setPeerId] = useState("");
@@ -82,22 +82,22 @@ const VideoChat = () => {
       <VideoChatContainer>
         <MainHeader />
         <VideoWrapper>
-          <div>
+          <VideoBox className="videoBox">
             <video autoPlay playsInline ref={myVideoRef} />
-            <span>나</span>
-          </div>
-          <div>
+            <UserName>나</UserName>
+          </VideoBox>
+          <VideoBox className="videoBox">
             <video autoPlay playsInline ref={remoteVideoRef} />
-            <span>상대방</span>
-          </div>
-          <div>
+            <UserName>상대방</UserName>
+          </VideoBox>
+          <VideoBox className="videoBox">
             <video autoPlay playsInline />
-            <span>한소영</span>
-          </div>
-          <div>
+            <UserName>한소영</UserName>
+          </VideoBox>
+          <VideoBox className="videoBox">
             <video autoPlay playsInline />
-            <span>한소영</span>
-          </div>
+            <UserName>한소영</UserName>
+          </VideoBox>
         </VideoWrapper>
         <EmojiWrapper>
           <EmojiButton />
@@ -128,36 +128,36 @@ const VideoWrapper = styled.section`
   align-content: space-evenly;
   grid-template-columns: repeat(2, minmax(600px, auto));
   grid-template-rows: repeat(2, minmax(400px, auto));
-  gap: 10px;
+  gap: 20px;
   width: 1200px;
   margin: auto;
+`;
 
-  div {
-    position: relative;
-    width: 100%;
-    height: 100%;
+const VideoBox = styled.div`
+  position: relative;
+  width: 100%;
+  height: 100%;
 
-    span {
-      position: absolute;
-      bottom: 30px;
-      left: 30px;
-      padding: 5px 15px;
-      border-radius: 15px;
-      background: var(--orange-color);
-      color: var(--white-color);
-    }
-
-    video {
-      width: 600px;
-      height: 400px;
-      border: 3px solid var(--orange-color);
-      border-radius: 20px;
-      box-sizing: border-box;
-      background: var(--white-color);
-      box-shadow: 1px 1px 10px 1px var(--dark-grey-shadow-color);
-      object-fit: cover;
-    }
+  video {
+    width: 600px;
+    height: 400px;
+    border: 2px solid var(--orange-color);
+    border-radius: 20px;
+    box-sizing: border-box;
+    background: var(--white-color);
+    box-shadow: 1px 1px 10px 1px var(--dark-grey-shadow-color);
+    object-fit: cover;
   }
+`;
+
+const UserName = styled.span`
+  position: absolute;
+  bottom: 30px;
+  left: 30px;
+  padding: 5px 15px;
+  border-radius: 15px;
+  background: var(--orange-color);
+  color: var(--white-color);
 `;
 
 const EmojiWrapper = styled.section`

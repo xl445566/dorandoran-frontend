@@ -34,11 +34,8 @@ const getUserLocation = (setLocation) => {
 
     const callback = function (result, status) {
       if (status === window.kakao.maps.services.Status.OK) {
-        console.log(
-          "location",
-          result[0].address.address_name.split(" ", 2).join(" ")
-        );
-        setLocation(result[0].address.address_name.split(" ", 2).join(" "));
+        const location = result[0].address.address_name.split(" ", 2).join(" ");
+        setLocation(location);
       }
     };
 
