@@ -18,9 +18,6 @@ const getUserLocation = (setLocation) => {
   const onGeoOk = (position) => {
     lat = position.coords.latitude;
     lng = position.coords.longitude;
-
-    // console.log("위치정보", lat);
-    // console.log("위치정보", lng);
     getAddr(lat, lng);
   };
 

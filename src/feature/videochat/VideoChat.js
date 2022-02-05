@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import Peer from "peerjs";
+import { io } from "socket.io-client";
 import MainHeader from "../Rooms/MainHeader";
 
 const VideoChat = () => {
@@ -11,6 +12,11 @@ const VideoChat = () => {
   const peerInstance = useRef(null);
 
   useEffect(() => {
+    const socket = io.connect("http://localhost:4000", {
+      withCredentials: true,
+    });
+    console.log(socket);
+
     const peer = new Peer();
     const getUserMedia =
       navigator.getUserMedia ||
@@ -88,15 +94,15 @@ const VideoChat = () => {
           </VideoBox>
           <VideoBox className="videoBox">
             <video autoPlay playsInline ref={remoteVideoRef} />
-            <UserName>상대방</UserName>
+            <UserName>상대방- 1</UserName>
           </VideoBox>
           <VideoBox className="videoBox">
             <video autoPlay playsInline />
-            <UserName>한소영</UserName>
+            <UserName>상대방 -2</UserName>
           </VideoBox>
           <VideoBox className="videoBox">
             <video autoPlay playsInline />
-            <UserName>한소영</UserName>
+            <UserName>상대방 -3</UserName>
           </VideoBox>
         </VideoWrapper>
         <EmojiWrapper>
