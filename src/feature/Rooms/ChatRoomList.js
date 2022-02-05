@@ -3,15 +3,15 @@ import styled from "styled-components";
 import PropTypes from "prop-types";
 import Card from "../../common/components/Card";
 
-const ChatRoomList = ({ data }) => {
-  console.log(data);
+const ChatRoomList = ({ roomData }) => {
+  const roomInfos = roomData.rooms;
+
   return (
     <>
       <ChatRoomContainer>
-        {Array(6)
-          .fill(0)
-          .map((v, i) => {
-            return <Card key={v + i} />;
+        {roomInfos &&
+          roomInfos.map((value, index) => {
+            return <Card key={value + index} roomInfo={value} index={index} />;
           })}
       </ChatRoomContainer>
     </>
@@ -28,7 +28,7 @@ const ChatRoomContainer = styled.ul`
 
 ChatRoomList.propTypes = {
   handleFresh: PropTypes.string,
-  data: PropTypes.string,
+  roomData: PropTypes.object,
 };
 
 export default ChatRoomList;

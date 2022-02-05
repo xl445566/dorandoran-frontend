@@ -1,7 +1,9 @@
 import React from "react";
 import styled from "styled-components";
+import PropTypes from "prop-types";
 
-const Card = () => {
+const Card = ({ roomInfo, index }) => {
+  const { title, users } = roomInfo;
   return (
     <>
       <ChatRoom>
@@ -9,10 +11,12 @@ const Card = () => {
           <img src="/assets/cards/card1.png" alt="image" />
         </div>
         <TextContent>
-          <RoomNumber>01</RoomNumber>
-          <h1>김필순님의 방</h1>
+          <RoomNumber>0{index + 1}</RoomNumber>
+          <h1>{title}</h1>
           <ul>
-            <li>김필순</li>
+            {users.map((user) => {
+              return <li key={user._id}>{user.name}</li>;
+            })}
           </ul>
         </TextContent>
       </ChatRoom>
@@ -58,5 +62,13 @@ const RoomNumber = styled.span`
   color: var(--scarlet-color);
   font-weight: bold;
 `;
+
+Card.propTypes = {
+  roomInfo: PropTypes.object,
+  title: PropTypes.string,
+  address: PropTypes.string,
+  users: PropTypes.string,
+  index: PropTypes.number,
+};
 
 export default Card;

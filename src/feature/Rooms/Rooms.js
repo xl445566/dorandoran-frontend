@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import styled from "styled-components";
 import PropTypes from "prop-types";
@@ -8,28 +8,32 @@ import Header from "../../common/components/Header";
 import Room from "../Rooms/Room";
 
 const Rooms = () => {
-  const [data, setData] = useState("");
+  const [roomData, setRoomData] = useState({});
 
-  const handleFresh = async (e) => {
-    e.preventDefault();
-    setData(null);
-    try {
-      // 테스트중
-      const result = await axios.get("http://localhost:4000/rooms");
-      console.log(result.data);
-    } catch (e) {
-      console.log(e);
-    }
-  };
+  useEffect(() => {
+    const fetchEvent = async () => {
+      try {
+        const result = await axios.get("http://localhost:4000/rooms", {
+          params: {
+            index: 0,
+          },
+        });
+        setRoomData(result.data);
+      } catch (e) {
+        console.log(e);
+      }
+    };
+    fetchEvent();
+  }, []);
 
   return (
     <Entry>
       <Header />
       <MainBody>
-        <button onClick={handleFresh}>
+        <button>
           <FaChevronLeft size="60" className="icons" />
         </button>
-        <ChatRoomList data={data} />
+        <ChatRoomList roomData={roomData} />
         <button>
           <FaChevronRight size="60" className="icons" />
         </button>
