@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
 import { authSliceActions } from "../../modules/slice/authSlice";
@@ -7,22 +7,20 @@ import kakaoApi from "../../modules/api/kakaoApi";
 const Login = () => {
   const [address, setAddress] = useState("");
   const [userEmail, setUserEmail] = useState("");
-  const auth = useSelector((state) => state.auth.isLoggedIn);
+  const isLogin = useSelector((state) => state.auth.isLoggedIn);
   const dispatch = useDispatch();
 
-  useEffect(() => {
+  const scope =
+    "profile_nickname, profile_image, account_email, gender, age_range";
+
+  const handleLogin = () => {
     dispatch(
       authSliceActions.loginRequest({
         email: userEmail,
         address,
       })
     );
-  }, [address, userEmail]);
 
-  const scope =
-    "profile_nickname, profile_image, account_email, gender, age_range";
-
-  const handleLogin = () => {
     window.Kakao.Auth.login({
       scope,
       success: async function (response) {
@@ -46,6 +44,10 @@ const Login = () => {
 
   const jsKey = "6fe0be1f6b114e35d999d9c9ba281084";
 
+  if (isLogin) {
+    console.log("로그인 한상태이다");
+    // history.push("/rooms");
+  }
   if (!window.Kakao.isInitialized()) {
     window.Kakao.init(jsKey);
     console.log("Kakao.isInitialized", window.Kakao.isInitialized());
@@ -63,7 +65,6 @@ const Login = () => {
             도란
             <p>우리동네 어르신들의 화상 채팅 방</p>
           </Title>
-          {auth}
           <TitleImg>
             <img src="/assets/cards/card12.png" alt="title img" />
           </TitleImg>

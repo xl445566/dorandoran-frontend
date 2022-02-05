@@ -4,11 +4,12 @@ import { authSliceActions } from "../slice/authSlice";
 
 const loginSaga = function* ({ payload }) {
   try {
-    console.log("payload", payload);
+    console.log("payload", payload.email);
     const request = yield call(() =>
       axios.post("http://localhost:4000/auth/login", payload)
     );
-    yield delay(2000);
+    // yield delay(5000);
+    console.log("request:::::::loginsaga", request.result);
     yield put(authSliceActions.loginSuccess(request.data));
   } catch (err) {
     console.error("login error", err);
