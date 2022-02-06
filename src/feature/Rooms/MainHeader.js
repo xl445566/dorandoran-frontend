@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import Button from "../../common/components/Button";
+import LogoutButton from "../../common/components/LogoutButton";
 
 const MainHeader = () => {
   return (
@@ -10,7 +11,7 @@ const MainHeader = () => {
         <Button text="새로고침" size="small" />
         <h1>강남구 대치노인정</h1>
       </RoomInfo>
-      <Button text="로그아웃" size="large" login={true} />
+      <LogoutButton>로그아웃</LogoutButton>
     </HeaderContainer>
   );
 };

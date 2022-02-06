@@ -1,26 +1,24 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
 import { authSliceActions } from "../../modules/slice/authSlice";
 import kakaoApi from "../../modules/api/kakaoApi";
+import { useHistory } from "react-router-dom";
+// import LogoutButton from "../../common/components/LogoutButton";
 
 const Login = () => {
-  const [address, setAddress] = useState("");
-  const [userEmail, setUserEmail] = useState("");
-  const isLogin = useSelector((state) => state.auth.isLoggedIn);
+  const history = useHistory();
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
   const dispatch = useDispatch();
+  const [address, setAddress] = useState("");
 
-  const scope =
-    "profile_nickname, profile_image, account_email, gender, age_range";
+  useEffect(() => {
+    kakaoApi.getUserLocation(setAddress);
+  }, []);
 
   const handleLogin = () => {
-    dispatch(
-      authSliceActions.loginRequest({
-        email: userEmail,
-        address,
-      })
-    );
-
+    const scope =
+      "profile_nickname, profile_image, account_email, gender, age_range";
     window.Kakao.Auth.login({
       scope,
       success: async function (response) {
@@ -28,8 +26,16 @@ const Login = () => {
         window.Kakao.API.request({
           url: "/v2/user/me",
           success: function (response) {
-            kakaoApi.getUserLocation(setAddress);
-            setUserEmail(response.kakao_account.email);
+            dispatch(
+              authSliceActions.loginRequest({
+                email: response.kakao_account.email,
+                age_range: response.kakao_account.age_range,
+                gender: response.kakao_account.gender,
+                name: response.kakao_account.profile.nickname,
+                profile: response.kakao_account.profile.profile_image_url,
+                current_address: address,
+              })
+            );
           },
           fail: function (error) {
             console.log("error", error);
@@ -44,14 +50,15 @@ const Login = () => {
 
   const jsKey = "6fe0be1f6b114e35d999d9c9ba281084";
 
-  if (isLogin) {
-    console.log("로그인 한상태이다");
-    // history.push("/rooms");
-  }
   if (!window.Kakao.isInitialized()) {
     window.Kakao.init(jsKey);
     console.log("Kakao.isInitialized", window.Kakao.isInitialized());
   }
+  useEffect(() => {
+    if (isLoggedIn) {
+      history.push("/");
+    }
+  }, [isLoggedIn]);
 
   return (
     <>
@@ -65,12 +72,20 @@ const Login = () => {
             도란
             <p>우리동네 어르신들의 화상 채팅 방</p>
           </Title>
+          {isLoggedIn}
           <TitleImg>
             <img src="/assets/cards/card12.png" alt="title img" />
           </TitleImg>
-          <Button onClick={handleLogin}>
-            <img src="/kakao_login_large_narrow.png" alt="kakao login image" />
-          </Button>
+          {!address && <span>사용자의 위치를 불러오고 있습니다..</span>}
+          {address && (
+            <Button onClick={handleLogin}>
+              <img
+                src="/kakao_login_large_narrow.png"
+                alt="kakao login image"
+              />
+            </Button>
+          )}
+          {/* <LogoutButton /> */}
         </Section>
       </Main>
     </>
