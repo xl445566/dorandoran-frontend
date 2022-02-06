@@ -1,19 +1,19 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
-import { authSliceActions } from "../../modules/slice/authSlice";
-import kakaoApi from "../../modules/api/kakaoApi";
 import { useHistory } from "react-router-dom";
-// import LogoutButton from "../../common/components/LogoutButton";
+import kakaoApi from "../../modules/api/kakaoApi";
+import { authSliceActions } from "../../modules/slice/authSlice";
 
 const Login = () => {
   const history = useHistory();
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
   const dispatch = useDispatch();
   const [address, setAddress] = useState("");
+  const [isAddress, setIsAddress] = useState(true);
 
   useEffect(() => {
-    kakaoApi.getUserLocation(setAddress);
+    kakaoApi.getUserLocation(setAddress, setIsAddress);
   }, []);
 
   const handleLogin = () => {
@@ -37,13 +37,7 @@ const Login = () => {
               })
             );
           },
-          fail: function (error) {
-            console.log("error", error);
-          },
         });
-      },
-      fail: function (error) {
-        console.log(error);
       },
     });
   };
@@ -52,8 +46,8 @@ const Login = () => {
 
   if (!window.Kakao.isInitialized()) {
     window.Kakao.init(jsKey);
-    console.log("Kakao.isInitialized", window.Kakao.isInitialized());
   }
+
   useEffect(() => {
     if (isLoggedIn) {
       history.push("/");
@@ -72,11 +66,13 @@ const Login = () => {
             도란
             <p>우리동네 어르신들의 화상 채팅 방</p>
           </Title>
-          {isLoggedIn}
+          {!isAddress && <span>위치를 알 수 없습니다.</span>}
           <TitleImg>
             <img src="/assets/cards/card12.png" alt="title img" />
           </TitleImg>
-          {!address && <span>사용자의 위치를 불러오고 있습니다..</span>}
+          {!address && isAddress && (
+            <span>사용자의 위치를 불러오고 있습니다..</span>
+          )}
           {address && (
             <Button onClick={handleLogin}>
               <img
@@ -85,7 +81,6 @@ const Login = () => {
               />
             </Button>
           )}
-          {/* <LogoutButton /> */}
         </Section>
       </Main>
     </>

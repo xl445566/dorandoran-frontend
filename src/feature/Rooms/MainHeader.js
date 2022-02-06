@@ -1,9 +1,22 @@
 import React from "react";
+import { useDispatch } from "react-redux";
 import styled from "styled-components";
 import Button from "../../common/components/Button";
 import LogoutButton from "../../common/components/LogoutButton";
+import { authSliceActions } from "../../modules/slice/authSlice";
 
 const MainHeader = () => {
+  const dispatch = useDispatch();
+
+  const handleLogout = () => {
+    window.Kakao.API.request({
+      url: "/v1/user/unlink",
+      success: function () {
+        dispatch(authSliceActions.logoutRequest());
+      },
+    });
+  };
+
   return (
     <HeaderContainer>
       <Button text="방 만들기" size="medium" />
@@ -11,7 +24,7 @@ const MainHeader = () => {
         <Button text="새로고침" size="small" />
         <h1>강남구 대치노인정</h1>
       </RoomInfo>
-      <LogoutButton>로그아웃</LogoutButton>
+      <LogoutButton handleLogoutClick={handleLogout}>로그아웃</LogoutButton>
     </HeaderContainer>
   );
 };

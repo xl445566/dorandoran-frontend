@@ -9,12 +9,6 @@ function App() {
     <>
       <ul>
         <li>
-          <Link to="/login">1.로그인화면으로</Link>
-        </li>
-        <li>
-          <Link to="/">2 . 방리스트화면</Link>
-        </li>
-        <li>
           <Link to="/rooms">3 . 방페이지로</Link>
         </li>
         <li>

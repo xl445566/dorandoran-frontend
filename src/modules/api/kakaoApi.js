@@ -1,4 +1,4 @@
-const getUserLocation = (setAddress) => {
+const getUserLocation = (setAddress, setIsAddress) => {
   let lat = 0;
   let lng = 0;
   const onGeoOk = (position) => {
@@ -9,7 +9,7 @@ const getUserLocation = (setAddress) => {
   };
 
   const onGeoError = () => {
-    console.log("위치를 알 수 없습니다.");
+    setIsAddress(false);
   };
 
   const getAddr = (lat, lng) => {

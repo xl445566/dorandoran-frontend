@@ -4,30 +4,37 @@ import { authSliceActions } from "../slice/authSlice";
 
 const loginSaga = function* ({ payload }) {
   try {
-    const request = yield call(() =>
+    const response = yield call(() =>
       axios.post("http://localhost:4000/auth/login", payload, {
         withCredentials: true,
       })
     );
-    yield put(authSliceActions.loginSuccess(request.data));
-  } catch (err) {
-    console.error("login error", err);
-    yield put(authSliceActions.loginFailure(err));
+    if (response.data.message) {
+      yield put(authSliceActions.loginFailure(response.data.message));
+      return;
+    }
+    yield put(authSliceActions.loginSuccess(response.data));
+  } catch (error) {
+    yield put(authSliceActions.loginFailure(error));
   }
 };
 
-const logoutSaga = function* ({ payload }) {
+const logoutSaga = function* () {
   try {
-    // console.log("로그아웃 payload", payload);
-    const request = yield call(() =>
-      axios.post("http://localhost:4000/auth/logout", payload, {
+    const response = yield call(() =>
+      axios.get("http://localhost:4000/auth/logout", {
         withCredentials: true,
       })
     );
-    yield put(authSliceActions.logoutSuccess(request.data));
-  } catch (err) {
-    console.error("login error", err);
-    yield put(authSliceActions.logoutFailure(err));
+
+    if (response.data.message) {
+      yield put(authSliceActions.logoutFailure(response.data.message));
+      return;
+    }
+
+    yield put(authSliceActions.logoutSuccess());
+  } catch (error) {
+    yield put(authSliceActions.logoutFailure(error));
   }
 };
 
