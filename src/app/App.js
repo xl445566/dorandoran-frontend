@@ -33,14 +33,14 @@ function App() {
           <Rooms />
         </Route>
         <Route path="/rooms">
-          <h1>노인정 방 페이지</h1>
+          <h1>노인정 방 리스트</h1>
         </Route>
-        <Route path="/video">
-          <h1>화상채팅</h1>
+        <Route path="/video/:roomId">
           <VideoChat />
         </Route>
         <Route path="/error">
           <h1>에러페이지</h1>
+          <p>에러내용</p>
         </Route>
       </Switch>
     </>

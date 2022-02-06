@@ -3,41 +3,96 @@ import styled from "styled-components";
 import Peer from "peerjs";
 import { io } from "socket.io-client";
 import MainHeader from "../Rooms/MainHeader";
+import { useHistory, useParams } from "react-router-dom";
 
 const VideoChat = () => {
   const [peerId, setPeerId] = useState("");
-  const [remotePeerId, setRemotePeerId] = useState("");
-  const myVideoRef = useRef(null);
-  const remoteVideoRef = useRef(null);
+
   const peerInstance = useRef(null);
+  const socketInstance = useRef(null);
+
+  const myVideoRef = useRef(null);
+  const remoteVideoRef1 = useRef(null);
+  const remoteVideoRef2 = useRef(null);
+  const remoteVideoRef3 = useRef(null);
+
+  const param = useParams();
+  const history = useHistory();
+  const roomName = param.roomId;
 
   useEffect(() => {
-    const socket = io.connect("http://localhost:4000", {
-      withCredentials: true,
-    });
-    console.log(socket);
-
     const peer = new Peer();
     const getUserMedia =
       navigator.getUserMedia ||
       navigator.webkitGetUserMedia ||
       navigator.mozGetUserMedia;
 
-    peer.on("open", (id) => setPeerId(id));
+    getUserMedia({ video: true }, (myStream) => {
+      myVideoRef.current.srcObject = myStream;
+    });
+
+    peer.on("open", (id) => {
+      console.log("---------------------------------------------------------");
+      console.log("my Peer ID: ", id);
+      console.log("---------------------------------------------------------");
+
+      setPeerId(id);
+      socket.emit("enterRoom", roomName, id);
+    });
 
     peer.on("call", (call) => {
       getUserMedia({ video: true }, (myStream) => {
-        myVideoRef.current.srcObject = myStream;
-
         call.answer(myStream);
 
         call.on("stream", (remoteStream) => {
-          remoteVideoRef.current.srcObject = remoteStream;
+          if (!remoteVideoRef1.current.srcObject) {
+            remoteVideoRef1.current.srcObject = remoteStream;
+          } else if (!remoteVideoRef2.current.srcObject) {
+            remoteVideoRef2.current.srcObject = remoteStream;
+          } else if (!remoteVideoRef3.current.srcObject) {
+            remoteVideoRef3.current.srcObject = remoteStream;
+          }
+        });
+
+        call.on("close", () => {
+          console.log(
+            "---------------------------------------------------------"
+          );
+          console.log("전화를 받은 사람이 나갔습니다.", call);
+          console.log(
+            "---------------------------------------------------------"
+          );
+
+          call.close();
         });
       });
     });
 
+    const socket = io.connect("http://localhost:4000", {
+      withCredentials: true,
+    });
+
+    socket.on("welcome", (newRemotePeerId) => {
+      console.log("---------------------------------------------------------");
+      console.log("새로 들어온 사람: ", newRemotePeerId);
+      console.log("---------------------------------------------------------");
+
+      call(newRemotePeerId);
+    });
+
+    socket.on("roomChange", (userList) => {
+      console.log("---------------------------------------------------------");
+      console.log("현재 유저 리스트: ", userList);
+      console.log("---------------------------------------------------------");
+    });
+
+    socket.on("bye", (leavePeerId) => {
+      console.log("나간 사람: ", leavePeerId);
+      console.log("남은 peerInstance.current", peerInstance.current);
+    });
+
     peerInstance.current = peer;
+    socketInstance.current = socket;
   }, []);
 
   const call = (remotePeerId) => {
@@ -46,62 +101,76 @@ const VideoChat = () => {
       navigator.webkitGetUserMedia ||
       navigator.mozGetUserMedia;
 
-    getUserMedia(
-      { video: true },
-      (myStream) => {
-        // call 버튼을 누르면 상대방에게 내 스트림을 전송하며 call을 발생시킵니다.
-        const call = peerInstance.current.call(remotePeerId, myStream);
+    getUserMedia({ video: true }, (myStream) => {
+      const call = peerInstance.current.call(remotePeerId, myStream);
 
-        myVideoRef.current.srcObject = myStream;
+      call.on("stream", (remoteStream) => {
+        if (!remoteVideoRef1.current.srcObject) {
+          remoteVideoRef1.current.srcObject = remoteStream;
+        } else if (!remoteVideoRef2.current.srcObject) {
+          remoteVideoRef2.current.srcObject = remoteStream;
+        } else if (!remoteVideoRef3.current.srcObject) {
+          remoteVideoRef3.current.srcObject = remoteStream;
+        }
+      });
 
-        // 상대방에게 stream을 받으면 상대방 비디오에 stream을 할당 합니다.
-        call.on("stream", (remoteStream) => {
-          remoteVideoRef.current.srcObject = remoteStream;
-        });
-      },
-      (err) => {
-        console.log("Failed to get local stream", err);
-      }
-    );
+      call.on("close", () => {
+        console.log(
+          "---------------------------------------------------------"
+        );
+        console.log("전화를 건 사람이 나갔습니다.", call);
+        console.log(
+          "---------------------------------------------------------"
+        );
+        call.close();
+      });
+    });
+  };
+
+  const handleLeaveRoom = () => {
+    socketInstance.current.close();
+    peerInstance.current.disconnect();
+    peerInstance.current.destroy();
+    history.push("/rooms");
   };
 
   return (
     <>
-      <h1>{peerId}</h1>
-      <p>
-        상대방 Peer ID를
-        <input
-          type="text"
-          onChange={(e) => {
-            setRemotePeerId(e.target.value);
-          }}
-        />
-        여기 사이에 입력 해주세요.
-      </p>
-      <button
-        onClick={() => {
-          call(remotePeerId);
-        }}
-      >
-        Call
-      </button>
+      <h1>My PEER ID: {peerId}</h1>
+      <h1>Room Name : {roomName}</h1>
+      <button onClick={handleLeaveRoom}>나가기</button>
       <VideoChatContainer>
         <MainHeader />
         <VideoWrapper>
-          <VideoBox className="videoBox">
+          <VideoBox>
             <video autoPlay playsInline ref={myVideoRef} />
             <UserName>나</UserName>
           </VideoBox>
-          <VideoBox className="videoBox">
-            <video autoPlay playsInline ref={remoteVideoRef} />
+          <VideoBox>
+            <video
+              className="remotePeer"
+              autoPlay
+              playsInline
+              ref={remoteVideoRef1}
+            />
             <UserName>상대방- 1</UserName>
           </VideoBox>
-          <VideoBox className="videoBox">
-            <video autoPlay playsInline />
+          <VideoBox>
+            <video
+              className="remotePeer"
+              autoPlay
+              playsInline
+              ref={remoteVideoRef2}
+            />
             <UserName>상대방 -2</UserName>
           </VideoBox>
-          <VideoBox className="videoBox">
-            <video autoPlay playsInline />
+          <VideoBox>
+            <video
+              className="remotePeer"
+              autoPlay
+              playsInline
+              ref={remoteVideoRef3}
+            />
             <UserName>상대방 -3</UserName>
           </VideoBox>
         </VideoWrapper>
