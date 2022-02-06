@@ -1,19 +1,20 @@
 import React from "react";
 import styled from "styled-components";
-import PropTypes from "prop-types";
 import Button from "./Button";
 
-const Header = () => {
+const Header = ({ leftOnClick, centerOnClick }) => {
   return (
     <HeaderContainer>
-      <Button text="방 만들기" size="medium" />
-      {/* <Button text="방 만들기" size="medium" type="cancel" /> */}
+      <Button text="방 만들기" size="medium" onClick={leftOnClick} />
       <RoomInfo>
-        <Button text="새로고침" size="small" type="refresh" />
-        {/* <Button text="셀렉토" size="small" /> */}
+        <Button
+          type="refresh"
+          text="새로고침"
+          size="small"
+          onClick={centerOnClick}
+        />
         <Title>강남구 대치경로당</Title>
       </RoomInfo>
-      {/* <Button text="라지사이즈" size="large" /> */}
       <Button
         type="logout"
         text="로그아웃"
@@ -41,9 +42,5 @@ const RoomInfo = styled.div`
     margin: 0 10px;
   }
 `;
-
-Header.propTypes = {
-  handleRefresh: PropTypes.string,
-};
 
 export default Header;

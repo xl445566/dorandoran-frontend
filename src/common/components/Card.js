@@ -1,18 +1,18 @@
 import React from "react";
 import styled from "styled-components";
-import PropTypes from "prop-types";
+import { makeRandomRoomImage } from "../utils/makeRoomResource";
 
-const Card = ({ roomInfo, index }) => {
-  const { title, users } = roomInfo;
+const Card = ({ roomInfo }) => {
+  const { title, users, room_no } = roomInfo;
   return (
     <>
       <ChatRoom>
         <div>
-          <img src="/assets/cards/card1.png" alt="image" />
+          <img src={makeRandomRoomImage()} alt="image" />
         </div>
         <TextContent>
-          <RoomNumber>0{index + 1}</RoomNumber>
-          <h1>{title}</h1>
+          <RoomNumber>{room_no < 10 ? "0" + room_no : room_no}</RoomNumber>
+          <h1>{title.length > 10 ? title.slice(0, 10) + "..." : title}</h1>
           <ul>
             {users.map((user) => {
               return <li key={user._id}>{user.name}</li>;
@@ -34,6 +34,7 @@ const ChatRoom = styled.li`
     padding: 0 0 5px;
     margin: 10px 0 15px 0;
     border-bottom: 1px solid var(--dark-grey-shadow-color);
+    font-size: 18px;
   }
 `;
 
@@ -62,13 +63,5 @@ const RoomNumber = styled.span`
   color: var(--scarlet-color);
   font-weight: bold;
 `;
-
-Card.propTypes = {
-  roomInfo: PropTypes.object,
-  title: PropTypes.string,
-  address: PropTypes.string,
-  users: PropTypes.string,
-  index: PropTypes.number,
-};
 
 export default Card;

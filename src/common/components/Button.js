@@ -2,10 +2,14 @@ import React from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 
-const Button = ({ text, type, size, color, img }) => {
+const Button = ({ onClick, text, type, size, color, img }) => {
   return (
     <>
-      {size === "small" && <Small type={type}>{text}</Small>}
+      {size === "small" && (
+        <Small onClick={onClick} type={type}>
+          {text}
+        </Small>
+      )}
       {size === "medium" && <Medium type={type}>{text}</Medium>}
       {size === "large" && <Large type={type}>{text}</Large>}
       {type === "logout" && (

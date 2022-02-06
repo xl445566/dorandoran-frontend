@@ -1,6 +1,6 @@
 import React from "react";
 import { Switch, Route, Link } from "react-router-dom";
-import Rooms from "../feature/Rooms/Rooms";
+import Rooms from "../feature/rooms/Rooms";
 import Login from "../feature/Auth/Login";
 
 function App() {

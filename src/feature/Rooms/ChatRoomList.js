@@ -1,16 +1,19 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import PropTypes from "prop-types";
 import Card from "../../common/components/Card";
 
-const ChatRoomList = ({ roomData }) => {
-  const roomInfos = roomData.rooms;
+const ChatRoomList = ({ roomList }) => {
+  const [rooms, setRooms] = useState([]);
+
+  useEffect(() => {
+    setRooms(roomList);
+  }, [roomList]);
 
   return (
     <>
       <ChatRoomContainer>
-        {roomInfos &&
-          roomInfos.map((value, index) => {
+        {rooms &&
+          rooms.map((value, index) => {
             return <Card key={value + index} roomInfo={value} index={index} />;
           })}
       </ChatRoomContainer>
@@ -25,10 +28,5 @@ const ChatRoomContainer = styled.ul`
   gap: 10px;
   width: 70%;
 `;
-
-ChatRoomList.propTypes = {
-  handleFresh: PropTypes.string,
-  roomData: PropTypes.object,
-};
 
 export default ChatRoomList;
