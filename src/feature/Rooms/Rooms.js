@@ -1,9 +1,11 @@
 import React, { useEffect } from "react";
-import MainHeader from "./MainHeader";
-import ChatRoomList from "./ChatRoomList";
-import styled from "styled-components";
+
 import { useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
+import styled from "styled-components";
+
+import ChatRoomList from "./ChatRoomList";
+import MainHeader from "./MainHeader";
 
 const Rooms = () => {
   const history = useHistory();

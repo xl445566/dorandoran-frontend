@@ -1,8 +1,11 @@
 import React from "react";
+
 import { Switch, Route, Link } from "react-router-dom";
-import Rooms from "../feature/rooms/Rooms";
+
 import Login from "../feature/auth/Login";
-import VideoChat from "../feature/videochat/VideoChat";
+import Rooms from "../feature/rooms/Rooms";
+import RoomCreate from "../feature/videochat/RoomCreate";
+// import VideoChat from "../feature/videochat/VideoChat";
 
 function App() {
   return (
@@ -30,7 +33,8 @@ function App() {
           <h1>노인정 방 리스트</h1>
         </Route>
         <Route path="/video/:roomId">
-          <VideoChat />
+          <RoomCreate />
+          {/* <VideoChat /> */}
         </Route>
         <Route path="/error">
           <h1>에러페이지</h1>

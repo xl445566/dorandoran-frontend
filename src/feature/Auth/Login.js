@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
-import styled from "styled-components";
+
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
+import styled from "styled-components";
+
 import kakaoApi from "../../modules/api/kakaoApi";
 import { authSliceActions } from "../../modules/slice/authSlice";
 

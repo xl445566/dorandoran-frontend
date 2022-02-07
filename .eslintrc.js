@@ -8,6 +8,7 @@ module.exports = {
     "eslint:recommended",
     "eslint-config-prettier",
     "plugin:react/recommended",
+    "plugin:import/recommended",
   ],
   parserOptions: {
     ecmaFeatures: {
@@ -25,5 +26,24 @@ module.exports = {
   rules: {
     "prettier/prettier": "error",
     "react/prop-types": "off",
+    "import/order": [
+      "error",
+      {
+        groups: ["builtin", "external", "internal", ["parent", "sibling"]],
+        pathGroups: [
+          {
+            pattern: "react",
+            group: "external",
+            position: "before",
+          },
+        ],
+        pathGroupsExcludedImportTypes: ["react"],
+        "newlines-between": "always",
+        alphabetize: {
+          order: "asc",
+          caseInsensitive: true,
+        },
+      },
+    ],
   },
 };

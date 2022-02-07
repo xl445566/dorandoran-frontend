@@ -1,8 +1,10 @@
 import React, { useEffect, useRef, useState } from "react";
-import styled from "styled-components";
+
 import Peer from "peerjs";
-import { io } from "socket.io-client";
 import { useHistory, useParams } from "react-router-dom";
+import { io } from "socket.io-client";
+import styled from "styled-components";
+
 import MainHeader from "../rooms/MainHeader";
 
 const VideoChat = () => {
