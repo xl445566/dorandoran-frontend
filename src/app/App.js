@@ -1,18 +1,13 @@
 import React from "react";
 import { Switch, Route, Link } from "react-router-dom";
 import Rooms from "../feature/rooms/Rooms";
-import Login from "../feature/Auth/Login";
+import Login from "../feature/auth/Login";
+import VideoChat from "../feature/videochat/VideoChat";
 
 function App() {
   return (
     <>
       <ul>
-        <li>
-          <Link to="/login">1.로그인화면으로</Link>
-        </li>
-        <li>
-          <Link to="/">2 . 방리스트화면</Link>
-        </li>
         <li>
           <Link to="/rooms">3 . 방페이지로</Link>
         </li>
@@ -36,6 +31,7 @@ function App() {
         </Route>
         <Route path="/video">
           <h1>화상채팅</h1>
+          <VideoChat />
         </Route>
         <Route path="/error">
           <h1>에러페이지</h1>
