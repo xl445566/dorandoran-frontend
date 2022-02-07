@@ -19,13 +19,14 @@ const Login = () => {
   const handleLogin = () => {
     const scope =
       "profile_nickname, profile_image, account_email, gender, age_range";
+
     window.Kakao.Auth.login({
       scope,
-      success: async function (response) {
+      success: async (response) => {
         window.Kakao.Auth.setAccessToken(response.access_token);
         window.Kakao.API.request({
           url: "/v2/user/me",
-          success: function (response) {
+          success: (response) => {
             dispatch(
               authSliceActions.loginRequest({
                 email: response.kakao_account.email,
@@ -66,10 +67,13 @@ const Login = () => {
             도란
             <p>우리동네 어르신들의 화상 채팅 방</p>
           </Title>
-          {!isAddress && <span>위치를 알 수 없습니다.</span>}
           <TitleImg>
-            <img src="/assets/cards/card12.png" alt="title img" />
+            <img
+              src="/assets/cards/card12.png"
+              alt="할머니 할아버지가 즐겁게 달리는 이미지"
+            />
           </TitleImg>
+          {!isAddress && <span>위치를 알 수 없습니다.</span>}
           {!address && isAddress && (
             <span>사용자의 위치를 불러오고 있습니다..</span>
           )}
@@ -97,7 +101,7 @@ const Main = styled.main`
   );
 `;
 
-const Section = styled.article`
+const Section = styled.section`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -105,8 +109,8 @@ const Section = styled.article`
   margin: 0 auto;
   padding: 20px;
   border-radius: 20px;
-  text-align: center;
   background-color: #fff;
+  text-align: center;
 `;
 
 const Title = styled.div`

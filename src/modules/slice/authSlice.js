@@ -6,12 +6,11 @@ export const authSlice = createSlice({
     isLoggedIn: false,
     error: "",
     user: null,
-    location: "",
   },
   reducers: {
     loginRequest: (state) => {
       state.isLoggedIn = true;
-      state.result = "";
+      state.error = "";
     },
     loginSuccess: (state, action) => {
       state.isLoggedIn = true;
@@ -19,19 +18,19 @@ export const authSlice = createSlice({
     },
     loginFailure: (state, action) => {
       state.isLoggedIn = false;
-      state.result = action.payload;
+      state.error = action.payload;
       state.user = null;
     },
     logoutRequest: (state) => {
-      state.isLoggingOut = true;
+      state.isLoggedIn = true;
     },
     logoutSuccess: (state) => {
       state.isLoggedIn = false;
       state.error = "";
-      state.location = "";
       state.user = null;
     },
     logoutFailure: (state, action) => {
+      state.isLoggedIn = true;
       state.error = action.payload;
     },
   },
