@@ -1,10 +1,20 @@
-import React from "react";
-import MainHeader from "../Rooms/MainHeader";
-import ChatRoomList from "../Rooms/ChatRoomList";
-
+import React, { useEffect } from "react";
+import MainHeader from "./MainHeader";
+import ChatRoomList from "./ChatRoomList";
 import styled from "styled-components";
+import { useSelector } from "react-redux";
+import { useHistory } from "react-router-dom";
 
 const Rooms = () => {
+  const history = useHistory();
+  const error = useSelector((state) => state.auth.error);
+
+  useEffect(() => {
+    if (error) {
+      history.push("/error");
+    }
+  }, [error]);
+
   return (
     <Entry>
       <MainHeader />

@@ -2,8 +2,8 @@ import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import Peer from "peerjs";
 import { io } from "socket.io-client";
-import MainHeader from "../Rooms/MainHeader";
 import { useHistory, useParams } from "react-router-dom";
+import MainHeader from "../rooms/MainHeader";
 
 const VideoChat = () => {
   const [peerId, setPeerId] = useState("");

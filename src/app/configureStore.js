@@ -1,13 +1,15 @@
-import { configureStore, combineReducers } from "@reduxjs/toolkit";
+import { configureStore } from "@reduxjs/toolkit";
 import createSagaMiddleware from "redux-saga";
 import logger from "redux-logger";
 import rootSaga from "./rootSaga";
-// import { authSlice } from '../modules/slice';
+import authSlice from "../modules/slice/authSlice";
+
 const createStore = () => {
-  const rootReducer = combineReducers({});
   const sagaMiddleware = createSagaMiddleware();
   const store = configureStore({
-    reducer: rootReducer,
+    reducer: {
+      auth: authSlice.reducer,
+    },
     devTools: true,
     middleware: [logger, sagaMiddleware],
   });
