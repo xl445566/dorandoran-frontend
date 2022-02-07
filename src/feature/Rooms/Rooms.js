@@ -1,15 +1,27 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import styled from "styled-components";
+import { useDispatch, useSelector } from "react-redux";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import ChatRoomList from "./ChatRoomList";
 import Header from "../../common/components/Header";
+
+import { roomSliceActions } from "../../modules/slice/roomSlice";
 
 const Rooms = () => {
   const [roomList, setRoomList] = useState([]);
   const [room, setRoom] = useState(0);
   const next = "next";
   const prev = "prev";
+
+  const data = useSelector((state) => console.log());
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    // dispatch(roomSliceActions.getRooms());
+  }, []);
+
+  // console.log(data);
 
   useEffect(() => {
     const fetchEvent = async () => {

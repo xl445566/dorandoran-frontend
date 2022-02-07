@@ -14,20 +14,17 @@ const GlobalStyle = createGlobalStyle`
   }
 
   * {
-<<<<<<< HEAD
     margin: 0;
     padding: 0;
     background: none;
     border: none;
     font-family: 'Noto Sans', sans-serif;
   }
-=======
   margin: 0;
   padding: 0;
   border: none;
   background: none;
 }
->>>>>>> main
 
 html, body {
   width: 100%;
