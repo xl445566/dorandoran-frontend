@@ -48,5 +48,9 @@ img {
   border: 0;
   vertical-align: middle;
 }
+
+#root {
+  height: 100%;
+}
 `;
 export default GlobalStyle;
