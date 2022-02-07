@@ -10,10 +10,14 @@ const Button = ({ onClick, text, type, size, color, img }) => {
           {text}
         </Small>
       )}
-      {size === "medium" && <Medium type={type}>{text}</Medium>}
+      {size === "medium" && (
+        <Medium onClick={onClick} type={type}>
+          {text}
+        </Medium>
+      )}
       {size === "large" && <Large type={type}>{text}</Large>}
       {type === "logout" && (
-        <Logout color={color} img={img}>
+        <Logout onClick={onClick} color={color} img={img}>
           {text}
         </Logout>
       )}

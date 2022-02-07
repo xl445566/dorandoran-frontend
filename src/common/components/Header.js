@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import Button from "./Button";
 
-const Header = ({ leftOnClick, centerOnClick }) => {
+const Header = ({ leftOnClick, centerOnClick, rightOnClick }) => {
   return (
     <HeaderContainer>
       <Button text="방 만들기" size="medium" onClick={leftOnClick} />
@@ -20,6 +20,7 @@ const Header = ({ leftOnClick, centerOnClick }) => {
         text="로그아웃"
         color="black"
         img="./assets/logout.png"
+        onClick={rightOnClick}
       />
     </HeaderContainer>
   );

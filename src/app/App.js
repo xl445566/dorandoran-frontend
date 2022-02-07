@@ -22,7 +22,6 @@ function App() {
         <Route path="/login">
           <Login />
         </Route>
-        <Route path="/login"></Route>
         <Route path="/" exact>
           <Rooms />
         </Route>

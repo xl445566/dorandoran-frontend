@@ -8,9 +8,12 @@ import { authSliceActions } from "../../modules/slice/authSlice";
 const Login = () => {
   const history = useHistory();
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+
   const dispatch = useDispatch();
   const [address, setAddress] = useState("");
   const [isAddress, setIsAddress] = useState(true);
+
+  const authData = useSelector((state) => state.auth);
 
   useEffect(() => {
     kakaoApi.getUserLocation(setAddress, setIsAddress);
@@ -49,7 +52,11 @@ const Login = () => {
     window.Kakao.init(jsKey);
   }
 
+  console.log(authData);
   useEffect(() => {
+    // if (isLoggedIn && authData.user.name) {
+    //   history.push("/");
+    // }
     if (isLoggedIn) {
       history.push("/");
     }

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import Card from "../../common/components/Card";
+import createKey from "../../common/utils/createKey";
 
 const ChatRoomList = ({ roomList }) => {
   const [rooms, setRooms] = useState([]);
@@ -14,7 +15,7 @@ const ChatRoomList = ({ roomList }) => {
       <ChatRoomContainer>
         {rooms &&
           rooms.map((value, index) => {
-            return <Card key={value + index} roomInfo={value} index={index} />;
+            return <Card key={createKey()} roomInfo={value} index={index} />;
           })}
       </ChatRoomContainer>
     </>
@@ -27,6 +28,7 @@ const ChatRoomContainer = styled.ul`
   grid-template-rows: repeat(2, minmax(100px, auto));
   gap: 10px;
   width: 70%;
+  height: 80vh;
 `;
 
 export default ChatRoomList;

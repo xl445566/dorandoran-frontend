@@ -9,7 +9,7 @@ export const authSlice = createSlice({
   },
   reducers: {
     loginRequest: (state) => {
-      state.isLoggedIn = true;
+      state.isLoggedIn = false;
       state.error = "";
     },
     loginSuccess: (state, action) => {
@@ -30,7 +30,7 @@ export const authSlice = createSlice({
       state.user = null;
     },
     logoutFailure: (state, action) => {
-      state.isLoggedIn = true;
+      state.isLoggedIn = false;
       state.error = action.payload;
     },
   },
