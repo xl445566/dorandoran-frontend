@@ -1,5 +1,6 @@
-import { call, takeEvery, put } from "redux-saga/effects";
 import axios from "axios";
+import { call, takeEvery, put } from "redux-saga/effects";
+
 import { authSliceActions } from "../slice/authSlice";
 
 const loginSaga = function* ({ payload }) {

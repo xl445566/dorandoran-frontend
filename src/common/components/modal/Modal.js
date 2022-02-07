@@ -61,6 +61,7 @@ const Container = styled.div`
   align-items: center;
   border: 15px solid #7f8c8d;
   border-radius: 2rem;
+  background: var(--white-color);
   overflow: hidden;
   width: 60%;
   height: 80%;

@@ -25,14 +25,13 @@ function App() {
         <Route path="/login">
           <Login />
         </Route>
-        <Route path="/login"></Route>
         <Route path="/" exact>
           <Rooms />
         </Route>
         <Route path="/rooms">
           <h1>노인정 방 리스트</h1>
         </Route>
-        <Route path="/video/:roomId">
+        <Route path="/video">
           <RoomCreate />
           {/* <VideoChat /> */}
         </Route>
