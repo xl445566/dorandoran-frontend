@@ -83,6 +83,7 @@ const Rooms = () => {
 const Entry = styled.main`
   height: 100%;
   background-color: #f6f8f9;
+  color: var(--black-color);
 `;
 
 const MainBody = styled.section`
