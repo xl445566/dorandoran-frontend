@@ -1,9 +1,9 @@
 import axios from "axios";
-import { call, take, put, takeEvery } from "redux-saga/effects";
+import { call, takeEvery, put } from "redux-saga/effects";
 
 import { roomSliceActions } from "../slice/roomSlice";
 
-const getRoomSaga = function* getRoomSaga() {
+const getRoomSaga = function* () {
   try {
     const response = yield call(() =>
       axios.get("http://localhost:4000/rooms", {
@@ -11,28 +11,101 @@ const getRoomSaga = function* getRoomSaga() {
       })
     );
 
-    if (response.data.rooms) {
-      yield put(roomSliceActions.logoutFailure(response.data.rooms));
+    if (response.data.message) {
+      yield put(roomSliceActions.getRoomFailure(response.data.rooms));
       return;
     }
+
+    yield put(roomSliceActions.getRoomsSuccess(response.data.rooms));
   } catch (error) {
-    console.log(error);
+    yield put(roomSliceActions.getRoomFailure(error));
   }
 };
 
-export function* watchInitRooms() {
-  yield take(roomSliceActions.getRooms, getRoomSaga);
-}
-
-const createRoomSaga = function* (action) {
+const getNextRoomSaga = function* ({ payload }) {
   try {
-    const roomData = action.payload;
+    const response = yield call(() =>
+      axios.post(
+        "http://localhost:4000/rooms",
+        {
+          room: payload[5],
+          direction: "next",
+        },
+        {
+          withCredentials: true,
+        }
+      )
+    );
 
+    if (response.data.message) {
+      yield put(roomSliceActions.getRoomFailure(response.data));
+      return;
+    }
+
+    yield put(roomSliceActions.getRoomsSuccess(response.data.rooms));
+  } catch (error) {
+    yield put(roomSliceActions.getRoomFailure(error));
+  }
+};
+
+const getPrevRoomSaga = function* ({ payload }) {
+  try {
+    const response = yield call(() =>
+      axios.post(
+        "http://localhost:4000/rooms",
+        {
+          room: payload[5],
+          direction: "prev",
+        },
+        {
+          withCredentials: true,
+        }
+      )
+    );
+
+    if (response.data.message) {
+      yield put(roomSliceActions.getRoomFailure(response));
+      return;
+    }
+
+    yield put(roomSliceActions.getRoomsSuccess(response.data.rooms));
+  } catch (error) {
+    yield put(roomSliceActions.getRoomFailure(error));
+  }
+};
+
+const getRefreshRoomSaga = function* ({ payload }) {
+  try {
+    const response = yield call(() =>
+      axios.post(
+        "http://localhost:4000/rooms/refresh",
+        {
+          roomList: payload,
+        },
+        {
+          withCredentials: true,
+        }
+      )
+    );
+
+    if (response.data.message) {
+      yield put(roomSliceActions.getRoomFailure(response));
+      return;
+    }
+
+    yield put(roomSliceActions.getRoomsSuccess(response.data.rooms));
+  } catch (error) {
+    yield put(roomSliceActions.getRoomFailure(error));
+  }
+};
+
+const createRoomSaga = function* ({ payload }) {
+  try {
     yield call(async () => {
       await axios.post(
         "http://localhost:4000/rooms/new",
         {
-          roomData,
+          roomData: payload,
         },
         {
           withCredentials: true,
@@ -45,6 +118,22 @@ const createRoomSaga = function* (action) {
     yield put(roomSliceActions.createRoomFailure(error));
   }
 };
+
+export function* watchInitRooms() {
+  yield takeEvery(roomSliceActions.getRooms, getRoomSaga);
+}
+
+export function* watchNextRooms() {
+  yield takeEvery(roomSliceActions.getNextRooms, getNextRoomSaga);
+}
+
+export function* watchPrevRooms() {
+  yield takeEvery(roomSliceActions.getPrevRooms, getPrevRoomSaga);
+}
+
+export function* watchFreshRooms() {
+  yield takeEvery(roomSliceActions.getFreshRooms, getRefreshRoomSaga);
+}
 
 export function* watchCreateRoom() {
   yield takeEvery(roomSliceActions.createRoomRequest, createRoomSaga);

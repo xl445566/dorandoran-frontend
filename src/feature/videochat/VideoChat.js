@@ -5,7 +5,7 @@ import { useHistory, useParams } from "react-router-dom";
 import { io } from "socket.io-client";
 import styled from "styled-components";
 
-import MainHeader from "../rooms/MainHeader";
+import Header from "../../common/components/Header";
 
 const VideoChat = () => {
   const [peerId, setPeerId] = useState("");
@@ -142,7 +142,7 @@ const VideoChat = () => {
       <h1>Room Name : {roomName}</h1>
       <button onClick={handleLeaveRoom}>나가기</button>
       <VideoChatContainer>
-        <MainHeader />
+        <Header />
         <VideoWrapper>
           <VideoBox>
             <video autoPlay playsInline ref={myVideoRef} />

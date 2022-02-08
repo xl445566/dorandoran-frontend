@@ -10,7 +10,7 @@ export const makeRandomRoomName = () => {
     " 님의 자랑방",
     " 님의 토크방",
     " 님의 이야기방",
-    " 님의 비밀이야기방",
+    " 님의 비밀얘기방",
     " 님의 일루와방",
   ];
 
@@ -36,5 +36,6 @@ export const makeRandomRoomImage = () => {
   ];
 
   const randomIndex = Math.ceil(Math.random() * 11);
+
   return roomImages[randomIndex];
 };

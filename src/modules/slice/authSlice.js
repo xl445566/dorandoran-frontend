@@ -20,7 +20,7 @@ export const authSlice = createSlice({
       state.error = action.payload;
     },
     loginRequest: (state) => {
-      state.isLoggedIn = true;
+      state.isLoggedIn = false;
       state.error = "";
     },
     loginSuccess: (state, action) => {

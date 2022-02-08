@@ -15,6 +15,12 @@ const GlobalStyle = createGlobalStyle`
   }
 
   * {
+    margin: 0;
+    padding: 0;
+    background: none;
+    border: none;
+    font-family: 'Noto Sans', sans-serif;
+  }
   margin: 0;
   padding: 0;
   border: none;
@@ -48,6 +54,10 @@ img {
   width: 100%;
   border: 0;
   vertical-align: middle;
+}
+
+#root {
+  height: 100%;
 }
 `;
 export default GlobalStyle;

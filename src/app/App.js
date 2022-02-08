@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Switch, Route, Link, useHistory } from "react-router-dom";
 
 import Login from "../feature/auth/Login";
+import Room from "../feature/room/Room";
 import Rooms from "../feature/rooms/Rooms";
 import VideoChat from "../feature/videochat/VideoChat";
 import { authSliceActions } from "../modules/slice/authSlice";
@@ -42,7 +43,8 @@ function App() {
           {user && user.name ? <Rooms /> : <Login />}
         </Route>
         <Route path="/rooms">
-          <h1>노인정 방 리스트</h1>
+          <h1>노인정 방 페이지</h1>
+          <Room />
         </Route>
         <Route path="/video">
           <VideoChat />

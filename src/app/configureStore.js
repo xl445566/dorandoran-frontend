@@ -6,6 +6,8 @@ import authSlice from "../modules/slice/authSlice";
 import roomSlice from "../modules/slice/roomSlice";
 import rootSaga from "./rootSaga";
 
+import roomSlice from "../modules/slice/roomSlice";
+
 const createStore = () => {
   const sagaMiddleware = createSagaMiddleware();
   const store = configureStore({
