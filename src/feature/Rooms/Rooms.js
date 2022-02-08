@@ -16,6 +16,9 @@ const Rooms = () => {
   const isLoading = useSelector((state) => state.room.isLoading);
   const error = useSelector((state) => state.room.error);
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+  const currentAddress = useSelector((state) => state.auth);
+  console.log(currentAddress);
+
   const history = useHistory();
   const dispatch = useDispatch();
   const [isShow, setIsShow] = useState(false);

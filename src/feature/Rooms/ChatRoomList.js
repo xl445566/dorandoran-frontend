@@ -11,6 +11,8 @@ const ChatRoomList = ({ roomList }) => {
   useEffect(() => {
     setRooms(roomList);
   }, [roomList]);
+
+  console.log("여기는 chatRoomlist 컴포넌트", roomList);
   return (
     <>
       <ChatRoomContainer>

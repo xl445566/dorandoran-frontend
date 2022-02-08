@@ -42,7 +42,7 @@ function App() {
         <Route path="/" exact>
           {user && user.name ? <Rooms /> : <Login />}
         </Route>
-        <Route path="/rooms">
+        <Route path="/room/:roomId">
           <h1>노인정 방 페이지</h1>
           <Room />
         </Route>

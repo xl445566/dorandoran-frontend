@@ -40,6 +40,10 @@ const Small = styled.button`
       color: var(--black-color);
       font-weight: bold;
       text-align: right;
+      &:hover {
+        border-bottom: 2px solid var(--scarlet-color);
+        color: var(--scarlet-color);
+      }
       `
       : null;
   }};
@@ -56,23 +60,8 @@ const Medium = styled.button`
   &:hover {
     border: 2px solid var(--scarlet-color);
     background-color: var(--white-color);
-    color: var(--dark-orange-color);
+    color: var(--scarlet-color);
   }
-
-  ${({ type }) => {
-    return type === "cancel"
-      ? `
-      border 2px solid var(--scarlet-color);
-      background: none;
-      color: var(--scarlet-color);
-
-      &:hover {
-        background-color: var(--dark-orange-color);
-        color: var(--white-color);
-      }
-      `
-      : null;
-  }}
 `;
 
 const Large = styled.button`
@@ -86,7 +75,7 @@ const Large = styled.button`
   &:hover {
     border: 2px solid var(--scarlet-color);
     background-color: var(--white-color);
-    color: var(--dark-orange-color);
+    color: var(--scarlet-color);
   }
 
   ${({ type }) => {

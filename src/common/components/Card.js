@@ -7,6 +7,7 @@ import { makeRandomRoomImage } from "../utils/makeRoomResource";
 
 const Card = ({ roomInfo }) => {
   const { title, users, room_no } = roomInfo;
+
   return (
     <>
       <ChatRoom>
@@ -15,7 +16,7 @@ const Card = ({ roomInfo }) => {
         </ImgContent>
         <TextContent>
           <RoomNumber>{room_no < 10 ? "0" + room_no : room_no}</RoomNumber>
-          <h1>{title.length > 10 ? title.slice(0, 10) + "..." : title}</h1>
+          <h1>{title.length > 9 ? title.slice(0, 9) + "..." : title}</h1>
           <ul>
             {users.map((user) => {
               return <li key={createKey()}>{user.name}</li>;
