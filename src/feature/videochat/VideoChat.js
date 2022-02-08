@@ -194,7 +194,7 @@ const VideoChat = () => {
 const VideoChatContainer = styled.main`
   width: 100%;
   height: 100%;
-  background: var(--dark-gray-color);
+  background: var(--light-gray-color);
 `;
 
 const VideoWrapper = styled.section`

@@ -1,13 +1,29 @@
-import React from "react";
+import React, { useEffect } from "react";
 
-import { Switch, Route, Link } from "react-router-dom";
+import { useBeforeunload } from "react-beforeunload";
+import { useDispatch, useSelector } from "react-redux";
+import { Switch, Route, Link, useHistory } from "react-router-dom";
 
 import Login from "../feature/auth/Login";
 import Rooms from "../feature/rooms/Rooms";
-import RoomCreate from "../feature/videochat/RoomCreate";
-// import VideoChat from "../feature/videochat/VideoChat";
+import VideoChat from "../feature/videochat/VideoChat";
+import { authSliceActions } from "../modules/slice/authSlice";
 
 function App() {
+  const user = useSelector((state) => state.auth.user);
+  const dispatch = useDispatch();
+  const history = useHistory();
+
+  useBeforeunload((event) => {
+    event.preventDefault();
+  });
+
+  useEffect(() => {
+    if (!user) {
+      dispatch(authSliceActions.cookieClear());
+      history.push("/");
+    }
+  }, [user]);
   return (
     <>
       <ul>
@@ -22,18 +38,14 @@ function App() {
         </li>
       </ul>
       <Switch>
-        <Route path="/login">
-          <Login />
-        </Route>
         <Route path="/" exact>
-          <Rooms />
+          {user && user.name ? <Rooms /> : <Login />}
         </Route>
         <Route path="/rooms">
           <h1>노인정 방 리스트</h1>
         </Route>
         <Route path="/video">
-          <RoomCreate />
-          {/* <VideoChat /> */}
+          <VideoChat />
         </Route>
         <Route path="/error">
           <h1>에러페이지</h1>

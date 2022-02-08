@@ -30,7 +30,7 @@ const createRoomSaga = function* (action) {
 
     yield call(async () => {
       await axios.post(
-        "http://localhost:4000/rooms",
+        "http://localhost:4000/rooms/new",
         {
           roomData,
         },
