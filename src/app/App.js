@@ -6,6 +6,13 @@ import VideoChat from "../feature/videochat/VideoChat";
 import Room from "../feature/room/Room";
 
 function App() {
+  // const history = useHistory();
+  // const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+  // useEffect(() => {
+  //   if (!isLoggedIn) {
+  //     history.push("/login");
+  //   }
+  // }, [isLoggedIn]);
   return (
     <>
       <ul>
