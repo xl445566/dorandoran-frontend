@@ -25,7 +25,7 @@ const GlobalStyle = createGlobalStyle`
   padding: 0;
   border: none;
   background: none;
-}
+
 
 html, body {
   width: 100%;
@@ -60,4 +60,5 @@ img {
   height: 100%;
 }
 `;
+
 export default GlobalStyle;

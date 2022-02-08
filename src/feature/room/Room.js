@@ -1,9 +1,11 @@
 import React, { useEffect } from "react";
-import styled from "styled-components";
+
 import { useDispatch, useSelector } from "react-redux";
-import { authSliceActions } from "../../modules/slice/authSlice";
 import { useHistory } from "react-router-dom";
+import styled from "styled-components";
+
 import Header from "../../common/components/Header";
+import { authSliceActions } from "../../modules/slice/authSlice";
 
 const Room = () => {
   const error = useSelector((state) => state.room.error);
