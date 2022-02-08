@@ -6,11 +6,11 @@ import kakaoApi from "../../modules/api/kakaoApi";
 import { authSliceActions } from "../../modules/slice/authSlice";
 
 const Login = () => {
-  const history = useHistory();
-  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
-  const dispatch = useDispatch();
   const [address, setAddress] = useState("");
   const [isAddress, setIsAddress] = useState(true);
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+  const history = useHistory();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     kakaoApi.getUserLocation(setAddress, setIsAddress);

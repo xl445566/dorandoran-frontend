@@ -1,15 +1,41 @@
 import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useHistory } from "react-router-dom";
 import styled from "styled-components";
-import MainHeader from "../rooms/MainHeader";
-import Character from "./Character";
+import { authSliceActions } from "../../modules/slice/authSlice";
 import { useCharacter } from "../../common/hooks/useCharacter";
+import Header from "../../common/components/Header";
+import Character from "./Character";
 
-const room = () => {
+const Room = () => {
   const char = useCharacter("교감쌤");
   const [mCount, setMcount] = useState(0);
   useEffect(() => {
     window.addEventListener("keydown", handleKeyDown);
   }, []);
+
+  const error = useSelector((state) => state.room.error);
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+  const history = useHistory();
+  const dispatch = useDispatch();
+
+  const handleLogout = () => {
+    window.Kakao.API.request({
+      url: "/v1/user/unlink",
+      success: function () {
+        dispatch(authSliceActions.logoutRequest());
+      },
+    });
+  };
+
+  useEffect(() => {
+    if (error) {
+      history.push("/error");
+    }
+    if (!isLoggedIn) {
+      history.push("/login");
+    }
+  }, [error, isLoggedIn]);
 
   let count = 0;
 
@@ -52,7 +78,7 @@ const room = () => {
   return (
     <>
       <Main>
-        <MainHeader />
+        <Header rightOnClick={handleLogout} title="우리들의 방" />
         <Section>
           <Character
             count={mCount}
@@ -78,13 +104,13 @@ const Main = styled.main`
 `;
 
 const Section = styled.section`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
   width: 70%;
   height: 480px;
   margin: 0 auto;
@@ -95,4 +121,4 @@ const Section = styled.section`
   box-shadow: 1px 1px 18px 4px #c87247;
 `;
 
-export default room;
+export default Room;

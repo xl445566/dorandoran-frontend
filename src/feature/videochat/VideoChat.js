@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import Peer from "peerjs";
-import MainHeader from "../rooms/MainHeader";
+import Header from "../../common/components/Header";
 
 const VideoChat = () => {
   const [peerId, setPeerId] = useState("");
@@ -80,7 +80,7 @@ const VideoChat = () => {
         Call
       </button>
       <VideoChatContainer>
-        <MainHeader />
+        <Header />
         <VideoWrapper>
           <VideoBox className="videoBox">
             <video autoPlay playsInline ref={myVideoRef} />

@@ -30,11 +30,11 @@ function App() {
         <Route path="/login">
           <Login />
         </Route>
-        <Route path="/login"></Route>
         <Route path="/" exact>
           <Rooms />
         </Route>
         <Route path="/rooms">
+          <h1>노인정 방 페이지</h1>
           <Room />
         </Route>
         <Route path="/video">

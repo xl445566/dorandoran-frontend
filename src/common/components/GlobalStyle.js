@@ -14,6 +14,12 @@ const GlobalStyle = createGlobalStyle`
   }
 
   * {
+    margin: 0;
+    padding: 0;
+    background: none;
+    border: none;
+    font-family: 'Noto Sans', sans-serif;
+  }
   margin: 0;
   padding: 0;
   border: none;
