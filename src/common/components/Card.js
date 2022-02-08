@@ -1,7 +1,9 @@
 import React from "react";
+
 import styled from "styled-components";
-import { makeRandomRoomImage } from "../utils/makeRoomResource";
+
 import createKey from "../utils/createKey";
+import { makeRandomRoomImage } from "../utils/makeRoomResource";
 
 const Card = ({ roomInfo }) => {
   const { title, users, room_no } = roomInfo;

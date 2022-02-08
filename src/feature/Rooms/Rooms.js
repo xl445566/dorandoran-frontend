@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react";
-import styled from "styled-components";
-import { useDispatch, useSelector } from "react-redux";
+
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
-import ChatRoomList from "./ChatRoomList";
-import Header from "../../common/components/Header";
-import { roomSliceActions } from "../../modules/slice/roomSlice";
-import { authSliceActions } from "../../modules/slice/authSlice";
+import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
+import styled from "styled-components";
+
+import Header from "../../common/components/Header";
+import { authSliceActions } from "../../modules/slice/authSlice";
+import { roomSliceActions } from "../../modules/slice/roomSlice";
+import ChatRoomList from "./ChatRoomList";
 import RoomCreate from "./RoomCreate";
 
 const Rooms = () => {

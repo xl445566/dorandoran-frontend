@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
+
 import styled from "styled-components";
+
 import Card from "../../common/components/Card";
 import createKey from "../../common/utils/createKey";
 
@@ -9,7 +11,6 @@ const ChatRoomList = ({ roomList }) => {
   useEffect(() => {
     setRooms(roomList);
   }, [roomList]);
-
   return (
     <>
       <ChatRoomContainer>

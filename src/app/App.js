@@ -1,18 +1,30 @@
-import React from "react";
-import { Switch, Route, Link } from "react-router-dom";
-import Rooms from "../feature/rooms/Rooms";
+import React, { useEffect } from "react";
+
+import { useBeforeunload } from "react-beforeunload";
+import { useDispatch, useSelector } from "react-redux";
+import { Switch, Route, Link, useHistory } from "react-router-dom";
+
 import Login from "../feature/auth/Login";
-import VideoChat from "../feature/videochat/VideoChat";
 import Room from "../feature/room/Room";
+import Rooms from "../feature/rooms/Rooms";
+import VideoChat from "../feature/videochat/VideoChat";
+import { authSliceActions } from "../modules/slice/authSlice";
 
 function App() {
-  // const history = useHistory();
-  // const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
-  // useEffect(() => {
-  //   if (!isLoggedIn) {
-  //     history.push("/login");
-  //   }
-  // }, [isLoggedIn]);
+  const user = useSelector((state) => state.auth.user);
+  const dispatch = useDispatch();
+  const history = useHistory();
+
+  useBeforeunload((event) => {
+    event.preventDefault();
+  });
+
+  useEffect(() => {
+    if (!user) {
+      dispatch(authSliceActions.cookieClear());
+      history.push("/");
+    }
+  }, [user]);
   return (
     <>
       <ul>
@@ -27,22 +39,19 @@ function App() {
         </li>
       </ul>
       <Switch>
-        <Route path="/login">
-          <Login />
-        </Route>
         <Route path="/" exact>
-          <Rooms />
+          {user && user.name ? <Rooms /> : <Login />}
         </Route>
         <Route path="/rooms">
           <h1>노인정 방 페이지</h1>
           <Room />
         </Route>
         <Route path="/video">
-          <h1>화상채팅</h1>
           <VideoChat />
         </Route>
         <Route path="/error">
           <h1>에러페이지</h1>
+          <p>에러내용</p>
         </Route>
       </Switch>
     </>

@@ -1,5 +1,6 @@
-import { call, takeEvery, put } from "redux-saga/effects";
 import axios from "axios";
+import { call, takeEvery, put } from "redux-saga/effects";
+
 import { authSliceActions } from "../slice/authSlice";
 
 const loginSaga = function* ({ payload }) {
@@ -39,10 +40,28 @@ const logoutSaga = function* () {
   }
 };
 
+const cookieClearSaga = function* () {
+  try {
+    yield call(() =>
+      axios.get("http://localhost:4000/auth/", {
+        withCredentials: true,
+      })
+    );
+
+    yield put(authSliceActions.cookieClearSuccess());
+  } catch (error) {
+    yield put(authSliceActions.cookieClearFailure(error));
+  }
+};
+
 export function* watchLogin() {
   yield takeEvery(authSliceActions.loginRequest, loginSaga);
 }
 
 export function* watchLogout() {
   yield takeEvery(authSliceActions.logoutRequest, logoutSaga);
+}
+
+export function* watchCookieClearSaga() {
+  yield takeEvery(authSliceActions.cookieClear, cookieClearSaga);
 }

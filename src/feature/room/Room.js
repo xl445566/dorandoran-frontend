@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
+
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import styled from "styled-components";
-import { authSliceActions } from "../../modules/slice/authSlice";
-import { useCharacter } from "../../common/hooks/useCharacter";
+
 import Header from "../../common/components/Header";
+import { useCharacter } from "../../common/hooks/useCharacter";
+import { authSliceActions } from "../../modules/slice/authSlice";
 import Character from "./Character";
 
 const Room = () => {

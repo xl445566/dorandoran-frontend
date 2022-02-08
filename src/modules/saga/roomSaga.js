@@ -1,5 +1,6 @@
-import { call, takeEvery, put } from "redux-saga/effects";
 import axios from "axios";
+import { call, takeEvery, put } from "redux-saga/effects";
+
 import { roomSliceActions } from "../slice/roomSlice";
 
 const getRoomSaga = function* () {

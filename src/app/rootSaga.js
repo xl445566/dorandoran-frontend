@@ -1,5 +1,10 @@
 import { all, fork } from "redux-saga/effects";
-import { watchLogin, watchLogout } from "../modules/saga/authSaga";
+
+import {
+  watchLogin,
+  watchLogout,
+  watchCookieClearSaga,
+} from "../modules/saga/authSaga";
 import {
   watchInitRooms,
   watchNextRooms,
@@ -17,5 +22,6 @@ export default function* rootSaga() {
     fork(watchPrevRooms),
     fork(watchFreshRooms),
     fork(watchCreateRoom),
+    fork(watchCookieClearSaga),
   ]);
 }
