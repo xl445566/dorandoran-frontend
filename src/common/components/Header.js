@@ -1,8 +1,9 @@
 import React from "react";
 import styled from "styled-components";
 import Button from "./Button";
+import LogoutButton from "./LogoutButton";
 
-const Header = ({ leftOnClick, centerOnClick, rightOnClick }) => {
+const Header = ({ leftOnClick, centerOnClick, rightOnClick, title }) => {
   return (
     <HeaderContainer>
       <Button text="방 만들기" size="medium" onClick={leftOnClick} />
@@ -13,15 +14,9 @@ const Header = ({ leftOnClick, centerOnClick, rightOnClick }) => {
           size="small"
           onClick={centerOnClick}
         />
-        <Title>강남구 대치경로당</Title>
+        <Title>{title ? title : "강남구 대치노인정"}</Title>
       </RoomInfo>
-      <Button
-        type="logout"
-        text="로그아웃"
-        color="black"
-        img="./assets/logout.png"
-        onClick={rightOnClick}
-      />
+      <LogoutButton text="로그아웃" onClick={rightOnClick} />
     </HeaderContainer>
   );
 };

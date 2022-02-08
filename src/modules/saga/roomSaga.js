@@ -98,15 +98,13 @@ const getRefreshRoomSaga = function* ({ payload }) {
   }
 };
 
-const createRoomSaga = function* (action) {
+const createRoomSaga = function* ({ payload }) {
   try {
-    const roomData = action.payload;
-
     yield call(async () => {
       await axios.post(
         "http://localhost:4000/rooms/new",
         {
-          roomData,
+          roomData: payload,
         },
         {
           withCredentials: true,

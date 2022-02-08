@@ -69,11 +69,11 @@ const Rooms = () => {
       />
       <MainBody>
         <button onClick={handlePrevClick}>
-          <FaChevronLeft size="60" className="icons" />
+          <FaChevronLeft size="60" className="icon" />
         </button>
         {!isLoading && <ChatRoomList roomList={roomList} />}
         <button onClick={handleNextClick}>
-          <FaChevronRight size="60" className="icons" />
+          <FaChevronRight size="60" className="icon" />
         </button>
       </MainBody>
     </Entry>
@@ -92,7 +92,7 @@ const MainBody = styled.section`
   width: 100%;
   align-items: center;
 
-  .icons {
+  .icon {
     color: var(--black-color);
   }
 `;

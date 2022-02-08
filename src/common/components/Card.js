@@ -9,7 +9,7 @@ const Card = ({ roomInfo }) => {
     <>
       <ChatRoom>
         <ImgContent>
-          <img src={makeRandomRoomImage()} alt="image" />
+          <img src={makeRandomRoomImage()} alt="채팅방 프로필 이미지" />
         </ImgContent>
         <TextContent>
           <RoomNumber>{room_no < 10 ? "0" + room_no : room_no}</RoomNumber>
@@ -26,6 +26,9 @@ const Card = ({ roomInfo }) => {
 };
 
 const ChatRoom = styled.li`
+  display: flex;
+  flex-direction: column;
+  hieght: 100%;
   width: 100%;
   border: 1px solid var(--dark-grey-shadow-color);
   border-radius: 15px;
@@ -33,41 +36,33 @@ const ChatRoom = styled.li`
   box-shadow: 1px 1px 10px 1px var(--light-grey-shadow-color);
   overflow: hidden;
 
-  display: flex;
-  flex-direction: column;
-  hieght: 100%;
-
   h1 {
+    margin: 10px 0 13px 0;
     padding: 0 0 5px;
-    margin: 10px 0 15px 0;
     border-bottom: 1px solid var(--dark-grey-shadow-color);
     font-size: 18px;
   }
 `;
 
 const ImgContent = styled.div`
-  height: 50%;
-
-  img {
-    object-fit: cover;
-  }
+  width: 100%;
 `;
 
 const TextContent = styled.div`
-  height: 57%;
-  padding: 3%;
-  width: 96%;
   display: flex;
   flex-direction: column;
   justify-content: center;
+  width: 96%;
+  height: 57%;
+  padding: 2%;
   background: var(--white-color);
 
   ul {
     display: grid;
-    width: 100%;
     grid-template-columns: repeat(2, 1fr);
     grid-template-rows: repeat(2, minmax(10px, auto));
     gap: 10px;
+    width: 100%;
   }
 
   li {
@@ -75,7 +70,6 @@ const TextContent = styled.div`
     justify-content: center;
     align-items: center;
     width: 90%;
-
     padding: 1%;
     border-radius: 15px;
     background-color: var(--orange-color);

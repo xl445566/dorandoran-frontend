@@ -1,8 +1,7 @@
 import React from "react";
 import styled from "styled-components";
-import PropTypes from "prop-types";
 
-const Button = ({ onClick, text, type, size, color, img }) => {
+const Button = ({ onClick, text, type, size }) => {
   return (
     <>
       {size === "small" && (
@@ -15,11 +14,10 @@ const Button = ({ onClick, text, type, size, color, img }) => {
           {text}
         </Medium>
       )}
-      {size === "large" && <Large type={type}>{text}</Large>}
-      {type === "logout" && (
-        <Logout onClick={onClick} color={color} img={img}>
+      {size === "large" && (
+        <Large onClick={onClick} type={type}>
           {text}
-        </Logout>
+        </Large>
       )}
     </>
   );
@@ -35,8 +33,8 @@ const Small = styled.button`
   ${({ type }) => {
     return type === "refresh"
       ? `
-      border-radius: 0;
       border-bottom: 2px solid var(--black-color);
+      border-radius: 0;
       background: url('./assets/refresh.png') no-repeat 0% 45%;
       color: var(--black-color);
       font-weight: bold;
@@ -97,30 +95,5 @@ const Large = styled.button`
       : null;
   }}
 `;
-
-const Logout = styled.button`
-  ${({ color, img }) => {
-    return color
-      ? `
-    width: 95px;
-    border-radius: 0;
-    border-bottom: 2px solid ${color};
-    background: url(${img}) no-repeat 0% 45%;
-    color: ${color};
-    font-size: 20px;
-    font-weight: bold;
-    text-align: right;
-    `
-      : null;
-  }}
-`;
-
-Button.propTypes = {
-  text: PropTypes.string,
-  type: PropTypes.string,
-  size: PropTypes.string,
-  color: PropTypes.string,
-  img: PropTypes.string,
-};
 
 export default Button;

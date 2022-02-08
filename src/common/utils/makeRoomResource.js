@@ -36,5 +36,6 @@ export const makeRandomRoomImage = () => {
   ];
 
   const randomIndex = Math.ceil(Math.random() * 11);
+
   return roomImages[randomIndex];
 };
