@@ -30,7 +30,7 @@ export const authSlice = createSlice({
       state.user = null;
     },
     logoutFailure: (state, action) => {
-      state.isLoggedIn = false;
+      state.isLoggedIn = true;
       state.error = action.payload;
     },
   },

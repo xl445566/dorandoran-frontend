@@ -51,6 +51,7 @@ const Medium = styled.button`
   color: var(--white-color);
   font-size: 18px;
   font-weight: bold;
+
   &:hover {
     border: 2px solid var(--scarlet-color);
     background-color: var(--white-color);
@@ -63,6 +64,7 @@ const Medium = styled.button`
       border 2px solid var(--scarlet-color);
       background: none;
       color: var(--scarlet-color);
+
       &:hover {
         background-color: var(--dark-orange-color);
         color: var(--white-color);
