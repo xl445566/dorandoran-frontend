@@ -3,8 +3,16 @@ import { Switch, Route, Link } from "react-router-dom";
 import Rooms from "../feature/rooms/Rooms";
 import Login from "../feature/auth/Login";
 import VideoChat from "../feature/videochat/VideoChat";
+import Room from "../feature/room/Room";
 
 function App() {
+  // const history = useHistory();
+  // const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+  // useEffect(() => {
+  //   if (!isLoggedIn) {
+  //     history.push("/login");
+  //   }
+  // }, [isLoggedIn]);
   return (
     <>
       <ul>
@@ -27,7 +35,7 @@ function App() {
           <Rooms />
         </Route>
         <Route path="/rooms">
-          <h1>노인정 방 페이지</h1>
+          <Room />
         </Route>
         <Route path="/video">
           <h1>화상채팅</h1>
