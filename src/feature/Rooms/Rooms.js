@@ -16,8 +16,9 @@ const Rooms = () => {
   const isLoading = useSelector((state) => state.room.isLoading);
   const error = useSelector((state) => state.room.error);
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
-  const currentAddress = useSelector((state) => state.auth);
-  console.log(currentAddress);
+  const currentAddress = useSelector(
+    (state) => state.auth.user.current_address
+  );
 
   const history = useHistory();
   const dispatch = useDispatch();
@@ -71,6 +72,8 @@ const Rooms = () => {
         leftOnClick={handleModalShowChange}
         centerOnClick={handleRefreshClick}
         rightOnClick={handleLogout}
+        title={`${currentAddress} 노인정`}
+        text="방 만들기"
       />
       <MainBody>
         <button onClick={handlePrevClick}>

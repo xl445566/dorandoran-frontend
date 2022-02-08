@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 
 import { useDispatch, useSelector } from "react-redux";
-import { useHistory } from "react-router-dom";
+import { useParams, useHistory } from "react-router-dom";
 import styled from "styled-components";
 
 import Header from "../../common/components/Header";
@@ -28,6 +28,10 @@ const Room = () => {
         dispatch(authSliceActions.logoutRequest());
       },
     });
+  };
+
+  const onRoomsPage = () => {
+    history.goBack();
   };
 
   useEffect(() => {
@@ -77,10 +81,17 @@ const Room = () => {
         break;
     }
   };
+
+  useParams;
   return (
     <>
       <Main>
-        <Header rightOnClick={handleLogout} title="우리들의 방" />
+        <Header
+          rightOnClick={handleLogout}
+          title={history.location.state.title}
+          text="방으로 가기"
+          leftOnClick={onRoomsPage}
+        />
         <Section>
           <Character
             count={mCount}
@@ -98,11 +109,7 @@ const Room = () => {
 const Main = styled.main`
   position: relative;
   height: 100%;
-  background: linear-gradient(
-    90deg,
-    var(--scarlet-color) 0%,
-    var(--orange-color) 100%
-  );
+  background: var(--light-gray-color);
 `;
 
 const Section = styled.section`
@@ -120,7 +127,7 @@ const Section = styled.section`
   border-radius: 20px;
   background: url(/assets/pixelArt-bg1.png) no-repeat center;
   text-align: center;
-  box-shadow: 1px 1px 18px 4px #c87247;
+  box-shadow: 1px 1px 10px 1px #756f6f;
 `;
 
 export default Room;

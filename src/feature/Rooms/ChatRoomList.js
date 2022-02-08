@@ -12,7 +12,6 @@ const ChatRoomList = ({ roomList }) => {
     setRooms(roomList);
   }, [roomList]);
 
-  console.log("여기는 chatRoomlist 컴포넌트", roomList);
   return (
     <>
       <ChatRoomContainer>

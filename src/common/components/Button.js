@@ -28,21 +28,20 @@ const Small = styled.button`
   width: 85px;
   border-radius: 20px;
   background-color: var(--dark-orange-color);
-  color: var(--white-color);
   font-size: 18px;
 
   ${({ type }) => {
     return type === "refresh"
       ? `
-      border-bottom: 2px solid var(--black-color);
       border-radius: 0;
-      background: url('./assets/refresh.png') no-repeat 0% 45%;
-      color: var(--black-color);
-      font-weight: bold;
+      background: url('/assets/refresh.svg') no-repeat 0% 45%;
+      color: var(--dark-gray-color);
       text-align: right;
+
       &:hover {
-        border-bottom: 2px solid var(--scarlet-color);
         color: var(--scarlet-color);
+        background: url('/assets/scarletRefresh.svg') no-repeat 0% 45%;
+        transition: all 0.25s ease-out;
       }
       `
       : null;
@@ -59,8 +58,9 @@ const Medium = styled.button`
 
   &:hover {
     border: 2px solid var(--scarlet-color);
-    background-color: var(--white-color);
+    background: none;
     color: var(--scarlet-color);
+    transition: all 0.25s ease-out;
   }
 `;
 
@@ -76,6 +76,7 @@ const Large = styled.button`
     border: 2px solid var(--scarlet-color);
     background-color: var(--white-color);
     color: var(--scarlet-color);
+    transition: all 0.25s ease-out;
   }
 
   ${({ type }) => {

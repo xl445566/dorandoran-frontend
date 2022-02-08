@@ -5,10 +5,10 @@ import styled from "styled-components";
 import Button from "./Button";
 import LogoutButton from "./LogoutButton";
 
-const Header = ({ leftOnClick, centerOnClick, rightOnClick, title }) => {
+const Header = ({ leftOnClick, centerOnClick, rightOnClick, title, text }) => {
   return (
     <HeaderContainer>
-      <Button text="방 만들기" size="medium" onClick={leftOnClick} />
+      <Button text={text ? text : null} size="medium" onClick={leftOnClick} />
       <RoomInfo>
         <Button
           type="refresh"
@@ -16,7 +16,7 @@ const Header = ({ leftOnClick, centerOnClick, rightOnClick, title }) => {
           size="small"
           onClick={centerOnClick}
         />
-        <Title>{title ? title : "강남구 대치노인정"}</Title>
+        <Title>{title ? title : null}</Title>
       </RoomInfo>
       <LogoutButton text="로그아웃" onClick={rightOnClick} />
     </HeaderContainer>
@@ -30,6 +30,7 @@ const HeaderContainer = styled.header`
 `;
 
 const Title = styled.h1`
+  padding: 0 6px;
   border-bottom: 3px solid var(--scarlet-color);
 `;
 
