@@ -57,28 +57,42 @@ const Login = () => {
     }
   }, [isLoggedIn]);
 
+  const handleReload = () => {
+    window.location.reload();
+  };
   return (
     <>
       <Main>
         <Section>
           <Title>
             도란
-            <Logo>
-              <img src="/favicon-32x32.png" alt="logo" />
-            </Logo>
+            <LogoImage>
+              <img src="/assets/logo.svg" alt="logo" />
+            </LogoImage>
             도란
-            <p>우리동네 어르신들의 화상 채팅 방</p>
           </Title>
+          <SubTitle>우리동네 어르신들의 화상 채팅 방</SubTitle>
           <TitleImg>
             <img
               src="/assets/cards/card12.png"
               alt="할머니 할아버지가 즐겁게 달리는 이미지"
             />
           </TitleImg>
-          {!isAddress && <span>위치를 알 수 없습니다.</span>}
-          {!address && isAddress && (
-            <span>사용자의 위치를 불러오고 있습니다..</span>
+          {!isAddress && (
+            <LocationErrorWrap>
+              <p>
+                현재 위치를 알 수 없습니다. <br /> 새로고침 해보시겠어요?
+              </p>
+              <RefreshButton onClick={handleReload}>
+                <span className="refreshImage">
+                  <img src="/assets/refresh.png" alt="새로고침 이미지" />
+                </span>
+                새로고침
+              </RefreshButton>
+            </LocationErrorWrap>
           )}
+
+          {!address && isAddress && <p>사용자의 위치를 불러오고 있습니다..</p>}
           {address && (
             <Button onClick={handleLogin}>
               <img
@@ -94,8 +108,8 @@ const Login = () => {
 };
 
 const Main = styled.main`
+  position: relative;
   height: 100%;
-  padding: 20px 0;
   background: linear-gradient(
     90deg,
     var(--scarlet-color) 0%,
@@ -104,32 +118,69 @@ const Main = styled.main`
 `;
 
 const Section = styled.section`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 80%;
+  width: 70%;
   margin: 0 auto;
-  padding: 20px;
+  padding: 70px 50px;
   border-radius: 20px;
   background-color: #fff;
   text-align: center;
+  box-shadow: 1px 1px 18px 4px #c87247;
 `;
 
-const Title = styled.div`
-  padding: 10px;
+const Title = styled.h2`
+  margin-bottom: 10px;
+  color: var(--orange-color);
+  font-size: 50px;
+  font-weight: bold;
 `;
 
-const Logo = styled.span`
+const SubTitle = styled.p`
+  margin-bottom: 30px;
+  font-size: 20px;
+`;
+
+const LogoImage = styled.span`
   display: inline-block;
-  width: 30px;
+  width: 50px;
+
+  img {
+    vertical-align: top;
+  }
 `;
 
 const TitleImg = styled.div`
-  width: 50%;
+  width: 40%;
+  margin-bottom: 30px;
 `;
 
+const LocationErrorWrap = styled.div`
+  width: 200px;
+`;
 const Button = styled.button`
-  width: 150px;
+  width: 200px;
 `;
 
+const RefreshButton = styled.button`
+  width: 200px;
+  margin-top: 20px;
+  padding: 10px 15px;
+  border-radius: 30px;
+  background-color: var(--dark-gray-color);
+  font-size: 20px;
+
+  .refreshImage {
+    display: inline-block;
+    vertical-align: sub;
+    width: 15px;
+    margin-right: 5px;
+    overflow: hidden;
+  }
+`;
 export default Login;
