@@ -67,7 +67,6 @@ const ChatRoom = styled.li`
   box-shadow: 10px 1px 10px 1px #655e584d;
   overflow: hidden;
   cursor: pointer;
-
   animation-duration: 0.5s;
   animation-timing-function: ease-in-out;
   animation-name: ${slideUp};
