@@ -4,8 +4,6 @@ export const roomSlice = createSlice({
   name: "room",
   initialState: {
     isLoading: false,
-    isStarted: false,
-    isFinished: true,
     roomList: [],
     totalCount: 0,
     error: "",
@@ -35,14 +33,13 @@ export const roomSlice = createSlice({
       state.roomList = action.payload;
     },
     createRoomRequest: (state) => {
-      state.isStarted = true;
-      state.isFinished = false;
+      state.isLoading = true;
     },
     createRoomSuccess: (state) => {
-      state.isStarted = false;
-      state.isFinished = true;
+      state.isLoading = false;
     },
     createRoomFailure: (state, action) => {
+      state.isLoading = false;
       state.error = action.payload;
     },
   },

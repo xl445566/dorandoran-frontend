@@ -2,10 +2,10 @@ import React, { useEffect, useRef, useState } from "react";
 
 import Peer from "peerjs";
 import { useHistory, useParams } from "react-router-dom";
-import { io } from "socket.io-client";
 import styled from "styled-components";
 
 import Header from "../../common/components/Header";
+import socket from "../../modules/socket/socket";
 
 const VideoChat = () => {
   const [peerId, setPeerId] = useState("");
@@ -34,9 +34,9 @@ const VideoChat = () => {
     });
 
     peer.on("open", (id) => {
-      console.log("---------------------------------------------------------");
+      console.log("-------------------------------------------------");
       console.log("my Peer ID: ", id);
-      console.log("---------------------------------------------------------");
+      console.log("-------------------------------------------------");
 
       setPeerId(id);
       socket.emit("enterRoom", roomName, id);
@@ -57,35 +57,27 @@ const VideoChat = () => {
         });
 
         call.on("close", () => {
-          console.log(
-            "---------------------------------------------------------"
-          );
+          console.log("-------------------------------------------------");
           console.log("전화를 받은 사람이 나갔습니다.", call);
-          console.log(
-            "---------------------------------------------------------"
-          );
+          console.log("-------------------------------------------------");
 
           call.close();
         });
       });
     });
 
-    const socket = io.connect("http://localhost:4000", {
-      withCredentials: true,
-    });
-
     socket.on("welcome", (newRemotePeerId) => {
-      console.log("---------------------------------------------------------");
+      console.log("-------------------------------------------------");
       console.log("새로 들어온 사람: ", newRemotePeerId);
-      console.log("---------------------------------------------------------");
+      console.log("-------------------------------------------------");
 
       call(newRemotePeerId);
     });
 
     socket.on("roomChange", (userList) => {
-      console.log("---------------------------------------------------------");
+      console.log("-------------------------------------------------");
       console.log("현재 유저 리스트: ", userList);
-      console.log("---------------------------------------------------------");
+      console.log("-------------------------------------------------");
     });
 
     socket.on("bye", (leavePeerId) => {
@@ -117,13 +109,9 @@ const VideoChat = () => {
       });
 
       call.on("close", () => {
-        console.log(
-          "---------------------------------------------------------"
-        );
+        console.log("-------------------------------------------------");
         console.log("전화를 건 사람이 나갔습니다.", call);
-        console.log(
-          "---------------------------------------------------------"
-        );
+        console.log("-------------------------------------------------");
         call.close();
       });
     });
