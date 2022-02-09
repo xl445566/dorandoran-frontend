@@ -12,9 +12,14 @@ import Character from "./Character";
 const Room = () => {
   const char = useCharacter("교감쌤");
   const [mCount, setMcount] = useState(0);
+
   useEffect(() => {
     window.addEventListener("keydown", handleKeyDown);
-  }, []);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [mCount]);
 
   const error = useSelector((state) => state.room.error);
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
@@ -45,38 +50,36 @@ const Room = () => {
     }
   }, [error, isLoggedIn]);
 
-  let count = 0;
-
   const handleKeyDown = (e) => {
     switch (e.code) {
       case "KeyA":
       case "ArrowLeft":
-        setMcount(count++);
-        if (mCount === 4) {
+        setMcount(mCount + 1);
+        if (mCount === 2) {
           setMcount(0);
         }
         char.moveLeft();
         break;
       case "KeyW":
       case "ArrowUp":
-        setMcount(count++);
-        if (mCount === 4) {
+        setMcount(mCount + 1);
+        if (mCount === 2) {
           setMcount(0);
         }
         char.moveUp();
         break;
       case "KeyD":
       case "ArrowRight":
-        setMcount(count++);
-        if (mCount === 4) {
+        setMcount(mCount + 1);
+        if (mCount === 2) {
           setMcount(0);
         }
         char.moveRight();
         break;
       case "KeyS":
       case "ArrowDown":
-        setMcount(count++);
-        if (mCount === 4) {
+        setMcount(mCount + 1);
+        if (mCount === 2) {
           setMcount(0);
         }
         char.moveDown();
@@ -96,6 +99,7 @@ const Room = () => {
         <Section>
           <Character
             count={mCount}
+            chairZone={char.chairZone}
             side={char.side}
             x={char.x}
             y={char.y}
@@ -126,7 +130,7 @@ const Section = styled.section`
   margin: 0 auto;
   padding: 70px 50px;
   border-radius: 20px;
-  background: url(/assets/pixelArt-bg1.png) no-repeat center;
+  background: url(/assets/pixelArt-bg.png) no-repeat center;
   text-align: center;
   box-shadow: 1px 1px 10px 1px #756f6f;
 `;

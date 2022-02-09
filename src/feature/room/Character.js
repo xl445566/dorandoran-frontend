@@ -2,25 +2,38 @@ import React from "react";
 
 import styled from "styled-components";
 
-const Character = ({ count, x, y, side, name }) => {
-  // const size = 32;
+import Profile from "../../common/components/Profile";
+
+const Character = ({ count, chairZone, x, y, side, name }) => {
   const sides = {
-    down: 0,
-    left: -71,
-    right: -140,
-    up: -211,
+    down: [-67, -70],
+    left: [-140, -70],
+    right: [-214, -70],
+    up: [-290, -70],
   };
+
   return (
-    <Container
-      count={count}
-      xPos={67}
-      yPos={70}
-      left={x * 60}
-      top={y * 60}
-      sidePos={sides[side] ?? 0}
-    >
-      <UserName>{name}</UserName>
-    </Container>
+    <>
+      {chairZone ? (
+        <Profile
+          left={x * 60}
+          top={y * 60}
+          type="/assets/men.png"
+          text="cnfp 한소영 캐릭터 "
+        />
+      ) : (
+        <Container
+          count={count}
+          xPos={64}
+          yPos={72}
+          left={x * 60}
+          top={y * 60}
+          sidePos={sides[side]}
+        >
+          <UserName>{name}</UserName>
+        </Container>
+      )}
+    </>
   );
 };
 
@@ -31,8 +44,8 @@ const Container = styled.div`
   left: ${(props) => props.left}px;
   top: ${(props) => props.top}px;
   background-image: url("/assets/character-big.png");
-  background-position: ${(props) => props.count * props.sidePos}px
-    ${(props) => props.sidePos}px;
+  background-position: ${(props) => props.count * props.sidePos[1]}px
+    ${(props) => props.sidePos[0]}px;
 `;
 
 const UserName = styled.p`
@@ -41,6 +54,9 @@ const UserName = styled.p`
   right: 15px;
   width: 100px;
   border-radius: 10px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   background: #0000007d;
   color: #fff;
   font-size: 15px;
