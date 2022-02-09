@@ -2,16 +2,17 @@ import { useState } from "react";
 
 import { useEffect } from "react/cjs/react.development";
 
-import { mapSpots } from "../../data/mapSpot";
+import mapSpots from "../utils/mapSpot";
 
-export const useCharacter = (props) => {
-  const [pos, setPos] = useState({ x: 3, y: 5 });
+export const useCharacter = (username) => {
+  const [pos, setPos] = useState({ x: 1, y: 5 });
   const [side, setSide] = useState("down");
-  const [name, setName] = useState("");
+  const [name, setName] = useState(username);
+  const [chairZone, setChairZone] = useState(false);
 
   useEffect(() => {
-    setName(props);
-  }, [props]);
+    setName(username);
+  }, [username]);
 
   const moveLeft = () => {
     setPos((pos) => ({
@@ -46,16 +47,20 @@ export const useCharacter = (props) => {
   };
 
   const canMove = (x, y) => {
-    if (mapSpots[y] !== undefined && mapSpots[y][x] !== undefined) {
+    if (mapSpots[y][x] !== undefined) {
       if (mapSpots[y][x] === 1) {
+        setChairZone(false);
+
         return true;
       }
 
       if (mapSpots[y][x] === 2) {
-        console.log("여기가 의자");
+        setChairZone(true);
+
         return true;
       }
     }
+
     return false;
   };
 
@@ -64,6 +69,7 @@ export const useCharacter = (props) => {
     x: pos.x,
     y: pos.y,
     side,
+    chairZone,
     moveLeft,
     moveRight,
     moveDown,
