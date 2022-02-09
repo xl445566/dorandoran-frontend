@@ -47,7 +47,7 @@ export const useCharacter = (username) => {
   };
 
   const canMove = (x, y) => {
-    if (mapSpots[y][x] !== undefined) {
+    if (mapSpots[y] !== undefined && mapSpots[y][x] !== undefined) {
       if (mapSpots[y][x] === 1) {
         setChairZone(false);
 
