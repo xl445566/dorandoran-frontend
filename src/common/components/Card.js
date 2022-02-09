@@ -1,25 +1,37 @@
 import React from "react";
 
+import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import styled, { keyframes } from "styled-components";
 
+import { roomSliceActions } from "../../modules/slice/roomSlice";
 import createKey from "../utils/createKey";
 import { makeRandomRoomImage } from "../utils/makeRoomResource";
 
-const Card = ({ roomInfo }) => {
+const Card = ({ roomInfo, setIsShowModal }) => {
+  const dispatch = useDispatch();
   const history = useHistory();
   const { title, users, room_no, _id } = roomInfo;
+  const currentUser = useSelector((state) => state.auth.user._id);
+
+  const joinedUser = () => {
+    if (users.length < 4) {
+      dispatch(
+        roomSliceActions.joinUser({
+          currentUser,
+          currentRoom: _id,
+        })
+      );
+
+      history.push(`/room/${_id}`, { title });
+    } else {
+      setIsShowModal(true);
+    }
+  };
 
   return (
     <>
-      <ChatRoom
-        onClick={() => {
-          history.push({
-            pathname: `/room/${_id}`,
-            state: roomInfo,
-          });
-        }}
-      >
+      <ChatRoom onClick={joinedUser}>
         <ImgContent>
           <img src={makeRandomRoomImage()} alt="채팅방 프로필 이미지" />
         </ImgContent>

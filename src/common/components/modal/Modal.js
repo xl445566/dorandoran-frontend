@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 
-const Modal = ({ children }) => {
+const Modal = ({ size, children }) => {
   useEffect(() => {
     document.body.style.overflow = "hidden";
 
@@ -18,7 +18,11 @@ const Modal = ({ children }) => {
         <Link to="/">
           <Overlay />
         </Link>
-        <Container>{children}</Container>
+        {!size ? (
+          <Container>{children}</Container>
+        ) : (
+          <SmallContainer>{children}</SmallContainer>
+        )}
       </ModalWrapper>
     </>
   );
@@ -65,5 +69,20 @@ const Container = styled.div`
   overflow: hidden;
   width: 60%;
   height: 80%;
+  z-index: 10;
+`;
+
+const SmallContainer = styled.div`
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border: 5px solid var(--orange-color);
+  border-radius: 2rem;
+  background: var(--white-color);
+  overflow: hidden;
+  width: 30%;
+  height: 40%;
   z-index: 10;
 `;

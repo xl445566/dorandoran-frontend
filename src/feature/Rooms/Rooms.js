@@ -6,15 +6,17 @@ import { useHistory } from "react-router-dom";
 import styled from "styled-components";
 
 import Header from "../../common/components/Header";
+import Modal from "../../common/components/modal/Modal";
 import { authSliceActions } from "../../modules/slice/authSlice";
-import { roomSliceActions } from "../../modules/slice/roomSlice";
+import { roomListSliceActions } from "../../modules/slice/roomListSlice";
+import RoomModal from "../room/RoomModal";
 import ChatRoomList from "./ChatRoomList";
 import RoomCreate from "./RoomCreate";
 
 const Rooms = () => {
-  const roomList = useSelector((state) => state.room.roomList);
-  const isLoading = useSelector((state) => state.room.isLoading);
-  const error = useSelector((state) => state.room.error);
+  const roomList = useSelector((state) => state.roomList.roomList);
+  const isLoading = useSelector((state) => state.roomList.isLoading);
+  const error = useSelector((state) => state.roomList.error);
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
   const currentAddress = useSelector(
     (state) => state.auth.user.current_address
@@ -22,26 +24,27 @@ const Rooms = () => {
 
   const history = useHistory();
   const dispatch = useDispatch();
-  const [isShow, setIsShow] = useState(false);
+  const [isCreateRoomModal, setIsCreateRoomModal] = useState(false);
+  const [isNotJoinModal, setIsNotJoinModal] = useState(false);
 
   const handleModalShowChange = () => {
-    setIsShow(isShow ? false : true);
+    setIsCreateRoomModal(isCreateRoomModal ? false : true);
   };
 
   useEffect(() => {
-    dispatch(roomSliceActions.getRooms());
+    dispatch(roomListSliceActions.getRooms());
   }, []);
 
   const handleNextClick = () => {
-    dispatch(roomSliceActions.getNextRooms(roomList));
+    dispatch(roomListSliceActions.getNextRooms(roomList));
   };
 
   const handlePrevClick = () => {
-    dispatch(roomSliceActions.getPrevRooms(roomList));
+    dispatch(roomListSliceActions.getPrevRooms(roomList));
   };
 
   const handleRefreshClick = () => {
-    dispatch(roomSliceActions.getFreshRooms(roomList));
+    dispatch(roomListSliceActions.getFreshRooms(roomList));
   };
 
   const handleLogout = () => {
@@ -51,6 +54,10 @@ const Rooms = () => {
         dispatch(authSliceActions.logoutRequest());
       },
     });
+  };
+
+  const changeJoinModalDisplay = () => {
+    isNotJoinModal ? setIsNotJoinModal(false) : setIsNotJoinModal(true);
   };
 
   useEffect(() => {
@@ -64,8 +71,13 @@ const Rooms = () => {
 
   return (
     <Entry>
+      {isNotJoinModal && (
+        <Modal size="small">
+          <RoomModal onClick={changeJoinModalDisplay} />
+        </Modal>
+      )}
       <RoomCreate
-        isShow={isShow}
+        isShow={isCreateRoomModal}
         handleModalShowChange={handleModalShowChange}
       />
       <Header
@@ -81,7 +93,12 @@ const Rooms = () => {
         <button onClick={handlePrevClick}>
           <FaChevronLeft size="60" className="icon" />
         </button>
-        {!isLoading && <ChatRoomList roomList={roomList} />}
+        {!isLoading && (
+          <ChatRoomList
+            setIsShowModal={setIsNotJoinModal}
+            roomList={roomList}
+          />
+        )}
         <button onClick={handleNextClick}>
           <FaChevronRight size="60" className="icon" />
         </button>
