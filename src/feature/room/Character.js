@@ -43,7 +43,7 @@ const Container = styled.div`
   position: absolute;
   left: ${(props) => props.left}px;
   top: ${(props) => props.top}px;
-  background-image: url("/assets/character-big.png");
+  background-image: url("/assets/character-big2.png");
   background-position: ${(props) => props.count * props.sidePos[1]}px
     ${(props) => props.sidePos[0]}px;
 `;

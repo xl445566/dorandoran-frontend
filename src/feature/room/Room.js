@@ -130,7 +130,7 @@ const Section = styled.section`
   margin: 0 auto;
   padding: 70px 50px;
   border-radius: 20px;
-  background: url(/assets/pixelArt-bg.png) no-repeat center;
+  background: url(/assets/pixelArt-bg.png) no-repeat center/cover;
   text-align: center;
   box-shadow: 1px 1px 10px 1px #756f6f;
 `;
