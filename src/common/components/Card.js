@@ -1,21 +1,31 @@
 import React from "react";
 
-import styled from "styled-components";
+import { useHistory } from "react-router-dom";
+import styled, { keyframes } from "styled-components";
 
 import createKey from "../utils/createKey";
 import { makeRandomRoomImage } from "../utils/makeRoomResource";
 
 const Card = ({ roomInfo }) => {
-  const { title, users, room_no } = roomInfo;
+  const history = useHistory();
+  const { title, users, room_no, _id } = roomInfo;
+
   return (
     <>
-      <ChatRoom>
+      <ChatRoom
+        onClick={() => {
+          history.push({
+            pathname: `/room/${_id}`,
+            state: roomInfo,
+          });
+        }}
+      >
         <ImgContent>
           <img src={makeRandomRoomImage()} alt="채팅방 프로필 이미지" />
         </ImgContent>
         <TextContent>
           <RoomNumber>{room_no < 10 ? "0" + room_no : room_no}</RoomNumber>
-          <h1>{title.length > 10 ? title.slice(0, 10) + "..." : title}</h1>
+          <h1>{title.length > 9 ? title.slice(0, 9) + "..." : title}</h1>
           <ul>
             {users.map((user) => {
               return <li key={createKey()}>{user.name}</li>;
@@ -27,16 +37,48 @@ const Card = ({ roomInfo }) => {
   );
 };
 
+const slideUp = keyframes`
+  from {
+    transform: translateY(-15px);
+  }
+  to {
+    transform: translateY(0px);
+  }
+`;
+
+const slideDown = keyframes`
+  from {
+    transform: translateY(0px);
+  }
+  to {
+    transform: translateY(-15px);
+  }
+`;
+
 const ChatRoom = styled.li`
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
   hieght: 100%;
   width: 100%;
-  border: 1px solid var(--dark-grey-shadow-color);
+  border: 1px solid var(--light-grey-shadow-color);
   border-radius: 15px;
-  background: #fff;
-  box-shadow: 1px 1px 10px 1px var(--light-grey-shadow-color);
+  background: var(--white-color);
+  box-shadow: 10px 1px 10px 1px #655e584d;
   overflow: hidden;
+  cursor: pointer;
+  animation-duration: 0.5s;
+  animation-timing-function: ease-in-out;
+  animation-name: ${slideUp};
+  animation-fill-mode: both;
+
+  &:hover {
+    animation-duration: 0.5s;
+    animation-timing-function: ease-in-out;
+    animation-name: ${slideDown};
+    animation-fill-mode: both;
+    box-shadow: 1px 1px 10px 1px #6d60554d;
+  }
 
   h1 {
     margin: 10px 0 13px 0;
@@ -54,9 +96,9 @@ const TextContent = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  width: 96%;
+  width: 94%;
   height: 57%;
-  padding: 2%;
+  padding: 3%;
   background: var(--white-color);
 
   ul {
@@ -72,7 +114,7 @@ const TextContent = styled.div`
     justify-content: center;
     align-items: center;
     width: 90%;
-    padding: 1%;
+    padding: 2% 1%;
     border-radius: 15px;
     background-color: var(--orange-color);
     color: var(--white-color);

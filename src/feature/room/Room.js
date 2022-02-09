@@ -21,6 +21,8 @@ const Room = () => {
   const history = useHistory();
   const dispatch = useDispatch();
 
+  const roomTitle = history.location.state.title;
+
   const handleLogout = () => {
     window.Kakao.API.request({
       url: "/v1/user/unlink",
@@ -28,6 +30,10 @@ const Room = () => {
         dispatch(authSliceActions.logoutRequest());
       },
     });
+  };
+
+  const onRoomsPage = () => {
+    history.push("/");
   };
 
   useEffect(() => {
@@ -77,10 +83,16 @@ const Room = () => {
         break;
     }
   };
+
   return (
     <>
       <Main>
-        <Header rightOnClick={handleLogout} title="우리들의 방" />
+        <Header
+          rightOnClick={handleLogout}
+          title={roomTitle}
+          text="방 리스트로 가기"
+          leftOnClick={onRoomsPage}
+        />
         <Section>
           <Character
             count={mCount}
@@ -98,11 +110,7 @@ const Room = () => {
 const Main = styled.main`
   position: relative;
   height: 100%;
-  background: linear-gradient(
-    90deg,
-    var(--scarlet-color) 0%,
-    var(--orange-color) 100%
-  );
+  background: var(--light-gray-color);
 `;
 
 const Section = styled.section`
@@ -120,7 +128,7 @@ const Section = styled.section`
   border-radius: 20px;
   background: url(/assets/pixelArt-bg1.png) no-repeat center;
   text-align: center;
-  box-shadow: 1px 1px 18px 4px #c87247;
+  box-shadow: 1px 1px 10px 1px #756f6f;
 `;
 
 export default Room;

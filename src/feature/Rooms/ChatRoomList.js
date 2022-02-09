@@ -11,6 +11,7 @@ const ChatRoomList = ({ roomList }) => {
   useEffect(() => {
     setRooms(roomList);
   }, [roomList]);
+
   return (
     <>
       <ChatRoomContainer>

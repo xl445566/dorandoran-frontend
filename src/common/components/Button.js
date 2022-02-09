@@ -28,25 +28,29 @@ const Small = styled.button`
   width: 85px;
   border-radius: 20px;
   background-color: var(--dark-orange-color);
-  color: var(--white-color);
   font-size: 18px;
 
   ${({ type }) => {
     return type === "refresh"
       ? `
-      border-bottom: 2px solid var(--black-color);
       border-radius: 0;
-      background: url('./assets/refresh.png') no-repeat 0% 45%;
-      color: var(--black-color);
-      font-weight: bold;
+      background: url('/assets/refresh.svg') no-repeat 0% 45%;
+      color: var(--dark-gray-color);
       text-align: right;
+
+      &:hover {
+        background: url('/assets/scarletRefresh.svg') no-repeat 0% 45%;
+        color: var(--scarlet-color);
+        transition: all 0.25s ease-out;
+      }
       `
       : null;
   }};
 `;
 
 const Medium = styled.button`
-  width: 120px;
+  padding: 0 20px;
+  border: 2px solid var(--scarlet-color);
   border-radius: 20px;
   background-color: var(--dark-orange-color);
   color: var(--white-color);
@@ -55,24 +59,10 @@ const Medium = styled.button`
 
   &:hover {
     border: 2px solid var(--scarlet-color);
-    background-color: var(--white-color);
-    color: var(--dark-orange-color);
+    background: none;
+    color: var(--scarlet-color);
+    transition: all 0.25s ease-out;
   }
-
-  ${({ type }) => {
-    return type === "cancel"
-      ? `
-      border 2px solid var(--scarlet-color);
-      background: none;
-      color: var(--scarlet-color);
-
-      &:hover {
-        background-color: var(--dark-orange-color);
-        color: var(--white-color);
-      }
-      `
-      : null;
-  }}
 `;
 
 const Large = styled.button`
@@ -86,7 +76,8 @@ const Large = styled.button`
   &:hover {
     border: 2px solid var(--scarlet-color);
     background-color: var(--white-color);
-    color: var(--dark-orange-color);
+    color: var(--scarlet-color);
+    transition: all 0.25s ease-out;
   }
 
   ${({ type }) => {

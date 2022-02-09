@@ -1,16 +1,21 @@
 import React, { useRef } from "react";
 
 import { useDispatch, useSelector } from "react-redux";
+import { useHistory } from "react-router-dom";
 import styled from "styled-components";
 
+import Button from "../../common/components/Button";
 import Modal from "../../common/components/modal/Modal";
 import { makeRandomRoomName } from "../../common/utils/makeRoomResource";
 import { roomSliceActions } from "../../modules/slice/roomSlice";
 
 const RoomCreate = ({ isShow, handleModalShowChange }) => {
   const user = useSelector((state) => state.auth.user);
+
   const roomNameRef = useRef();
   const dispatch = useDispatch();
+
+  const history = useHistory();
 
   const handleCreateButton = () => {
     const roomData = {
@@ -19,6 +24,14 @@ const RoomCreate = ({ isShow, handleModalShowChange }) => {
     };
 
     dispatch(roomSliceActions.createRoomRequest(roomData));
+
+    history.push({
+      pathname: `/room/${roomData.roomCreator._id}`,
+      state: {
+        title: roomData.roomTitle,
+      },
+    });
+
     handleModalShowChange();
   };
 
@@ -38,8 +51,17 @@ const RoomCreate = ({ isShow, handleModalShowChange }) => {
               </p>
             </h1>
             <h1 className="roomDescription">최대 인원은 4명 입니다 !</h1>
-            <button onClick={handleModalShowChange}>취소</button>
-            <button onClick={handleCreateButton}>방만들기</button>
+            <Button
+              text="취소"
+              size="medium"
+              type="color"
+              onClick={handleModalShowChange}
+            />
+            <Button
+              text="방만들기"
+              size="medium"
+              onClick={handleCreateButton}
+            />
           </RoomCreateWrapper>
         </Modal>
       )}
@@ -87,6 +109,7 @@ const RoomCreateWrapper = styled.div`
   .roomDescription {
     margin-bottom: 35px;
     color: var(--dark-gray-color);
+    font-size: 25px;
   }
 
   button {

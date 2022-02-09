@@ -10,7 +10,6 @@ const loginSaga = function* ({ payload }) {
         withCredentials: true,
       })
     );
-    console.log("response.data.message", response.data.message);
     if (response.data.message) {
       yield put(authSliceActions.loginFailure(response.data.message));
       return;

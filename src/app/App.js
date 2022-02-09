@@ -25,12 +25,10 @@ function App() {
       history.push("/");
     }
   }, [user]);
+
   return (
     <>
       <ul>
-        <li>
-          <Link to="/rooms">3 . 방페이지로</Link>
-        </li>
         <li>
           <Link to="/video">4 . 화상채팅페이지로</Link>
         </li>
@@ -42,8 +40,7 @@ function App() {
         <Route path="/" exact>
           {user && user.name ? <Rooms /> : <Login />}
         </Route>
-        <Route path="/rooms">
-          <h1>노인정 방 페이지</h1>
+        <Route path="/room/:roomId">
           <Room />
         </Route>
         <Route path="/video">

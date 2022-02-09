@@ -24,11 +24,12 @@ const getRoomSaga = function* () {
 
 const getNextRoomSaga = function* ({ payload }) {
   try {
+    const room = payload[payload.length - 1];
     const response = yield call(() =>
       axios.post(
         "http://localhost:4000/rooms",
         {
-          room: payload[5],
+          room,
           direction: "next",
         },
         {
@@ -50,11 +51,12 @@ const getNextRoomSaga = function* ({ payload }) {
 
 const getPrevRoomSaga = function* ({ payload }) {
   try {
+    const room = payload[payload.length - 1];
     const response = yield call(() =>
       axios.post(
         "http://localhost:4000/rooms",
         {
-          room: payload[5],
+          room,
           direction: "prev",
         },
         {
