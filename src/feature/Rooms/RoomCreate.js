@@ -1,6 +1,7 @@
 import React, { useRef } from "react";
 
 import { useDispatch, useSelector } from "react-redux";
+import { useHistory } from "react-router-dom";
 import styled from "styled-components";
 
 import Button from "../../common/components/Button";
@@ -10,8 +11,11 @@ import { roomSliceActions } from "../../modules/slice/roomSlice";
 
 const RoomCreate = ({ isShow, handleModalShowChange }) => {
   const user = useSelector((state) => state.auth.user);
+
   const roomNameRef = useRef();
   const dispatch = useDispatch();
+
+  const history = useHistory();
 
   const handleCreateButton = () => {
     const roomData = {
@@ -20,6 +24,12 @@ const RoomCreate = ({ isShow, handleModalShowChange }) => {
     };
 
     dispatch(roomSliceActions.createRoomRequest(roomData));
+
+    history.push({
+      pathname: `/room/${roomData.roomCreator._id}`,
+      state: roomData.roomTitle,
+    });
+
     handleModalShowChange();
   };
 

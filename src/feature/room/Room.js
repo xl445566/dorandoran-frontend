@@ -21,6 +21,10 @@ const Room = () => {
   const history = useHistory();
   const dispatch = useDispatch();
 
+  const historyLocation = history.location.state.title
+    ? history.location.state.title
+    : history.location.state.roomTitle;
+
   const handleLogout = () => {
     window.Kakao.API.request({
       url: "/v1/user/unlink",
@@ -88,8 +92,8 @@ const Room = () => {
       <Main>
         <Header
           rightOnClick={handleLogout}
-          title={history.location.state.title}
-          text="방으로 가기"
+          title={historyLocation}
+          text="채팅룸으로 가기"
           leftOnClick={onRoomsPage}
         />
         <Section>

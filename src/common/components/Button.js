@@ -49,7 +49,7 @@ const Small = styled.button`
 `;
 
 const Medium = styled.button`
-  width: 120px;
+  padding: 0 20px;
   border-radius: 20px;
   background-color: var(--dark-orange-color);
   color: var(--white-color);

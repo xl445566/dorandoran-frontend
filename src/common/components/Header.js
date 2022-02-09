@@ -5,15 +5,23 @@ import styled from "styled-components";
 import Button from "./Button";
 import LogoutButton from "./LogoutButton";
 
-const Header = ({ leftOnClick, centerOnClick, rightOnClick, title, text }) => {
+const Header = ({
+  leftOnClick,
+  centerOnClick,
+  rightOnClick,
+  title,
+  text,
+  size,
+  type,
+}) => {
   return (
     <HeaderContainer>
       <Button text={text ? text : null} size="medium" onClick={leftOnClick} />
       <RoomInfo>
         <Button
-          type="refresh"
+          type={type}
           text="새로고침"
-          size="small"
+          size={size}
           onClick={centerOnClick}
         />
         <Title>{title ? title : null}</Title>
@@ -35,10 +43,16 @@ const Title = styled.h1`
 `;
 
 const RoomInfo = styled.div`
-  display: flex;
+  position: relative;
 
   h1 {
-    margin: 0 10px;
+    margin-right: 20px;
+  }
+
+  button {
+    position: absolute;
+    left: -90px;
+    top: 10px;
   }
 `;
 

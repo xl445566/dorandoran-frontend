@@ -61,10 +61,10 @@ const ChatRoom = styled.li`
   justify-content: space-between;
   hieght: 100%;
   width: 100%;
-  border: 1px solid var(--dark-grey-shadow-color);
+  border: 1px solid var(--light-grey-shadow-color);
   border-radius: 15px;
   background: var(--white-color);
-  box-shadow: 1px 1px 10px 1px var(--light-grey-shadow-color);
+  box-shadow: 10px 1px 10px 1px #5a36184d;
   overflow: hidden;
   cursor: pointer;
 

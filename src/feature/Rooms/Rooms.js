@@ -74,6 +74,8 @@ const Rooms = () => {
         rightOnClick={handleLogout}
         title={`${currentAddress} 노인정`}
         text="방 만들기"
+        size="small"
+        type="refresh"
       />
       <MainBody>
         <button onClick={handlePrevClick}>
