@@ -1,5 +1,7 @@
 import { useState } from "react";
+
 import { useEffect } from "react/cjs/react.development";
+
 import { mapSpots } from "../../data/mapSpot";
 
 export const useCharacter = (props) => {

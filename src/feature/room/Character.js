@@ -1,4 +1,5 @@
 import React from "react";
+
 import styled from "styled-components";
 
 const Character = ({ count, x, y, side, name }) => {
