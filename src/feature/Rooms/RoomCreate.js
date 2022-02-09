@@ -27,7 +27,9 @@ const RoomCreate = ({ isShow, handleModalShowChange }) => {
 
     history.push({
       pathname: `/room/${roomData.roomCreator._id}`,
-      state: roomData.roomTitle,
+      state: {
+        title: roomData.roomTitle,
+      },
     });
 
     handleModalShowChange();

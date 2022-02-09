@@ -64,7 +64,7 @@ const ChatRoom = styled.li`
   border: 1px solid var(--light-grey-shadow-color);
   border-radius: 15px;
   background: var(--white-color);
-  box-shadow: 10px 1px 10px 1px #5a36184d;
+  box-shadow: 10px 1px 10px 1px #655e584d;
   overflow: hidden;
   cursor: pointer;
 
@@ -78,7 +78,7 @@ const ChatRoom = styled.li`
     animation-timing-function: ease-in-out;
     animation-name: ${slideDown};
     animation-fill-mode: both;
-    box-shadow: 1px 1px 10px 1px #5a36184d;
+    box-shadow: 1px 1px 10px 1px #6d60554d;
   }
 
   h1 {

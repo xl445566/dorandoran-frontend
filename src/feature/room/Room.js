@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 
 import { useDispatch, useSelector } from "react-redux";
-import { useParams, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import styled from "styled-components";
 
 import Header from "../../common/components/Header";
@@ -21,9 +21,7 @@ const Room = () => {
   const history = useHistory();
   const dispatch = useDispatch();
 
-  const historyLocation = history.location.state.title
-    ? history.location.state.title
-    : history.location.state.roomTitle;
+  const roomTitle = history.location.state.title;
 
   const handleLogout = () => {
     window.Kakao.API.request({
@@ -35,7 +33,7 @@ const Room = () => {
   };
 
   const onRoomsPage = () => {
-    history.goBack();
+    history.push("/");
   };
 
   useEffect(() => {
@@ -86,14 +84,13 @@ const Room = () => {
     }
   };
 
-  useParams;
   return (
     <>
       <Main>
         <Header
           rightOnClick={handleLogout}
-          title={historyLocation}
-          text="채팅룸으로 가기"
+          title={roomTitle}
+          text="방 리스트로 가기"
           leftOnClick={onRoomsPage}
         />
         <Section>

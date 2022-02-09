@@ -39,8 +39,8 @@ const Small = styled.button`
       text-align: right;
 
       &:hover {
-        color: var(--scarlet-color);
         background: url('/assets/scarletRefresh.svg') no-repeat 0% 45%;
+        color: var(--scarlet-color);
         transition: all 0.25s ease-out;
       }
       `
@@ -50,6 +50,7 @@ const Small = styled.button`
 
 const Medium = styled.button`
   padding: 0 20px;
+  border: 2px solid var(--scarlet-color);
   border-radius: 20px;
   background-color: var(--dark-orange-color);
   color: var(--white-color);
