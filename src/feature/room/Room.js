@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 
 import { useDispatch, useSelector } from "react-redux";
-import { useLocation, useHistory, useParams } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import styled from "styled-components";
 
 import Header from "../../common/components/Header";
@@ -15,7 +15,7 @@ import Character from "./Character";
 const Room = () => {
   const char = useCharacter("교감쌤");
   const { roomId } = useParams();
-  const roomList = useSelector((state) => state.room.roomList);
+  const roomList = useSelector((state) => state.roomList.roomList);
   const [moveCount, setMoveCount] = useState(0);
   const [title, setTitle] = useState("");
 
@@ -65,9 +65,6 @@ const Room = () => {
   const history = useHistory();
   const dispatch = useDispatch();
   const params = useParams();
-
-  const location = useLocation();
-  const { title } = location.state;
 
   const handleLogout = () => {
     window.Kakao.API.request({
