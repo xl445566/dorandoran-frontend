@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
 
-import { Link } from "react-router-dom";
 import styled from "styled-components";
 
 const Modal = ({ size, children }) => {
@@ -15,9 +14,7 @@ const Modal = ({ size, children }) => {
   return (
     <>
       <ModalWrapper>
-        <Link to="/">
-          <Overlay />
-        </Link>
+        <Overlay />
         {!size ? (
           <Container>{children}</Container>
         ) : (
@@ -31,10 +28,10 @@ const Modal = ({ size, children }) => {
 export default Modal;
 
 const ModalWrapper = styled.div`
-  position: fixed;
   display: flex;
   justify-content: center;
   align-items: center;
+  position: fixed;
   top: 0;
   left: 0;
   width: 100%;
@@ -58,31 +55,31 @@ const Overlay = styled.div`
 `;
 
 const Container = styled.div`
-  position: relative;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  position: relative;
+  width: 60%;
+  height: 80%;
   border: 15px solid #7f8c8d;
   border-radius: 2rem;
   background: var(--white-color);
   overflow: hidden;
-  width: 60%;
-  height: 80%;
   z-index: 10;
 `;
 
 const SmallContainer = styled.div`
-  position: relative;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  position: relative;
+  width: 30%;
+  height: 40%;
   border: 5px solid var(--orange-color);
   border-radius: 2rem;
   background: var(--white-color);
   overflow: hidden;
-  width: 30%;
-  height: 40%;
   z-index: 10;
 `;

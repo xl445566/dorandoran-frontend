@@ -13,6 +13,7 @@ const Card = ({ roomInfo, setIsShowModal }) => {
   const history = useHistory();
   const { title, users, room_no, _id } = roomInfo;
   const currentUser = useSelector((state) => state.auth.user._id);
+  const images = makeRandomRoomImage();
 
   const joinedUser = () => {
     if (users.length < 4) {
@@ -33,7 +34,7 @@ const Card = ({ roomInfo, setIsShowModal }) => {
     <>
       <ChatRoom onClick={joinedUser}>
         <ImgContent>
-          <img src={makeRandomRoomImage()} alt="채팅방 프로필 이미지" />
+          <img src={images[0]} alt={images[1]} />
         </ImgContent>
         <TextContent>
           <RoomNumber>{room_no < 10 ? "0" + room_no : room_no}</RoomNumber>

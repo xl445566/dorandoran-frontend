@@ -7,8 +7,6 @@ export const roomSlice = createSlice({
     isStarted: false,
     isFinished: true,
     roomList: [],
-    totalCount: 0,
-    currentUser: "",
     error: "",
   },
   reducers: {

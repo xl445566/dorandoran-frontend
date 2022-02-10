@@ -11,10 +11,8 @@ import { roomListSliceActions } from "../../modules/slice/roomListSlice";
 
 const RoomCreate = ({ isShow, handleModalShowChange }) => {
   const user = useSelector((state) => state.auth.user);
-
   const roomNameRef = useRef();
   const dispatch = useDispatch();
-
   const history = useHistory();
 
   const handleCreateButton = () => {
