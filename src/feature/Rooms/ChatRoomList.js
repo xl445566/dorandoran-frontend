@@ -5,7 +5,7 @@ import styled from "styled-components";
 import Card from "../../common/components/Card";
 import createKey from "../../common/utils/createKey";
 
-const ChatRoomList = ({ roomList }) => {
+const ChatRoomList = ({ roomList, setIsShowModal }) => {
   const [rooms, setRooms] = useState([]);
 
   useEffect(() => {
@@ -16,8 +16,14 @@ const ChatRoomList = ({ roomList }) => {
     <>
       <ChatRoomContainer>
         {rooms &&
-          rooms.map((value, index) => {
-            return <Card key={createKey()} roomInfo={value} index={index} />;
+          rooms.map((room) => {
+            return (
+              <Card
+                key={createKey()}
+                roomInfo={room}
+                setIsShowModal={setIsShowModal}
+              />
+            );
           })}
       </ChatRoomContainer>
     </>
