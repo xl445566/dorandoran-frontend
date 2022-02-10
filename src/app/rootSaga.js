@@ -13,6 +13,7 @@ import {
   watchCreateRoom,
 } from "../modules/saga/roomListSaga";
 import { watchJoinUser, watchDelteUser } from "../modules/saga/roomSaga";
+import { watchSocketSaga } from "../modules/saga/socketSaga";
 
 export default function* rootSaga() {
   yield all([
@@ -26,5 +27,6 @@ export default function* rootSaga() {
     fork(watchCookieClearSaga),
     fork(watchJoinUser),
     fork(watchDelteUser),
+    fork(watchSocketSaga),
   ]);
 }

@@ -4,6 +4,7 @@ export const roomSlice = createSlice({
   name: "room",
   initialState: {
     isLoading: false,
+    roomList: [],
     error: "",
   },
   reducers: {
@@ -24,6 +25,20 @@ export const roomSlice = createSlice({
       state.isLoading = false;
     },
     deleteUserFailure: (state, action) => {
+      state.isLoading = false;
+      state.error = action.payload;
+    },
+    getFreshRooms: (state, action) => {
+      state.isLoading = false;
+      state.roomList = action.payload;
+    },
+    createRoomRequest: (state) => {
+      state.isLoading = true;
+    },
+    createRoomSuccess: (state) => {
+      state.isLoading = false;
+    },
+    createRoomFailure: (state, action) => {
       state.isLoading = false;
       state.error = action.payload;
     },
