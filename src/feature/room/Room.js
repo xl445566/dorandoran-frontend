@@ -12,10 +12,10 @@ import Character from "./Character";
 
 const Room = () => {
   const char = useCharacter("교감쌤");
-  const [moveCount, setMoveCount] = useState(0);
   const { roomId } = useParams();
-  const [title, setTitle] = useState("");
   const roomList = useSelector((state) => state.room.roomList);
+  const [moveCount, setMoveCount] = useState(0);
+  const [title, setTitle] = useState("");
 
   useEffect(() => {
     roomList.forEach((room) => {
@@ -70,7 +70,7 @@ const Room = () => {
     });
   };
 
-  const onRoomsPage = () => {
+  const handleRoomsPage = () => {
     history.push("/");
   };
 
@@ -127,7 +127,7 @@ const Room = () => {
           rightOnClick={handleLogout}
           title={title}
           text="방 리스트로 가기"
-          leftOnClick={onRoomsPage}
+          leftOnClick={handleRoomsPage}
         />
         <Section>
           <Character

@@ -8,10 +8,10 @@ import Profile from "../../common/components/Profile";
 
 const Character = ({ count, isChatting, x, y, side, name }) => {
   const sides = {
-    down: [-67, -70],
-    left: [-140, -70],
-    right: [-214, -70],
-    up: [-290, -70],
+    down: [0, -70],
+    left: [-70, -70],
+    right: [-141, -70],
+    up: [-208, -70],
   };
   const user = useSelector((state) => state.auth.user);
 

@@ -7,7 +7,7 @@ const Profile = ({ type, text, left, top }) => {
   return (
     <Container left={left} top={top}>
       <ProfileImageWrapper>
-        <img src={type} />
+        <img src={type} alt="카카오톡 프로필 이미지" />
       </ProfileImageWrapper>
       <UserName>
         <ChatOn />
@@ -34,14 +34,14 @@ const UserName = styled.h3`
   margin-top: 10px;
   padding: 5px 5px;
   border-radius: 46px;
-  text-overflow: ellipsis;
-  white-space: nowrap;
   background-color: var(--black-color);
-  overflow: hidden;
   color: var(--white-color);
   font-size: 15px;
   text-align: center;
+  text-overflow: ellipsis;
   opacity: 0.6;
+  overflow: hidden;
+  white-space: nowrap;
 `;
 
 const ChatOn = styled.span`
