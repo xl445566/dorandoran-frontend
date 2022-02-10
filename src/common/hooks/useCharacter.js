@@ -1,15 +1,15 @@
-import { useState } from "react";
-import { useEffect } from "react/cjs/react.development";
+import { useState, useEffect } from "react";
+
 import { mapSpots } from "../../data/mapSpot";
 
-export const useCharacter = (props) => {
+export const useCharacter = (username) => {
   const [pos, setPos] = useState({ x: 3, y: 5 });
   const [side, setSide] = useState("down");
-  const [name, setName] = useState("");
+  const [name, setName] = useState(username);
 
   useEffect(() => {
-    setName(props);
-  }, [props]);
+    setName(username);
+  }, [username]);
 
   const moveLeft = () => {
     setPos((pos) => ({
@@ -44,13 +44,13 @@ export const useCharacter = (props) => {
   };
 
   const canMove = (x, y) => {
-    if (mapSpots[y] !== undefined && mapSpots[y][x] !== undefined) {
+    if (mapSpots[y][x] !== undefined) {
       if (mapSpots[y][x] === 1) {
         return true;
       }
 
       if (mapSpots[y][x] === 2) {
-        console.log("여기가 의자");
+        alert("의자 입니다 !");
         return true;
       }
     }

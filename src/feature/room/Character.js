@@ -1,22 +1,23 @@
 import React from "react";
+
 import styled from "styled-components";
 
 const Character = ({ count, x, y, side, name }) => {
-  // const size = 32;
   const sides = {
-    down: 0,
-    left: -71,
-    right: -140,
-    up: -211,
+    down: [-67, -70],
+    left: [-140, -70],
+    right: [-214, -70],
+    up: [-290, -70],
   };
+
   return (
     <Container
       count={count}
-      xPos={67}
-      yPos={70}
+      xPos={64}
+      yPos={72}
       left={x * 60}
       top={y * 60}
-      sidePos={sides[side] ?? 0}
+      sidePos={sides[side]}
     >
       <UserName>{name}</UserName>
     </Container>
@@ -29,9 +30,9 @@ const Container = styled.div`
   position: absolute;
   left: ${(props) => props.left}px;
   top: ${(props) => props.top}px;
-  background-image: url("/assets/character-big.png");
-  background-position: ${(props) => props.count * props.sidePos}px
-    ${(props) => props.sidePos}px;
+  background-image: url("/assets/character-big3.png");
+  background-position: ${(props) => props.count * props.sidePos[1]}px
+    ${(props) => props.sidePos[0]}px;
 `;
 
 const UserName = styled.p`

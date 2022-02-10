@@ -1,26 +1,27 @@
 import React, { useEffect, useRef, useState } from "react";
 
 import Peer from "peerjs";
-import { useHistory, useParams } from "react-router-dom";
-import { io } from "socket.io-client";
+import { useHistory } from "react-router-dom";
 import styled from "styled-components";
 
 import Header from "../../common/components/Header";
+import soketApi from "../../modules/api/socketApi";
+import { socket } from "../../modules/saga/socketSaga";
 
 const VideoChat = () => {
   const [peerId, setPeerId] = useState("");
 
   const peerInstance = useRef(null);
-  const socketInstance = useRef(null);
 
   const myVideoRef = useRef(null);
   const remoteVideoRef1 = useRef(null);
   const remoteVideoRef2 = useRef(null);
   const remoteVideoRef3 = useRef(null);
 
-  const param = useParams();
+  // const param = useParams();
   const history = useHistory();
-  const roomName = param.roomId;
+  // const roomName = param.roomId;
+  const roomName = "cnfp";
 
   useEffect(() => {
     const peer = new Peer();
@@ -34,12 +35,12 @@ const VideoChat = () => {
     });
 
     peer.on("open", (id) => {
-      console.log("---------------------------------------------------------");
+      console.log("-------------------------------------------------");
       console.log("my Peer ID: ", id);
-      console.log("---------------------------------------------------------");
+      console.log("-------------------------------------------------");
 
       setPeerId(id);
-      socket.emit("enterRoom", roomName, id);
+      soketApi.enterRoom("cnfp", id);
     });
 
     peer.on("call", (call) => {
@@ -57,35 +58,27 @@ const VideoChat = () => {
         });
 
         call.on("close", () => {
-          console.log(
-            "---------------------------------------------------------"
-          );
+          console.log("-------------------------------------------------");
           console.log("전화를 받은 사람이 나갔습니다.", call);
-          console.log(
-            "---------------------------------------------------------"
-          );
+          console.log("-------------------------------------------------");
 
           call.close();
         });
       });
     });
 
-    const socket = io.connect("http://localhost:4000", {
-      withCredentials: true,
-    });
+    // socket.on("welcome", (newRemotePeerId) => {
+    //   console.log("-------------------------------------------------");
+    //   console.log("새로 들어온 사람: ", newRemotePeerId);
+    //   console.log("-------------------------------------------------");
 
-    socket.on("welcome", (newRemotePeerId) => {
-      console.log("---------------------------------------------------------");
-      console.log("새로 들어온 사람: ", newRemotePeerId);
-      console.log("---------------------------------------------------------");
-
-      call(newRemotePeerId);
-    });
+    //   call(newRemotePeerId);
+    // });
 
     socket.on("roomChange", (userList) => {
-      console.log("---------------------------------------------------------");
+      console.log("-------------------------------------------------");
       console.log("현재 유저 리스트: ", userList);
-      console.log("---------------------------------------------------------");
+      console.log("-------------------------------------------------");
     });
 
     socket.on("bye", (leavePeerId) => {
@@ -94,46 +87,41 @@ const VideoChat = () => {
     });
 
     peerInstance.current = peer;
-    socketInstance.current = socket;
   }, []);
 
-  const call = (remotePeerId) => {
-    const getUserMedia =
-      navigator.getUserMedia ||
-      navigator.webkitGetUserMedia ||
-      navigator.mozGetUserMedia;
+  // const call = (remotePeerId) => {
+  //   const getUserMedia =
+  //     navigator.getUserMedia ||
+  //     navigator.webkitGetUserMedia ||
+  //     navigator.mozGetUserMedia;
 
-    getUserMedia({ video: true }, (myStream) => {
-      const call = peerInstance.current.call(remotePeerId, myStream);
+  //   getUserMedia({ video: true }, (myStream) => {
+  //     const call = peerInstance.current.call(remotePeerId, myStream);
 
-      call.on("stream", (remoteStream) => {
-        if (!remoteVideoRef1.current.srcObject) {
-          remoteVideoRef1.current.srcObject = remoteStream;
-        } else if (!remoteVideoRef2.current.srcObject) {
-          remoteVideoRef2.current.srcObject = remoteStream;
-        } else if (!remoteVideoRef3.current.srcObject) {
-          remoteVideoRef3.current.srcObject = remoteStream;
-        }
-      });
+  //     call.on("stream", (remoteStream) => {
+  //       if (!remoteVideoRef1.current.srcObject) {
+  //         remoteVideoRef1.current.srcObject = remoteStream;
+  //       } else if (!remoteVideoRef2.current.srcObject) {
+  //         remoteVideoRef2.current.srcObject = remoteStream;
+  //       } else if (!remoteVideoRef3.current.srcObject) {
+  //         remoteVideoRef3.current.srcObject = remoteStream;
+  //       }
+  //     });
 
-      call.on("close", () => {
-        console.log(
-          "---------------------------------------------------------"
-        );
-        console.log("전화를 건 사람이 나갔습니다.", call);
-        console.log(
-          "---------------------------------------------------------"
-        );
-        call.close();
-      });
-    });
-  };
+  //     call.on("close", () => {
+  //       console.log("-------------------------------------------------");
+  //       console.log("전화를 건 사람이 나갔습니다.", call);
+  //       console.log("-------------------------------------------------");
+  //       call.close();
+  //     });
+  //   });
+  // };
 
   const handleLeaveRoom = () => {
-    socketInstance.current.close();
+    socket.close();
     peerInstance.current.disconnect();
     peerInstance.current.destroy();
-    history.push("/rooms");
+    history.push("/");
   };
 
   return (

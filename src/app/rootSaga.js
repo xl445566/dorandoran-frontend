@@ -12,6 +12,7 @@ import {
   watchFreshRooms,
   watchCreateRoom,
 } from "../modules/saga/roomSaga";
+import { watchSocketSaga } from "../modules/saga/socketSaga";
 
 export default function* rootSaga() {
   yield all([
@@ -23,5 +24,6 @@ export default function* rootSaga() {
     fork(watchFreshRooms),
     fork(watchCreateRoom),
     fork(watchCookieClearSaga),
+    fork(watchSocketSaga),
   ]);
 }
