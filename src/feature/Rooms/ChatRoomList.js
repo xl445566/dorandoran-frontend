@@ -32,11 +32,12 @@ const ChatRoomList = ({ roomList, setIsShowModal }) => {
 
 const ChatRoomContainer = styled.ul`
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(3, minmax(3vw, auto));
   grid-template-rows: repeat(2, minmax(100px, auto));
   gap: 10px;
   width: 70%;
-  height: 80vh;
+  height: 600px;
+  min-height: 80vh;
 `;
 
 export default ChatRoomList;

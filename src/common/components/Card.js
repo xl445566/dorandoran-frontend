@@ -33,10 +33,10 @@ const Card = ({ roomInfo, setIsShowModal }) => {
   return (
     <>
       <ChatRoom onClick={joinedUser}>
-        <ImgContent>
+        <div className="img-container">
           <img src={images[0]} alt={images[1]} />
-        </ImgContent>
-        <TextContent>
+        </div>
+        <div className="text-container">
           <RoomNumber>{room_no < 10 ? "0" + room_no : room_no}</RoomNumber>
           <h1>{title.length > 9 ? title.slice(0, 9) + "..." : title}</h1>
           <ul>
@@ -44,7 +44,7 @@ const Card = ({ roomInfo, setIsShowModal }) => {
               return <li key={createKey()}>{user.name}</li>;
             })}
           </ul>
-        </TextContent>
+        </div>
       </ChatRoom>
     </>
   );
@@ -69,11 +69,6 @@ const slideDown = keyframes`
 `;
 
 const ChatRoom = styled.li`
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  hieght: 100%;
-  width: 100%;
   border: 1px solid var(--light-grey-shadow-color);
   border-radius: 15px;
   background: var(--white-color);
@@ -84,6 +79,27 @@ const ChatRoom = styled.li`
   animation-timing-function: ease-in-out;
   animation-name: ${slideUp};
   animation-fill-mode: both;
+
+  .text-container {
+    padding: 8px;
+    background-color: var(--white-color);
+  }
+
+  .text-container ul {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(2, minmax(3px, auto));
+    gap: 6px;
+  }
+
+  .text-container ul li {
+    height: 18px;
+    padding: 3px 0;
+    border-radius: 15px;
+    background-color: var(--orange-color);
+    color: var(--white-color);
+    text-align: center;
+  }
 
   &:hover {
     animation-duration: 0.5s;
@@ -98,40 +114,6 @@ const ChatRoom = styled.li`
     padding: 0 0 5px;
     border-bottom: 1px solid var(--dark-grey-shadow-color);
     font-size: 18px;
-  }
-`;
-
-const ImgContent = styled.div`
-  width: 100%;
-`;
-
-const TextContent = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  width: 94%;
-  height: 57%;
-  padding: 3%;
-  background: var(--white-color);
-
-  ul {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: repeat(2, minmax(10px, auto));
-    gap: 10px;
-    width: 100%;
-  }
-
-  li {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 90%;
-    padding: 2% 1%;
-    border-radius: 15px;
-    background-color: var(--orange-color);
-    color: var(--white-color);
-    text-align: center;
   }
 `;
 

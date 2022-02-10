@@ -116,7 +116,6 @@ const Entry = styled.main`
 const MainBody = styled.section`
   display: flex;
   justify-content: space-around;
-  width: 100%;
   align-items: center;
 
   .icon {
