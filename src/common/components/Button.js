@@ -66,7 +66,9 @@ const Medium = styled.button`
 `;
 
 const Large = styled.button`
-  width: 160px;
+  width: 100px;
+  padding: 5px 20px;
+  border: 2px solid var(--scarlet-color);
   border-radius: 20px;
   background-color: var(--dark-orange-color);
   color: var(--white-color);

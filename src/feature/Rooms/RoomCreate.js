@@ -7,14 +7,12 @@ import styled from "styled-components";
 import Button from "../../common/components/Button";
 import Modal from "../../common/components/modal/Modal";
 import { makeRandomRoomName } from "../../common/utils/makeRoomResource";
-import { roomSliceActions } from "../../modules/slice/roomSlice";
+import { roomListSliceActions } from "../../modules/slice/roomListSlice";
 
 const RoomCreate = ({ isShow, handleModalShowChange }) => {
   const user = useSelector((state) => state.auth.user);
-
   const roomNameRef = useRef();
   const dispatch = useDispatch();
-
   const history = useHistory();
 
   const handleCreateButton = () => {
@@ -23,7 +21,7 @@ const RoomCreate = ({ isShow, handleModalShowChange }) => {
       roomTitle: roomNameRef.current.textContent,
     };
 
-    dispatch(roomSliceActions.createRoomRequest(roomData));
+    dispatch(roomListSliceActions.createRoomRequest(roomData));
 
     history.push({
       pathname: `/room/${roomData.roomCreator._id}`,
@@ -50,7 +48,7 @@ const RoomCreate = ({ isShow, handleModalShowChange }) => {
                 {`${user.name}${makeRandomRoomName()}`}
               </p>
             </h1>
-            <h1 className="roomDescription">최대 인원은 4명 입니다 !</h1>
+            <h1 className="roomDescription">최대 인원은 4명 입니다!</h1>
             <Button
               text="취소"
               size="medium"

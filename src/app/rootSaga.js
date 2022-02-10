@@ -11,7 +11,8 @@ import {
   watchPrevRooms,
   watchFreshRooms,
   watchCreateRoom,
-} from "../modules/saga/roomSaga";
+} from "../modules/saga/roomListSaga";
+import { watchJoinUser, watchDelteUser } from "../modules/saga/roomSaga";
 import { watchSocketSaga } from "../modules/saga/socketSaga";
 
 export default function* rootSaga() {
@@ -24,6 +25,8 @@ export default function* rootSaga() {
     fork(watchFreshRooms),
     fork(watchCreateRoom),
     fork(watchCookieClearSaga),
+    fork(watchJoinUser),
+    fork(watchDelteUser),
     fork(watchSocketSaga),
   ]);
 }
