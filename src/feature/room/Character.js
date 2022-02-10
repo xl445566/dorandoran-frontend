@@ -1,26 +1,32 @@
 import React from "react";
 
+import { useSelector } from "react-redux";
+import { Redirect } from "react-router-dom";
 import styled from "styled-components";
 
 import Profile from "../../common/components/Profile";
 
-const Character = ({ count, chairZone, x, y, side, name }) => {
+const Character = ({ count, isChatting, x, y, side, name }) => {
   const sides = {
     down: [-67, -70],
     left: [-140, -70],
     right: [-214, -70],
     up: [-290, -70],
   };
+  const user = useSelector((state) => state.auth.user);
 
   return (
     <>
-      {chairZone ? (
-        <Profile
-          left={x * 60}
-          top={y * 60}
-          type="/assets/men.png"
-          text="cnfp 한소영 캐릭터 "
-        />
+      {isChatting ? (
+        <>
+          <Profile
+            left={x * 60}
+            top={y * 60}
+            type={user.profile}
+            text={user.name}
+          />
+          <Redirect to="/video" />
+        </>
       ) : (
         <Container
           count={count}

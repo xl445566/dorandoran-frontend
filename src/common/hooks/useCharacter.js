@@ -8,7 +8,13 @@ export const useCharacter = (username) => {
   const [pos, setPos] = useState({ x: 1, y: 5 });
   const [side, setSide] = useState("down");
   const [name, setName] = useState(username);
-  const [chairZone, setChairZone] = useState(false);
+  const [isChatting, setIsChatting] = useState(false);
+  const [chairZone, setChairZone] = useState({
+    top: false,
+    right: false,
+    bottom: false,
+    left: false,
+  });
 
   useEffect(() => {
     setName(username);
@@ -49,13 +55,29 @@ export const useCharacter = (username) => {
   const canMove = (x, y) => {
     if (mapSpots[y] !== undefined && mapSpots[y][x] !== undefined) {
       if (mapSpots[y][x] === 1) {
-        setChairZone(false);
-
+        setChairZone({ top: false, right: false, bottom: false, left: false });
+        console.log("chairZone", chairZone);
+        setIsChatting(false);
         return true;
       }
-
       if (mapSpots[y][x] === 2) {
-        setChairZone(true);
+        setIsChatting(true);
+        setChairZone({ top: true });
+
+        return true;
+      } else if (mapSpots[y][x] === 3) {
+        setIsChatting(true);
+        setChairZone({ right: true });
+
+        return true;
+      } else if (mapSpots[y][x] === 4) {
+        setIsChatting(true);
+        setChairZone({ bottom: true });
+
+        return true;
+      } else if (mapSpots[y][x] === 5) {
+        setIsChatting(true);
+        setChairZone({ left: true });
 
         return true;
       }
@@ -70,6 +92,7 @@ export const useCharacter = (username) => {
     y: pos.y,
     side,
     chairZone,
+    isChatting,
     moveLeft,
     moveRight,
     moveDown,

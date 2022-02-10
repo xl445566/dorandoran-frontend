@@ -25,6 +25,8 @@ const Container = styled.div`
 
 const ProfileImageWrapper = styled.div`
   width: 100px;
+  border-radius: 50px;
+  overflow: hidden;
 `;
 
 const UserName = styled.h3`

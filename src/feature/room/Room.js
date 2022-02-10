@@ -1,17 +1,29 @@
 import React, { useEffect, useState } from "react";
 
 import { useDispatch, useSelector } from "react-redux";
-import { useHistory } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import styled from "styled-components";
 
 import Header from "../../common/components/Header";
 import { useCharacter } from "../../common/hooks/useCharacter";
+import mapSpots from "../../common/utils/mapSpot";
 import { authSliceActions } from "../../modules/slice/authSlice";
 import Character from "./Character";
 
 const Room = () => {
   const char = useCharacter("교감쌤");
-  const [mCount, setMcount] = useState(0);
+  const [moveCount, setMoveCount] = useState(0);
+  const { roomId } = useParams();
+  const [title, setTitle] = useState("");
+  const roomList = useSelector((state) => state.room.roomList);
+
+  useEffect(() => {
+    roomList.forEach((room) => {
+      if (room._id === roomId) {
+        setTitle(room.title);
+      }
+    });
+  }, []);
 
   useEffect(() => {
     window.addEventListener("keydown", handleKeyDown);
@@ -19,14 +31,35 @@ const Room = () => {
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [mCount]);
+  }, [moveCount]);
+
+  useEffect(() => {
+    if (
+      mapSpots[char.y][char.x] === 2 ||
+      mapSpots[char.y][char.x] === 3 ||
+      mapSpots[char.y][char.x] === 4 ||
+      mapSpots[char.y][char.x] === 5
+    ) {
+      mapSpots[char.y - 1][char.x] = 0;
+      mapSpots[char.y][char.x - 1] = 0;
+      mapSpots[char.y][char.x + 1] = 0;
+      mapSpots[char.y + 1][char.x] = 0;
+
+      dispatch(
+        authSliceActions.setSeatPosition([
+          [char.y - 1, char.x],
+          [char.y, char.x - 1],
+          [char.y, char.x + 1],
+          [char.y + 1, char.x],
+        ])
+      );
+    }
+  }, [char.y, char.x]);
 
   const error = useSelector((state) => state.room.error);
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
   const history = useHistory();
   const dispatch = useDispatch();
-
-  const roomTitle = history.location.state.title;
 
   const handleLogout = () => {
     window.Kakao.API.request({
@@ -54,33 +87,33 @@ const Room = () => {
     switch (e.code) {
       case "KeyA":
       case "ArrowLeft":
-        setMcount(mCount + 1);
-        if (mCount === 2) {
-          setMcount(0);
+        setMoveCount(moveCount + 1);
+        if (moveCount === 2) {
+          setMoveCount(0);
         }
         char.moveLeft();
         break;
       case "KeyW":
       case "ArrowUp":
-        setMcount(mCount + 1);
-        if (mCount === 2) {
-          setMcount(0);
+        setMoveCount(moveCount + 1);
+        if (moveCount === 2) {
+          setMoveCount(0);
         }
         char.moveUp();
         break;
       case "KeyD":
       case "ArrowRight":
-        setMcount(mCount + 1);
-        if (mCount === 2) {
-          setMcount(0);
+        setMoveCount(moveCount + 1);
+        if (moveCount === 2) {
+          setMoveCount(0);
         }
         char.moveRight();
         break;
       case "KeyS":
       case "ArrowDown":
-        setMcount(mCount + 1);
-        if (mCount === 2) {
-          setMcount(0);
+        setMoveCount(moveCount + 1);
+        if (moveCount === 2) {
+          setMoveCount(0);
         }
         char.moveDown();
         break;
@@ -92,17 +125,18 @@ const Room = () => {
       <Main>
         <Header
           rightOnClick={handleLogout}
-          title={roomTitle}
+          title={title}
           text="방 리스트로 가기"
           leftOnClick={onRoomsPage}
         />
         <Section>
           <Character
-            count={mCount}
-            chairZone={char.chairZone}
+            count={moveCount}
+            chairZone={char.charZone}
             side={char.side}
             x={char.x}
             y={char.y}
+            isChatting={char.isChatting}
             name={char.name}
           />
         </Section>
@@ -125,7 +159,7 @@ const Section = styled.section`
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 70%;
+  width: 1350px;
   height: 480px;
   margin: 0 auto;
   padding: 70px 50px;

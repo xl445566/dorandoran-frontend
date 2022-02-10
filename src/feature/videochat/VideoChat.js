@@ -1,11 +1,13 @@
 import React, { useEffect, useRef, useState } from "react";
 
 import Peer from "peerjs";
-import { useHistory, useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { useHistory } from "react-router-dom";
 import { io } from "socket.io-client";
 import styled from "styled-components";
 
 import Header from "../../common/components/Header";
+import mapSpots from "../../common/utils/mapSpot";
 
 const VideoChat = () => {
   const [peerId, setPeerId] = useState("");
@@ -18,9 +20,10 @@ const VideoChat = () => {
   const remoteVideoRef2 = useRef(null);
   const remoteVideoRef3 = useRef(null);
 
-  const param = useParams();
+  const seatPosition = useSelector((state) => state.auth.seatPosition);
+
   const history = useHistory();
-  const roomName = param.roomId;
+  const roomName = "cnfp";
 
   useEffect(() => {
     const peer = new Peer();
@@ -136,13 +139,20 @@ const VideoChat = () => {
     history.push("/rooms");
   };
 
+  const onRoomPage = () => {
+    seatPosition.forEach((point) => {
+      mapSpots[point[0]][point[1]] = 1;
+    });
+    history.push(`/room/62028363530976bb8ea8ab6b`);
+  };
+
   return (
     <>
       <h1>My PEER ID: {peerId}</h1>
       <h1>Room Name : {roomName}</h1>
       <button onClick={handleLeaveRoom}>나가기</button>
       <VideoChatContainer>
-        <Header />
+        <Header leftOnClick={onRoomPage} />
         <VideoWrapper>
           <VideoBox>
             <video autoPlay playsInline ref={myVideoRef} />
