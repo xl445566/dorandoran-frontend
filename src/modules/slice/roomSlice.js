@@ -5,28 +5,28 @@ export const roomSlice = createSlice({
   initialState: {
     isLoading: false,
     roomList: [],
-    totalCount: 0,
     error: "",
   },
   reducers: {
-    getRooms: (state) => {
+    joinUser: (state) => {
       state.isLoading = true;
     },
-    getRoomsSuccess: (state, action) => {
+    joinedUserSuccess: (state) => {
       state.isLoading = false;
-      state.roomList = action.payload;
     },
-    getRoomFailure: (state, action) => {
+    joinedUserFailure: (state, action) => {
       state.isLoading = false;
       state.error = action.payload;
     },
-    getNextRooms: (state, action) => {
-      state.isLoading = false;
-      state.roomList = action.payload;
+    deleteUser: (state) => {
+      state.isLoading = true;
     },
-    getPrevRooms: (state, action) => {
+    deleteUserSuccess: (state) => {
       state.isLoading = false;
-      state.roomList = action.payload;
+    },
+    deleteUserFailure: (state, action) => {
+      state.isLoading = false;
+      state.error = action.payload;
     },
     getFreshRooms: (state, action) => {
       state.isLoading = false;

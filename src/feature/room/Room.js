@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from "react";
 
 import { useDispatch, useSelector } from "react-redux";
-import { useHistory } from "react-router-dom";
+import { useLocation, useHistory, useParams } from "react-router-dom";
 import styled from "styled-components";
 
 import Header from "../../common/components/Header";
 import { useCharacter } from "../../common/hooks/useCharacter";
-import { socket } from "../../modules/saga/socketSaga";
+// import { socket } from "../../modules/saga/socketSaga";
 import { authSliceActions } from "../../modules/slice/authSlice";
+import { roomSliceActions } from "../../modules/slice/roomSlice";
 import Character from "./Character";
 
 const Room = () => {
@@ -24,21 +25,37 @@ const Room = () => {
 
   const error = useSelector((state) => state.room.error);
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+  const currentUser = useSelector((state) => state.auth.user);
+
   const history = useHistory();
   const dispatch = useDispatch();
+  const params = useParams();
 
-  const roomTitle = history.location.state.title;
+  const location = useLocation();
+  const { title } = location.state;
 
   const handleLogout = () => {
     window.Kakao.API.request({
       url: "/v1/user/unlink",
       success: function () {
+        dispatch(
+          roomSliceActions.deleteUser({
+            currentUser: currentUser._id,
+            currentRoom: params.roomId,
+          })
+        );
         dispatch(authSliceActions.logoutRequest());
       },
     });
   };
 
   const onRoomsPage = () => {
+    dispatch(
+      roomSliceActions.deleteUser({
+        currentUser: currentUser._id,
+        currentRoom: params.roomId,
+      })
+    );
     history.push("/");
   };
 
@@ -93,7 +110,7 @@ const Room = () => {
       <Main>
         <Header
           rightOnClick={handleLogout}
-          title={roomTitle}
+          title={title}
           text="방 리스트로 가기"
           leftOnClick={onRoomsPage}
         />
