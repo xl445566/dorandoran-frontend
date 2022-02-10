@@ -44,12 +44,12 @@ const Character = ({ count, isChatting, x, y, side, name }) => {
 };
 
 const Container = styled.div`
-  width: ${(props) => props.xPos}px;
-  height: ${(props) => props.yPos}px;
   position: absolute;
   left: ${(props) => props.left}px;
   top: ${(props) => props.top}px;
-  background-image: url("/assets/character-big2.png");
+  width: ${(props) => props.xPos}px;
+  height: ${(props) => props.yPos}px;
+  background-image: url("/assets/character-big.png");
   background-position: ${(props) => props.count * props.sidePos[1]}px
     ${(props) => props.sidePos[0]}px;
 `;
@@ -60,12 +60,12 @@ const UserName = styled.p`
   right: 15px;
   width: 100px;
   border-radius: 10px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
   background: #0000007d;
   color: #fff;
   font-size: 15px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
 `;
 
 export default Character;

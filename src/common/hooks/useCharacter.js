@@ -25,6 +25,7 @@ export const useCharacter = (username) => {
       x: canMove(pos.x - 1, pos.y) ? pos.x - 1 : pos.x,
       y: pos.y,
     }));
+
     setSide("left");
   };
 
@@ -33,6 +34,7 @@ export const useCharacter = (username) => {
       x: canMove(pos.x + 1, pos.y) ? pos.x + 1 : pos.x,
       y: pos.y,
     }));
+
     setSide("right");
   };
 
@@ -41,6 +43,7 @@ export const useCharacter = (username) => {
       x: pos.x,
       y: canMove(pos.x, pos.y + 1) ? pos.y + 1 : pos.y,
     }));
+
     setSide("down");
   };
 
@@ -49,15 +52,16 @@ export const useCharacter = (username) => {
       x: pos.x,
       y: canMove(pos.x, pos.y - 1) ? pos.y - 1 : pos.y,
     }));
+
     setSide("up");
   };
 
   const canMove = (x, y) => {
-    if (mapSpots[y] !== undefined && mapSpots[y][x] !== undefined) {
+    if (mapSpots[y][x] !== undefined) {
       if (mapSpots[y][x] === 1) {
         setChairZone({ top: false, right: false, bottom: false, left: false });
-        console.log("chairZone", chairZone);
         setIsChatting(false);
+
         return true;
       }
       if (mapSpots[y][x] === 2) {
