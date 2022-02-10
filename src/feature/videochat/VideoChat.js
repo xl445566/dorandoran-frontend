@@ -7,8 +7,8 @@ import styled from "styled-components";
 
 import Header from "../../common/components/Header";
 import mapSpots from "../../common/utils/mapSpot";
-import soketApi from "../../modules/api/socketApi";
-import { socket } from "../../modules/saga/socketSaga";
+import { soketVideoApi } from "../../modules/api/socketApi";
+import { socketVideo } from "../../modules/saga/socketSaga";
 
 const VideoChat = () => {
   const [peerId, setPeerId] = useState("");
@@ -41,7 +41,7 @@ const VideoChat = () => {
       console.log("-------------------------------------------------");
 
       setPeerId(id);
-      soketApi.enterRoom("cnfp", id);
+      soketVideoApi.enterRoom("cnfp", id);
     });
 
     peer.on("call", (call) => {
@@ -76,13 +76,13 @@ const VideoChat = () => {
     //   call(newRemotePeerId);
     // });
 
-    socket.on("roomChange", (userList) => {
+    socketVideo.on("roomChange", (userList) => {
       console.log("-------------------------------------------------");
       console.log("현재 유저 리스트: ", userList);
       console.log("-------------------------------------------------");
     });
 
-    socket.on("bye", (leavePeerId) => {
+    socketVideo.on("bye", (leavePeerId) => {
       console.log("나간 사람: ", leavePeerId);
       console.log("남은 peerInstance.current", peerInstance.current);
     });
@@ -119,7 +119,7 @@ const VideoChat = () => {
   // };
 
   const handleLeaveRoom = () => {
-    socket.close();
+    socketVideo.close();
     peerInstance.current.disconnect();
     peerInstance.current.destroy();
     history.push("/");
