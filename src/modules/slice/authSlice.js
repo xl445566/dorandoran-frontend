@@ -6,8 +6,12 @@ export const authSlice = createSlice({
     isLoggedIn: false,
     error: "",
     user: null,
+    seatPosition: null,
   },
   reducers: {
+    setSeatPosition: (state, action) => {
+      state.seatPosition = action.payload;
+    },
     cookieClear: (state) => {
       state.error = "";
       state.isLoggedIn = false;
@@ -39,6 +43,7 @@ export const authSlice = createSlice({
       state.isLoggedIn = false;
       state.error = "";
       state.user = null;
+      state.seatPosition = null;
     },
     logoutFailure: (state, action) => {
       state.isLoggedIn = true;
