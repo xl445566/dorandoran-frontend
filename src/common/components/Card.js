@@ -88,7 +88,7 @@ const ChatRoom = styled.li`
   .text-container ul {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: repeat(2, minmax(3px, auto));
+    grid-template-rows: repeat(2, minmax(29px, auto));
     gap: 6px;
   }
 
@@ -96,6 +96,7 @@ const ChatRoom = styled.li`
     height: 18px;
     padding: 3px 0;
     border-radius: 15px;
+    line-height: 23px;
     background-color: var(--orange-color);
     color: var(--white-color);
     text-align: center;
