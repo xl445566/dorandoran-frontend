@@ -3,27 +3,16 @@ import { createSlice } from "@reduxjs/toolkit";
 export const videoSlice = createSlice({
   name: "video",
   initialState: {
-    isUpdate: false,
-    remotePeerId: "",
-    leavePeerId: "",
-    userList: [],
+    remoteIds: [],
+    isWelcome: false,
   },
   reducers: {
-    saveRemotePeer: (state, action) => {
-      state.isUpdate = true;
-      state.remotePeerId = action.payload;
+    saveRemoteId: (state, action) => {
+      state.isWelcome = true;
+      state.remoteIds = state.remoteIds.push(action.payload);
     },
-    saveUserList: (state, action) => {
-      state.userList = action.payload;
-    },
-    saveLeavePeerId: (state, action) => {
-      state.leavePeerId = action.payload;
-    },
-    initIsUpdate: (state) => {
-      state.isUpdate = !state.isUpdate;
-    },
-    test: (state) => {
-      state.error = state;
+    changeIsWelcome: (state) => {
+      state.isWelcome = false;
     },
   },
 });

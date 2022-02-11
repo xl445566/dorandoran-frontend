@@ -36,25 +36,18 @@ export const watchSocketCharacterSaga = function* () {
 
 const createSocketVideoChannel = (socketVideo) => {
   return eventChannel((emit) => {
-    socketVideo.on("welcome", (remoteId) => {
-      console.log("새로 들어온 사람", remoteId);
-      emit(videoSliceActions.saveRemotePeer(remoteId));
+    socketVideo.on("enterRoom", (remoteId) => {
+      console.log("새로 들어온 사람 소켓 ID:::", remoteId);
+      emit(videoSliceActions.saveRemoteId(remoteId));
     });
 
-    socketVideo.on("roomChange", (users) => {
-      console.log("현재 유저 리스트", users);
-      emit(videoSliceActions.saveUserList(users));
-    });
-
-    socketVideo.on("bye", (leavePeerId) => {
-      console.log("나간 사람: ", leavePeerId);
-      emit(videoSliceActions.saveLeavePeerId(leavePeerId));
+    socketVideo.on("offer", (offer) => {
+      console.log("서버에서 온 Offer", offer);
     });
 
     return () => {
-      socketVideo.off("welcome");
-      socketVideo.off("roomChange");
-      socketVideo.off("bye");
+      socketVideo.off("enterRoom");
+      socketVideo.off("offer");
     };
   });
 };

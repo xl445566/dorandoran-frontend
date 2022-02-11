@@ -7,7 +7,10 @@ export const soketCharacterApi = {
 };
 
 export const soketVideoApi = {
-  enterRoom: (roomName, peerId) => {
-    socketVideo.emit("enterRoom", roomName, peerId);
+  enterRoom: (roomName) => {
+    socketVideo.emit("enterRoom", roomName);
+  },
+  offer: (roomName, offer) => {
+    socketVideo.emit("offer", roomName, offer);
   },
 };
