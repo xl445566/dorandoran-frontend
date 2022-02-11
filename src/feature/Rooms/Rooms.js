@@ -90,18 +90,20 @@ const Rooms = () => {
         type="refresh"
       />
       <MainBody>
-        <button onClick={handlePrevClick}>
-          <FaChevronLeft size="60" className="icon" />
-        </button>
-        {!isLoading && (
-          <ChatRoomList
-            setIsShowModal={setIsNotJoinModal}
-            roomList={roomList}
-          />
-        )}
-        <button onClick={handleNextClick}>
-          <FaChevronRight size="60" className="icon" />
-        </button>
+        <Pagination>
+          <button onClick={handlePrevClick}>
+            <FaChevronLeft size="60" className="icon" />
+          </button>
+          {!isLoading && (
+            <ChatRoomList
+              setIsShowModal={setIsNotJoinModal}
+              roomList={roomList}
+            />
+          )}
+          <button onClick={handleNextClick}>
+            <FaChevronRight size="60" className="icon" />
+          </button>
+        </Pagination>
       </MainBody>
     </Entry>
   );
@@ -114,14 +116,18 @@ const Entry = styled.main`
 `;
 
 const MainBody = styled.section`
+  height: 90%;
   display: flex;
-  justify-content: space-around;
-  width: 100%;
   align-items: center;
+  justify-content: space-around;
 
   .icon {
     color: var(--black-color);
   }
 `;
 
+const Pagination = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
 export default Rooms;

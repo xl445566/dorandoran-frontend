@@ -44,13 +44,6 @@ export const roomSlice = createSlice({
     createRoomFailure: (state, action) => {
       state.error = action.payload;
     },
-    joinedRooms: (state) => {
-      state.isLoading = true;
-    },
-    joinedRoomsSuccess: (state, action) => {
-      state.isLoading = false;
-      state.roomList = action.payload;
-    },
   },
 });
 

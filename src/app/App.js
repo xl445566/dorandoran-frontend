@@ -43,7 +43,7 @@ function App() {
         <Route path="/room/:roomId">
           <Room />
         </Route>
-        <Route path="/video">
+        <Route path="/video/:roomId">
           <VideoChat />
         </Route>
         <Route path="/error">

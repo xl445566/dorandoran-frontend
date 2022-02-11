@@ -1,28 +1,42 @@
 import React, { useEffect, useRef, useState } from "react";
 
 import Peer from "peerjs";
-import { useSelector } from "react-redux";
-import { useHistory } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { useHistory, useParams } from "react-router-dom";
 import styled from "styled-components";
 
 import Header from "../../common/components/Header";
 import mapSpots from "../../common/utils/mapSpot";
-import soketApi from "../../modules/api/socketApi";
-import { socket } from "../../modules/saga/socketSaga";
+import { soketVideoApi } from "../../modules/api/socketApi";
+import { socketVideo } from "../../modules/saga/socketSaga";
+import { authSliceActions } from "../../modules/slice/authSlice";
+import { roomSliceActions } from "../../modules/slice/roomSlice";
 
 const VideoChat = () => {
   const [peerId, setPeerId] = useState("");
+  const [title, setTitle] = useState("");
 
   const peerInstance = useRef(null);
-
   const myVideoRef = useRef(null);
   const remoteVideoRef1 = useRef(null);
   const remoteVideoRef2 = useRef(null);
   const remoteVideoRef3 = useRef(null);
 
+  const dispatch = useDispatch();
   const seatPosition = useSelector((state) => state.auth.seatPosition);
+  const currentUser = useSelector((state) => state.auth.user);
+  const roomList = useSelector((state) => state.roomList.roomList);
   const history = useHistory();
-  const roomName = "cnfp";
+  const params = useParams();
+
+  useEffect(() => {
+    roomList.forEach((room) => {
+      if (room._id === params.roomId) {
+        setTitle(room.title);
+        console.log(room.title);
+      }
+    });
+  }, []);
 
   useEffect(() => {
     const peer = new Peer();
@@ -41,7 +55,7 @@ const VideoChat = () => {
       console.log("-------------------------------------------------");
 
       setPeerId(id);
-      soketApi.enterRoom("cnfp", id);
+      soketVideoApi.enterRoom(params.roomId, id);
     });
 
     peer.on("call", (call) => {
@@ -68,21 +82,21 @@ const VideoChat = () => {
       });
     });
 
-    // socket.on("welcome", (newRemotePeerId) => {
-    //   console.log("-------------------------------------------------");
-    //   console.log("새로 들어온 사람: ", newRemotePeerId);
-    //   console.log("-------------------------------------------------");
+    socketVideo.on("welcome", (newRemotePeerId) => {
+      console.log("-------------------------------------------------");
+      console.log("새로 들어온 사람: ", newRemotePeerId);
+      console.log("-------------------------------------------------");
 
-    //   call(newRemotePeerId);
-    // });
+      call(newRemotePeerId);
+    });
 
-    socket.on("roomChange", (userList) => {
+    socketVideo.on("roomChange", (userList) => {
       console.log("-------------------------------------------------");
       console.log("현재 유저 리스트: ", userList);
       console.log("-------------------------------------------------");
     });
 
-    socket.on("bye", (leavePeerId) => {
+    socketVideo.on("bye", (leavePeerId) => {
       console.log("나간 사람: ", leavePeerId);
       console.log("남은 peerInstance.current", peerInstance.current);
     });
@@ -90,55 +104,96 @@ const VideoChat = () => {
     peerInstance.current = peer;
   }, []);
 
-  // const call = (remotePeerId) => {
-  //   const getUserMedia =
-  //     navigator.getUserMedia ||
-  //     navigator.webkitGetUserMedia ||
-  //     navigator.mozGetUserMedia;
+  const call = (remotePeerId) => {
+    const getUserMedia =
+      navigator.getUserMedia ||
+      navigator.webkitGetUserMedia ||
+      navigator.mozGetUserMedia;
 
-  //   getUserMedia({ video: true }, (myStream) => {
-  //     const call = peerInstance.current.call(remotePeerId, myStream);
+    getUserMedia({ video: true }, (myStream) => {
+      const call = peerInstance.current.call(remotePeerId, myStream);
 
-  //     call.on("stream", (remoteStream) => {
-  //       if (!remoteVideoRef1.current.srcObject) {
-  //         remoteVideoRef1.current.srcObject = remoteStream;
-  //       } else if (!remoteVideoRef2.current.srcObject) {
-  //         remoteVideoRef2.current.srcObject = remoteStream;
-  //       } else if (!remoteVideoRef3.current.srcObject) {
-  //         remoteVideoRef3.current.srcObject = remoteStream;
-  //       }
-  //     });
+      call.on("stream", (remoteStream) => {
+        if (!remoteVideoRef1.current.srcObject) {
+          remoteVideoRef1.current.srcObject = remoteStream;
+        } else if (!remoteVideoRef2.current.srcObject) {
+          remoteVideoRef2.current.srcObject = remoteStream;
+        } else if (!remoteVideoRef3.current.srcObject) {
+          remoteVideoRef3.current.srcObject = remoteStream;
+        }
+      });
 
-  //     call.on("close", () => {
-  //       console.log("-------------------------------------------------");
-  //       console.log("전화를 건 사람이 나갔습니다.", call);
-  //       console.log("-------------------------------------------------");
-  //       call.close();
-  //     });
-  //   });
-  // };
-
-  const handleLeaveRoom = () => {
-    socket.close();
-    peerInstance.current.disconnect();
-    peerInstance.current.destroy();
-    history.push("/");
+      call.on("close", () => {
+        console.log("-------------------------------------------------");
+        console.log("전화를 건 사람이 나갔습니다.", call);
+        console.log("-------------------------------------------------");
+        call.close();
+      });
+    });
   };
 
-  const onRoomPage = () => {
+  const handleRoomPage = () => {
+    const stream = myVideoRef.current.srcObject;
+    const tracks = stream.getTracks();
+
+    tracks.forEach((track) => {
+      track.stop();
+    });
+
+    myVideoRef.current.srcObject = null;
+    socketVideo.close();
+    peerInstance.current.disconnect();
+    peerInstance.current.destroy();
+
     seatPosition.forEach((point) => {
       mapSpots[point[0]][point[1]] = 1;
     });
-    history.push(`/room/62028363530976bb8ea8ab6b`);
+
+    history.push(`/room/${params.roomId}`);
+  };
+
+  const handleLogout = () => {
+    const stream = myVideoRef.current.srcObject;
+    const tracks = stream.getTracks();
+
+    tracks.forEach((track) => {
+      track.stop();
+    });
+
+    myVideoRef.current.srcObject = null;
+    socketVideo.close();
+    peerInstance.current.disconnect();
+    peerInstance.current.destroy();
+
+    seatPosition.forEach((point) => {
+      mapSpots[point[0]][point[1]] = 1;
+    });
+
+    window.Kakao.API.request({
+      url: "/v1/user/unlink",
+      success: function () {
+        dispatch(
+          roomSliceActions.deleteUser({
+            currentUser: currentUser._id,
+            currentRoom: params.roomId,
+          })
+        );
+        dispatch(roomSliceActions.init());
+        dispatch(authSliceActions.logoutRequest());
+      },
+    });
   };
 
   return (
     <>
-      <h1>My PEER ID: {peerId}</h1>
-      <h1>Room Name : {roomName}</h1>
-      <button onClick={handleLeaveRoom}>나가기</button>
+      <p>My PEER ID: {peerId}</p>
       <VideoChatContainer>
-        <Header leftOnClick={onRoomPage} />
+        <Header
+          leftOnClick={handleRoomPage}
+          rightOnClick={handleLogout}
+          text="방 으로 가기"
+          title={title}
+        />
         <VideoWrapper>
           <VideoBox>
             <video autoPlay playsInline ref={myVideoRef} />

@@ -1,4 +1,4 @@
-import { all, fork } from "redux-saga/effects";
+import { all } from "redux-saga/effects";
 
 import {
   watchLogin,
@@ -10,23 +10,30 @@ import {
   watchNextRooms,
   watchPrevRooms,
   watchFreshRooms,
-  watchCreateRoom,
 } from "../modules/saga/roomListSaga";
-import { watchJoinUser, watchDelteUser } from "../modules/saga/roomSaga";
-import { watchSocketSaga } from "../modules/saga/socketSaga";
+import {
+  watchJoinUser,
+  watchDelteUser,
+  watchCreateRoom,
+} from "../modules/saga/roomSaga";
+import {
+  watchSocketCharacterSaga,
+  watchSocketVideoSaga,
+} from "../modules/saga/socketSaga";
 
 export default function* rootSaga() {
   yield all([
-    fork(watchLogin),
-    fork(watchLogout),
-    fork(watchInitRooms),
-    fork(watchNextRooms),
-    fork(watchPrevRooms),
-    fork(watchFreshRooms),
-    fork(watchCreateRoom),
-    fork(watchCookieClearSaga),
-    fork(watchJoinUser),
-    fork(watchDelteUser),
-    fork(watchSocketSaga),
+    watchLogin(),
+    watchLogout(),
+    watchInitRooms(),
+    watchNextRooms(),
+    watchPrevRooms(),
+    watchFreshRooms(),
+    watchCreateRoom(),
+    watchCookieClearSaga(),
+    watchJoinUser(),
+    watchDelteUser(),
+    watchSocketCharacterSaga(),
+    watchSocketVideoSaga(),
   ]);
 }

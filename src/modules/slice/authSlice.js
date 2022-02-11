@@ -7,8 +7,12 @@ export const authSlice = createSlice({
     error: "",
     user: null,
     seatPosition: null,
+    character: [],
   },
   reducers: {
+    characterSoCket: (state, action) => {
+      state.character.push(action.payload);
+    },
     setSeatPosition: (state, action) => {
       state.seatPosition = action.payload;
     },

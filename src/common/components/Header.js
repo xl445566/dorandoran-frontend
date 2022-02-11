@@ -32,9 +32,10 @@ const Header = ({
 };
 
 const HeaderContainer = styled.header`
+  height: 10%;
   display: flex;
   justify-content: space-around;
-  padding: 30px 0;
+  align-items: center;
 `;
 
 const Title = styled.h1`

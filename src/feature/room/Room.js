@@ -6,26 +6,26 @@ import styled from "styled-components";
 
 import Header from "../../common/components/Header";
 import { useCharacter } from "../../common/hooks/useCharacter";
+import createKey from "../../common/utils/createKey";
 import mapSpots from "../../common/utils/mapSpot";
-// import { socket } from "../../modules/saga/socketSaga";
+import { soketCharacterApi } from "../../modules/api/socketApi";
 import { authSliceActions } from "../../modules/slice/authSlice";
+import { roomListSliceActions } from "../../modules/slice/roomListSlice";
 import { roomSliceActions } from "../../modules/slice/roomSlice";
 import Character from "./Character";
 
 const Room = () => {
   const char = useCharacter("교감쌤");
-  const { roomId } = useParams();
-  const roomList = useSelector((state) => state.roomList.roomList);
+  const roomInfo = useSelector((state) => state.room.info);
   const [moveCount, setMoveCount] = useState(0);
-  const [title, setTitle] = useState("");
-
-  useEffect(() => {
-    roomList.forEach((room) => {
-      if (room._id === roomId) {
-        setTitle(room.title);
-      }
-    });
-  }, []);
+  // const socketUser = useSelector((state) => state.character.character);
+  const error = useSelector((state) => state.room.error);
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+  const currentUser = useSelector((state) => state.auth.user);
+  const history = useHistory();
+  const dispatch = useDispatch();
+  const params = useParams();
+  const userPos = useSelector((state) => state.character.userPos);
 
   useEffect(() => {
     window.addEventListener("keydown", handleKeyDown);
@@ -42,6 +42,7 @@ const Room = () => {
       mapSpots[char.y][char.x] === 4 ||
       mapSpots[char.y][char.x] === 5
     ) {
+      console.log("여기 프로필 들어가기");
       mapSpots[char.y - 1][char.x] = 0;
       mapSpots[char.y][char.x - 1] = 0;
       mapSpots[char.y][char.x + 1] = 0;
@@ -56,15 +57,13 @@ const Room = () => {
         ])
       );
     }
+
+    // soketCharacterApi.moveCharacter(mapSpots[char.y][char.x]);
   }, [char.y, char.x]);
 
-  const error = useSelector((state) => state.room.error);
-  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
-  const currentUser = useSelector((state) => state.auth.user);
-
-  const history = useHistory();
-  const dispatch = useDispatch();
-  const params = useParams();
+  useEffect(() => {
+    soketCharacterApi.hello(params.roomId, "famale1");
+  }, []);
 
   const handleLogout = () => {
     window.Kakao.API.request({
@@ -76,6 +75,7 @@ const Room = () => {
             currentRoom: params.roomId,
           })
         );
+        dispatch(roomSliceActions.init());
         dispatch(authSliceActions.logoutRequest());
       },
     });
@@ -88,6 +88,10 @@ const Room = () => {
         currentRoom: params.roomId,
       })
     );
+    dispatch(roomSliceActions.init());
+    dispatch(roomListSliceActions.getRooms());
+    soketCharacterApi.exitUser(params.roomId);
+
     history.push("/");
   };
 
@@ -101,6 +105,8 @@ const Room = () => {
   }, [error, isLoggedIn]);
 
   const handleKeyDown = (e) => {
+    // soketCharacterApi.moveCharacter(char);
+
     switch (e.code) {
       case "KeyA":
       case "ArrowLeft":
@@ -136,18 +142,20 @@ const Room = () => {
         break;
     }
   };
-
+  console.log("userPos::::", userPos);
+  console.log("char.x", char.x);
   return (
     <>
       <Main>
         <Header
           rightOnClick={handleLogout}
-          title={title}
+          title={roomInfo ? roomInfo.title : false}
           text="방 리스트로 가기"
           leftOnClick={handleRoomsPage}
         />
         <Section>
           <Character
+            key={createKey()}
             count={moveCount}
             chairZone={char.charZone}
             side={char.side}
@@ -155,7 +163,25 @@ const Room = () => {
             y={char.y}
             isChatting={char.isChatting}
             name={char.name}
+            roomId={params.roomId}
+            type="famale1"
           />
+          {/* {socketUser.map((user) => {
+            return (
+              <Character
+                key={createKey()}
+                count={moveCount}
+                chairZone={char.charZone}
+                side={char.side}
+                x={char.x}
+                y={char.y}
+                isChatting={char.isChatting}
+                name={user[0]}
+                roomId={params.roomId}
+                type={user[1]}
+              />
+            );
+          })} */}
         </Section>
       </Main>
     </>
@@ -186,4 +212,10 @@ const Section = styled.section`
   box-shadow: 1px 1px 10px 1px #756f6f;
 `;
 
+// const SocketTest = styled.div`
+//   display: inline-block;
+//   width: 20px;
+//   height: 20px;
+//   background-color: red;
+// `;
 export default Room;
