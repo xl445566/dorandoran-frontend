@@ -58,10 +58,35 @@ const deleteUserSaga = function* ({ payload }) {
   }
 };
 
+const createRoomSaga = function* ({ payload }) {
+  try {
+    let response;
+    yield call(async () => {
+      response = await axios.post(
+        "http://localhost:4000/rooms/new",
+        {
+          roomData: payload,
+        },
+        {
+          withCredentials: true,
+        }
+      );
+    });
+
+    yield put(roomSliceActions.createRoomSuccess(response.data.newRoom));
+  } catch (error) {
+    yield put(roomSliceActions.createRoomFailure(error));
+  }
+};
+
 export function* watchJoinUser() {
   yield takeEvery(roomSliceActions.joinUser, joinUserSaga);
 }
 
 export function* watchDelteUser() {
   yield takeEvery(roomSliceActions.deleteUser, deleteUserSaga);
+}
+
+export function* watchCreateRoom() {
+  yield takeEvery(roomSliceActions.createRoomRequest, createRoomSaga);
 }

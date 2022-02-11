@@ -6,12 +6,12 @@ import styled from "styled-components";
 
 import Profile from "../../common/components/Profile";
 
-const Character = ({ count, isChatting, x, y, side, name }) => {
+const Character = ({ roomId, count, isChatting, x, y, side, name }) => {
   const sides = {
     down: [0, -70],
-    left: [-70, -70],
-    right: [-141, -70],
-    up: [-208, -70],
+    left: [-71, -70],
+    right: [-142, -70],
+    up: [-213, -70],
   };
   const user = useSelector((state) => state.auth.user);
 
@@ -25,13 +25,13 @@ const Character = ({ count, isChatting, x, y, side, name }) => {
             type={user.profile}
             text={user.name}
           />
-          <Redirect to="/video" />
+          <Redirect to={`/video/${roomId}`} />
         </>
       ) : (
         <Container
           count={count}
           xPos={64}
-          yPos={72}
+          yPos={69}
           left={x * 60}
           top={y * 60}
           sidePos={sides[side]}
@@ -49,7 +49,7 @@ const Container = styled.div`
   top: ${(props) => props.top}px;
   width: ${(props) => props.xPos}px;
   height: ${(props) => props.yPos}px;
-  background-image: url("/assets/character-big.png");
+  background-image: url("/assets/male2.png");
   background-position: ${(props) => props.count * props.sidePos[1]}px
     ${(props) => props.sidePos[0]}px;
 `;

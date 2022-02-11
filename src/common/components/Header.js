@@ -24,7 +24,7 @@ const Header = ({
           size={size}
           onClick={centerOnClick}
         />
-        <Title>{title ? title : null}</Title>
+        <Title>{title ? title : false}</Title>
       </RoomInfo>
       <LogoutButton text="로그아웃" onClick={rightOnClick} />
     </HeaderContainer>
@@ -32,9 +32,10 @@ const Header = ({
 };
 
 const HeaderContainer = styled.header`
+  height: 10%;
   display: flex;
   justify-content: space-around;
-  padding: 30px 0;
+  align-items: center;
 `;
 
 const Title = styled.h1`

@@ -1,144 +1,141 @@
 import React, { useEffect, useRef, useState } from "react";
 
 import Peer from "peerjs";
-import { useSelector } from "react-redux";
-import { useHistory } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { useHistory, useParams } from "react-router-dom";
 import styled from "styled-components";
 
 import Header from "../../common/components/Header";
 import mapSpots from "../../common/utils/mapSpot";
+import {
+  peerAnswer,
+  peerCall,
+  setMediaStream,
+  handlePeerDisconnect,
+} from "../../common/utils/mediaUtils";
 import { soketVideoApi } from "../../modules/api/socketApi";
-import { socketVideo } from "../../modules/saga/socketSaga";
+import { authSliceActions } from "../../modules/slice/authSlice";
+import { roomSliceActions } from "../../modules/slice/roomSlice";
+import { videoSliceActions } from "../../modules/slice/videoSlice";
 
 const VideoChat = () => {
   const [peerId, setPeerId] = useState("");
 
   const peerInstance = useRef(null);
-
   const myVideoRef = useRef(null);
   const remoteVideoRef1 = useRef(null);
   const remoteVideoRef2 = useRef(null);
   const remoteVideoRef3 = useRef(null);
 
+  const error = useSelector((state) => state.room.error);
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
   const seatPosition = useSelector((state) => state.auth.seatPosition);
+  const currentUser = useSelector((state) => state.auth.user);
+  const isUpdate = useSelector((state) => state.video.isUpdate);
+  const remotePeerId = useSelector((state) => state.video.remotePeerId);
+  const roomInfo = useSelector((state) => state.room.info);
+
+  const dispatch = useDispatch();
   const history = useHistory();
-  const roomName = "cnfp";
+  const params = useParams();
 
   useEffect(() => {
     const peer = new Peer();
-    const getUserMedia =
-      navigator.getUserMedia ||
-      navigator.webkitGetUserMedia ||
-      navigator.mozGetUserMedia;
-
-    getUserMedia({ video: true }, (myStream) => {
-      myVideoRef.current.srcObject = myStream;
-    });
+    peerInstance.current = peer;
+    setMediaStream(myVideoRef.current);
 
     peer.on("open", (id) => {
-      console.log("-------------------------------------------------");
-      console.log("my Peer ID: ", id);
-      console.log("-------------------------------------------------");
-
       setPeerId(id);
-      soketVideoApi.enterRoom("cnfp", id);
+      soketVideoApi.enterRoom(params.roomId, id);
     });
 
     peer.on("call", (call) => {
-      getUserMedia({ video: true }, (myStream) => {
-        call.answer(myStream);
-
-        call.on("stream", (remoteStream) => {
-          if (!remoteVideoRef1.current.srcObject) {
-            remoteVideoRef1.current.srcObject = remoteStream;
-          } else if (!remoteVideoRef2.current.srcObject) {
-            remoteVideoRef2.current.srcObject = remoteStream;
-          } else if (!remoteVideoRef3.current.srcObject) {
-            remoteVideoRef3.current.srcObject = remoteStream;
-          }
-        });
-
-        call.on("close", () => {
-          console.log("-------------------------------------------------");
-          console.log("전화를 받은 사람이 나갔습니다.", call);
-          console.log("-------------------------------------------------");
-
-          call.close();
-        });
-      });
+      peerAnswer(
+        call,
+        remoteVideoRef1.current,
+        remoteVideoRef2.current,
+        remoteVideoRef3.current
+      );
     });
-
-    // socket.on("welcome", (newRemotePeerId) => {
-    //   console.log("-------------------------------------------------");
-    //   console.log("새로 들어온 사람: ", newRemotePeerId);
-    //   console.log("-------------------------------------------------");
-
-    //   call(newRemotePeerId);
-    // });
-
-    socketVideo.on("roomChange", (userList) => {
-      console.log("-------------------------------------------------");
-      console.log("현재 유저 리스트: ", userList);
-      console.log("-------------------------------------------------");
-    });
-
-    socketVideo.on("bye", (leavePeerId) => {
-      console.log("나간 사람: ", leavePeerId);
-      console.log("남은 peerInstance.current", peerInstance.current);
-    });
-
-    peerInstance.current = peer;
   }, []);
 
-  // const call = (remotePeerId) => {
-  //   const getUserMedia =
-  //     navigator.getUserMedia ||
-  //     navigator.webkitGetUserMedia ||
-  //     navigator.mozGetUserMedia;
+  useEffect(() => {
+    if (isUpdate) {
+      peerCall(
+        peerInstance.current,
+        remotePeerId,
+        remoteVideoRef1.current,
+        remoteVideoRef2.current,
+        remoteVideoRef3.current
+      );
+      dispatch(videoSliceActions.initIsUpdate());
+    }
+  }, [remotePeerId, isUpdate]);
 
-  //   getUserMedia({ video: true }, (myStream) => {
-  //     const call = peerInstance.current.call(remotePeerId, myStream);
+  useEffect(() => {
+    if (error) {
+      history.push("/error");
+    }
 
-  //     call.on("stream", (remoteStream) => {
-  //       if (!remoteVideoRef1.current.srcObject) {
-  //         remoteVideoRef1.current.srcObject = remoteStream;
-  //       } else if (!remoteVideoRef2.current.srcObject) {
-  //         remoteVideoRef2.current.srcObject = remoteStream;
-  //       } else if (!remoteVideoRef3.current.srcObject) {
-  //         remoteVideoRef3.current.srcObject = remoteStream;
-  //       }
-  //     });
+    if (!isLoggedIn) {
+      history.push("/");
+    }
+  }, [error, isLoggedIn]);
 
-  //     call.on("close", () => {
-  //       console.log("-------------------------------------------------");
-  //       console.log("전화를 건 사람이 나갔습니다.", call);
-  //       console.log("-------------------------------------------------");
-  //       call.close();
-  //     });
-  //   });
-  // };
+  const handleRoomPage = () => {
+    const stream = myVideoRef.current.srcObject;
+    const tracks = stream.getTracks();
+    tracks.forEach((track) => {
+      track.stop();
+    });
+    myVideoRef.current.srcObject = null;
+    handlePeerDisconnect(peerInstance.current);
 
-  const handleLeaveRoom = () => {
-    socketVideo.close();
-    peerInstance.current.disconnect();
-    peerInstance.current.destroy();
-    history.push("/");
-  };
-
-  const onRoomPage = () => {
     seatPosition.forEach((point) => {
       mapSpots[point[0]][point[1]] = 1;
     });
-    history.push(`/room/62028363530976bb8ea8ab6b`);
+
+    history.push(`/room/${params.roomId}`);
+  };
+
+  const handleLogout = () => {
+    const stream = myVideoRef.current.srcObject;
+    const tracks = stream.getTracks();
+    tracks.forEach((track) => {
+      track.stop();
+    });
+    myVideoRef.current.srcObject = null;
+    handlePeerDisconnect(peerInstance.current);
+
+    seatPosition.forEach((point) => {
+      mapSpots[point[0]][point[1]] = 1;
+    });
+
+    window.Kakao.API.request({
+      url: "/v1/user/unlink",
+      success: function () {
+        dispatch(
+          roomSliceActions.deleteUser({
+            currentUser: currentUser._id,
+            currentRoom: params.roomId,
+          })
+        );
+        dispatch(roomSliceActions.init());
+        dispatch(authSliceActions.logoutRequest());
+      },
+    });
   };
 
   return (
     <>
-      <h1>My PEER ID: {peerId}</h1>
-      <h1>Room Name : {roomName}</h1>
-      <button onClick={handleLeaveRoom}>나가기</button>
+      <p>My PEER ID: {peerId}</p>
       <VideoChatContainer>
-        <Header leftOnClick={onRoomPage} />
+        <Header
+          leftOnClick={handleRoomPage}
+          rightOnClick={handleLogout}
+          text="방 으로 가기"
+          title={roomInfo.title ? roomInfo.title : false}
+        />
         <VideoWrapper>
           <VideoBox>
             <video autoPlay playsInline ref={myVideoRef} />
