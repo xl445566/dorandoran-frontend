@@ -4,8 +4,6 @@ export const roomSlice = createSlice({
   name: "roomList",
   initialState: {
     isLoading: false,
-    isStarted: false,
-    isFinished: true,
     roomList: [],
     error: "",
   },
@@ -30,24 +28,6 @@ export const roomSlice = createSlice({
       state.roomList = action.payload;
     },
     getFreshRooms: (state, action) => {
-      state.isLoading = false;
-      state.roomList = action.payload;
-    },
-    createRoomRequest: (state) => {
-      state.isStarted = true;
-      state.isFinished = false;
-    },
-    createRoomSuccess: (state) => {
-      state.isStarted = false;
-      state.isFinished = true;
-    },
-    createRoomFailure: (state, action) => {
-      state.error = action.payload;
-    },
-    joinedRooms: (state) => {
-      state.isLoading = true;
-    },
-    joinedRoomsSuccess: (state, action) => {
       state.isLoading = false;
       state.roomList = action.payload;
     },

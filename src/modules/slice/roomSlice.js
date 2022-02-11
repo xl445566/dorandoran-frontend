@@ -3,9 +3,10 @@ import { createSlice } from "@reduxjs/toolkit";
 export const roomSlice = createSlice({
   name: "room",
   initialState: {
+    isComplete: false,
     isLoading: false,
-    roomList: [],
     error: "",
+    info: null,
   },
   reducers: {
     joinUser: (state) => {
@@ -23,24 +24,32 @@ export const roomSlice = createSlice({
     },
     deleteUserSuccess: (state) => {
       state.isLoading = false;
+      state.isComplete = true;
     },
     deleteUserFailure: (state, action) => {
       state.isLoading = false;
       state.error = action.payload;
     },
-    getFreshRooms: (state, action) => {
-      state.isLoading = false;
-      state.roomList = action.payload;
-    },
     createRoomRequest: (state) => {
       state.isLoading = true;
     },
-    createRoomSuccess: (state) => {
+    createRoomSuccess: (state, action) => {
+      state.isComplete = true;
       state.isLoading = false;
+      state.info = action.payload;
     },
     createRoomFailure: (state, action) => {
       state.isLoading = false;
       state.error = action.payload;
+    },
+    saveInfo: (state, action) => {
+      state.info = action.payload;
+    },
+    changeIsComplted: (state) => {
+      state.isComplete = false;
+    },
+    init: (state) => {
+      state.info = null;
     },
   },
 });

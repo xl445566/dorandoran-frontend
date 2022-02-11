@@ -1,5 +1,5 @@
 import axios from "axios";
-import { call, takeEvery, put } from "redux-saga/effects";
+import { call, takeEvery, put, takeLatest } from "redux-saga/effects";
 
 import { roomListSliceActions } from "../slice/roomListSlice";
 
@@ -101,28 +101,8 @@ const getRefreshRoomSaga = function* ({ payload }) {
   }
 };
 
-const createRoomSaga = function* ({ payload }) {
-  try {
-    yield call(async () => {
-      await axios.post(
-        "http://localhost:4000/rooms/new",
-        {
-          roomData: payload,
-        },
-        {
-          withCredentials: true,
-        }
-      );
-    });
-
-    yield put(roomListSliceActions.createRoomSuccess());
-  } catch (error) {
-    yield put(roomListSliceActions.createRoomFailure(error));
-  }
-};
-
 export function* watchInitRooms() {
-  yield takeEvery(roomListSliceActions.getRooms, getRoomSaga);
+  yield takeLatest(roomListSliceActions.getRooms, getRoomSaga);
 }
 
 export function* watchNextRooms() {
@@ -135,8 +115,4 @@ export function* watchPrevRooms() {
 
 export function* watchFreshRooms() {
   yield takeEvery(roomListSliceActions.getFreshRooms, getRefreshRoomSaga);
-}
-
-export function* watchCreateRoom() {
-  yield takeEvery(roomListSliceActions.createRoomRequest, createRoomSaga);
 }

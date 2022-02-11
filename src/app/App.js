@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 
 import { useBeforeunload } from "react-beforeunload";
 import { useDispatch, useSelector } from "react-redux";
-import { Switch, Route, Link, useHistory } from "react-router-dom";
+import { Switch, Route, useHistory } from "react-router-dom";
 
 import Login from "../feature/auth/Login";
 import Room from "../feature/room/Room";
@@ -28,14 +28,6 @@ function App() {
 
   return (
     <>
-      <ul>
-        <li>
-          <Link to="/video">4 . 화상채팅페이지로</Link>
-        </li>
-        <li>
-          <Link to="/error">5 . 에러페이지로</Link>
-        </li>
-      </ul>
       <Switch>
         <Route path="/" exact>
           {user && user.name ? <Rooms /> : <Login />}
@@ -43,7 +35,7 @@ function App() {
         <Route path="/room/:roomId">
           <Room />
         </Route>
-        <Route path="/video">
+        <Route path="/video/:roomId">
           <VideoChat />
         </Route>
         <Route path="/error">

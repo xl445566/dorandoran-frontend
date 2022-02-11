@@ -7,25 +7,22 @@ import styled from "styled-components";
 import Header from "../../common/components/Header";
 import { useCharacter } from "../../common/hooks/useCharacter";
 import mapSpots from "../../common/utils/mapSpot";
-// import { socket } from "../../modules/saga/socketSaga";
 import { authSliceActions } from "../../modules/slice/authSlice";
 import { roomSliceActions } from "../../modules/slice/roomSlice";
 import Character from "./Character";
 
 const Room = () => {
   const char = useCharacter("교감쌤");
-  const { roomId } = useParams();
-  const roomList = useSelector((state) => state.roomList.roomList);
+  const roomInfo = useSelector((state) => state.room.info);
   const [moveCount, setMoveCount] = useState(0);
-  const [title, setTitle] = useState("");
 
-  useEffect(() => {
-    roomList.forEach((room) => {
-      if (room._id === roomId) {
-        setTitle(room.title);
-      }
-    });
-  }, []);
+  const error = useSelector((state) => state.room.error);
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+  const currentUser = useSelector((state) => state.auth.user);
+
+  const history = useHistory();
+  const dispatch = useDispatch();
+  const params = useParams();
 
   useEffect(() => {
     window.addEventListener("keydown", handleKeyDown);
@@ -58,14 +55,6 @@ const Room = () => {
     }
   }, [char.y, char.x]);
 
-  const error = useSelector((state) => state.room.error);
-  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
-  const currentUser = useSelector((state) => state.auth.user);
-
-  const history = useHistory();
-  const dispatch = useDispatch();
-  const params = useParams();
-
   const handleLogout = () => {
     window.Kakao.API.request({
       url: "/v1/user/unlink",
@@ -76,6 +65,7 @@ const Room = () => {
             currentRoom: params.roomId,
           })
         );
+
         dispatch(authSliceActions.logoutRequest());
       },
     });
@@ -88,6 +78,7 @@ const Room = () => {
         currentRoom: params.roomId,
       })
     );
+
     history.push("/");
   };
 
@@ -96,7 +87,7 @@ const Room = () => {
       history.push("/error");
     }
     if (!isLoggedIn) {
-      history.push("/login");
+      history.push("/");
     }
   }, [error, isLoggedIn]);
 
@@ -142,7 +133,7 @@ const Room = () => {
       <Main>
         <Header
           rightOnClick={handleLogout}
-          title={title}
+          title={roomInfo ? roomInfo.title : false}
           text="방 리스트로 가기"
           leftOnClick={handleRoomsPage}
         />
@@ -155,6 +146,7 @@ const Room = () => {
             y={char.y}
             isChatting={char.isChatting}
             name={char.name}
+            roomId={params.roomId}
           />
         </Section>
       </Main>

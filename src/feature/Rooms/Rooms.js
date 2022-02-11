@@ -9,6 +9,7 @@ import Header from "../../common/components/Header";
 import Modal from "../../common/components/modal/Modal";
 import { authSliceActions } from "../../modules/slice/authSlice";
 import { roomListSliceActions } from "../../modules/slice/roomListSlice";
+import { roomSliceActions } from "../../modules/slice/roomSlice";
 import RoomModal from "../room/RoomModal";
 import ChatRoomList from "./ChatRoomList";
 import RoomCreate from "./RoomCreate";
@@ -17,6 +18,7 @@ const Rooms = () => {
   const roomList = useSelector((state) => state.roomList.roomList);
   const isLoading = useSelector((state) => state.roomList.isLoading);
   const error = useSelector((state) => state.roomList.error);
+  const isComplete = useSelector((state) => state.room.isComplete);
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
   const currentAddress = useSelector(
     (state) => state.auth.user.current_address
@@ -32,8 +34,20 @@ const Rooms = () => {
   };
 
   useEffect(() => {
-    dispatch(roomListSliceActions.getRooms());
-  }, []);
+    if (isComplete) {
+      dispatch(roomSliceActions.changeIsComplted());
+    } else {
+      dispatch(roomListSliceActions.getRooms());
+    }
+
+    if (error) {
+      history.push("/error");
+    }
+
+    if (!isLoggedIn) {
+      history.push("/");
+    }
+  }, [isComplete, error, isLoggedIn]);
 
   const handleNextClick = () => {
     dispatch(roomListSliceActions.getNextRooms(roomList));
@@ -60,15 +74,6 @@ const Rooms = () => {
     isNotJoinModal ? setIsNotJoinModal(false) : setIsNotJoinModal(true);
   };
 
-  useEffect(() => {
-    if (error) {
-      history.push("/error");
-    }
-    if (!isLoggedIn) {
-      history.push("/login");
-    }
-  }, [error, isLoggedIn]);
-
   return (
     <Entry>
       {isNotJoinModal && (
@@ -90,18 +95,20 @@ const Rooms = () => {
         type="refresh"
       />
       <MainBody>
-        <button onClick={handlePrevClick}>
-          <FaChevronLeft size="60" className="icon" />
-        </button>
-        {!isLoading && (
-          <ChatRoomList
-            setIsShowModal={setIsNotJoinModal}
-            roomList={roomList}
-          />
-        )}
-        <button onClick={handleNextClick}>
-          <FaChevronRight size="60" className="icon" />
-        </button>
+        <Pagination>
+          <button onClick={handlePrevClick}>
+            <FaChevronLeft size="60" className="icon" />
+          </button>
+          {!isLoading && (
+            <ChatRoomList
+              setIsShowModal={setIsNotJoinModal}
+              roomList={roomList}
+            />
+          )}
+          <button onClick={handleNextClick}>
+            <FaChevronRight size="60" className="icon" />
+          </button>
+        </Pagination>
       </MainBody>
     </Entry>
   );
@@ -114,14 +121,18 @@ const Entry = styled.main`
 `;
 
 const MainBody = styled.section`
+  height: 90%;
   display: flex;
-  justify-content: space-around;
-  width: 100%;
   align-items: center;
+  justify-content: space-around;
 
   .icon {
     color: var(--black-color);
   }
 `;
 
+const Pagination = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
 export default Rooms;
