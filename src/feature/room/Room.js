@@ -7,23 +7,31 @@ import styled from "styled-components";
 import Header from "../../common/components/Header";
 import { useCharacter } from "../../common/hooks/useCharacter";
 import mapSpots from "../../common/utils/mapSpot";
-// import { socket } from "../../modules/saga/socketSaga";
+import { soketCharacterApi } from "../../modules/api/socketApi";
 import { authSliceActions } from "../../modules/slice/authSlice";
+import { roomListSliceActions } from "../../modules/slice/roomListSlice";
 import { roomSliceActions } from "../../modules/slice/roomSlice";
 import Character from "./Character";
 
 const Room = () => {
   const char = useCharacter("교감쌤");
-  const { roomId } = useParams();
-  const roomList = useSelector((state) => state.roomList.roomList);
+  const roomInfo = useSelector((state) => state.room.info);
   const [moveCount, setMoveCount] = useState(0);
-  const [title, setTitle] = useState("");
+
+  const error = useSelector((state) => state.room.error);
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+  const currentUser = useSelector((state) => state.auth.user);
+
+  const history = useHistory();
+  const dispatch = useDispatch();
+  const params = useParams();
+
+  const userData = useSelector((state) => state.avartar.avartarInfo);
 
   useEffect(() => {
-    roomList.forEach((room) => {
-      if (room._id === roomId) {
-        setTitle(room.title);
-      }
+    soketCharacterApi.enterRoom({
+      roomId: roomInfo._id,
+      user: currentUser,
     });
   }, []);
 
@@ -58,14 +66,6 @@ const Room = () => {
     }
   }, [char.y, char.x]);
 
-  const error = useSelector((state) => state.room.error);
-  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
-  const currentUser = useSelector((state) => state.auth.user);
-
-  const history = useHistory();
-  const dispatch = useDispatch();
-  const params = useParams();
-
   const handleLogout = () => {
     window.Kakao.API.request({
       url: "/v1/user/unlink",
@@ -76,6 +76,7 @@ const Room = () => {
             currentRoom: params.roomId,
           })
         );
+        dispatch(roomSliceActions.init());
         dispatch(authSliceActions.logoutRequest());
       },
     });
@@ -88,6 +89,9 @@ const Room = () => {
         currentRoom: params.roomId,
       })
     );
+    dispatch(roomSliceActions.init());
+    dispatch(roomListSliceActions.getRooms());
+
     history.push("/");
   };
 
@@ -142,11 +146,14 @@ const Room = () => {
       <Main>
         <Header
           rightOnClick={handleLogout}
-          title={title}
+          title={roomInfo ? roomInfo.title : false}
           text="방 리스트로 가기"
           leftOnClick={handleRoomsPage}
         />
         <Section>
+          {userData.map((val) => {
+            <h3>{val}</h3>;
+          })}
           <Character
             count={moveCount}
             chairZone={char.charZone}
@@ -155,6 +162,7 @@ const Room = () => {
             y={char.y}
             isChatting={char.isChatting}
             name={char.name}
+            roomId={params.roomId}
           />
         </Section>
       </Main>
@@ -184,6 +192,13 @@ const Section = styled.section`
   background: url(/assets/pixelArt-bg.png) no-repeat center/cover;
   text-align: center;
   box-shadow: 1px 1px 10px 1px #756f6f;
+
+  // 임시! 테스트 후 무조건 삭제하기
+
+  h3 {
+    background-color: black;
+    color: yellow;
+  }
 `;
 
 export default Room;

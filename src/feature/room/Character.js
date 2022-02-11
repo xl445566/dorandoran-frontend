@@ -6,7 +6,7 @@ import styled from "styled-components";
 
 import Profile from "../../common/components/Profile";
 
-const Character = ({ count, isChatting, x, y, side, name }) => {
+const Character = ({ roomId, count, isChatting, x, y, side, name }) => {
   const sides = {
     down: [0, -70],
     left: [-70, -70],
@@ -25,7 +25,7 @@ const Character = ({ count, isChatting, x, y, side, name }) => {
             type={user.profile}
             text={user.name}
           />
-          <Redirect to="/video" />
+          <Redirect to={`/video/${roomId}`} />
         </>
       ) : (
         <Container

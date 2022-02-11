@@ -24,7 +24,16 @@ const Card = ({ roomInfo, setIsShowModal }) => {
         })
       );
 
-      history.push(`/room/${_id}`, { title });
+      dispatch(
+        roomSliceActions.saveInfo({
+          title,
+          users,
+          room_no,
+          _id,
+        })
+      );
+
+      history.push(`/room/${_id}`);
     } else {
       setIsShowModal(true);
     }
@@ -88,17 +97,16 @@ const ChatRoom = styled.li`
   .text-container ul {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: repeat(2, minmax(29px, auto));
+    grid-template-rows: repeat(2, minmax(23px, auto));
     gap: 6px;
   }
 
   .text-container ul li {
-    height: 18px;
-    padding: 3px 0;
+    padding: 5px 0;
     border-radius: 15px;
-    line-height: 23px;
     background-color: var(--orange-color);
     color: var(--white-color);
+    font-size: 18px;
     text-align: center;
   }
 

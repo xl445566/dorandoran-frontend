@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
@@ -7,13 +7,23 @@ import styled from "styled-components";
 import Button from "../../common/components/Button";
 import Modal from "../../common/components/modal/Modal";
 import { makeRandomRoomName } from "../../common/utils/makeRoomResource";
-import { roomListSliceActions } from "../../modules/slice/roomListSlice";
+import { roomSliceActions } from "../../modules/slice/roomSlice";
 
 const RoomCreate = ({ isShow, handleModalShowChange }) => {
   const user = useSelector((state) => state.auth.user);
+  const roomInfo = useSelector((state) => state.room.info);
+  const isComplete = useSelector((state) => state.room.isComplete);
   const roomNameRef = useRef();
   const dispatch = useDispatch();
   const history = useHistory();
+
+  useEffect(() => {
+    if (isComplete) {
+      history.push(`/room/${roomInfo._id}`);
+
+      dispatch(roomSliceActions.changeIsComplted());
+    }
+  }, [roomInfo]);
 
   const handleCreateButton = () => {
     const roomData = {
@@ -21,14 +31,7 @@ const RoomCreate = ({ isShow, handleModalShowChange }) => {
       roomTitle: roomNameRef.current.textContent,
     };
 
-    dispatch(roomListSliceActions.createRoomRequest(roomData));
-
-    history.push({
-      pathname: `/room/${roomData.roomCreator._id}`,
-      state: {
-        title: roomData.roomTitle,
-      },
-    });
+    dispatch(roomSliceActions.createRoomRequest(roomData));
 
     handleModalShowChange();
   };
