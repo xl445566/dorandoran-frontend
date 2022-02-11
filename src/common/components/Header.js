@@ -24,7 +24,7 @@ const Header = ({
           size={size}
           onClick={centerOnClick}
         />
-        <Title>{title ? title : null}</Title>
+        <Title>{title ? title : false}</Title>
       </RoomInfo>
       <LogoutButton text="로그아웃" onClick={rightOnClick} />
     </HeaderContainer>

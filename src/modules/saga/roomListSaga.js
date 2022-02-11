@@ -1,5 +1,5 @@
 import axios from "axios";
-import { call, takeEvery, put } from "redux-saga/effects";
+import { call, takeEvery, put, takeLatest } from "redux-saga/effects";
 
 import { roomListSliceActions } from "../slice/roomListSlice";
 
@@ -102,7 +102,7 @@ const getRefreshRoomSaga = function* ({ payload }) {
 };
 
 export function* watchInitRooms() {
-  yield takeEvery(roomListSliceActions.getRooms, getRoomSaga);
+  yield takeLatest(roomListSliceActions.getRooms, getRoomSaga);
 }
 
 export function* watchNextRooms() {

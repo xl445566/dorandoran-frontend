@@ -10,8 +10,8 @@ export const authSlice = createSlice({
     character: [],
   },
   reducers: {
-    characterSoCket: (state, action) => {
-      state.character.push(action.payload);
+    test: (state) => {
+      state.error = "";
     },
     setSeatPosition: (state, action) => {
       state.seatPosition = action.payload;

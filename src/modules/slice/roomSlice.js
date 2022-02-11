@@ -24,6 +24,7 @@ export const roomSlice = createSlice({
     },
     deleteUserSuccess: (state) => {
       state.isLoading = false;
+      state.isComplete = true;
     },
     deleteUserFailure: (state, action) => {
       state.isLoading = false;
@@ -48,9 +49,6 @@ export const roomSlice = createSlice({
       state.isComplete = false;
     },
     init: (state) => {
-      state.isComplete = false;
-      state.isLoading = false;
-      state.error = "";
       state.info = null;
     },
   },

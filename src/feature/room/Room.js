@@ -76,6 +76,7 @@ const Room = () => {
           })
         );
         dispatch(roomSliceActions.init());
+
         dispatch(authSliceActions.logoutRequest());
       },
     });
@@ -100,7 +101,7 @@ const Room = () => {
       history.push("/error");
     }
     if (!isLoggedIn) {
-      history.push("/login");
+      history.push("/");
     }
   }, [error, isLoggedIn]);
 

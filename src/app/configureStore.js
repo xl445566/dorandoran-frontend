@@ -6,16 +6,19 @@ import authSlice from "../modules/slice/authSlice";
 import characterSlice from "../modules/slice/characterSlice";
 import roomListSlice from "../modules/slice/roomListSlice";
 import roomSlice from "../modules/slice/roomSlice";
+import videoSlice from "../modules/slice/videoSlice";
 import rootSaga from "./rootSaga";
 
 const createStore = () => {
   const sagaMiddleware = createSagaMiddleware();
+
   const store = configureStore({
     reducer: {
       auth: authSlice.reducer,
       room: roomSlice.reducer,
       roomList: roomListSlice.reducer,
       character: characterSlice.reducer,
+      video: videoSlice.reducer,
     },
     devTools: true,
     middleware: [logger, sagaMiddleware],

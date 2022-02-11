@@ -9,9 +9,9 @@ import Profile from "../../common/components/Profile";
 const Character = ({ roomId, count, isChatting, x, y, side, name, type }) => {
   const sides = {
     down: [0, -70],
-    left: [-70, -70],
-    right: [-141, -70],
-    up: [-208, -70],
+    left: [-71, -70],
+    right: [-142, -70],
+    up: [-213, -70],
   };
   const user = useSelector((state) => state.auth.user);
 
@@ -31,7 +31,7 @@ const Character = ({ roomId, count, isChatting, x, y, side, name, type }) => {
         <Container
           count={count}
           xPos={64}
-          yPos={72}
+          yPos={69}
           left={x * 60}
           top={y * 60}
           sidePos={sides[side]}

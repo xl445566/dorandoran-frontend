@@ -47,7 +47,7 @@ const Card = ({ roomInfo, setIsShowModal }) => {
         </div>
         <div className="text-container">
           <RoomNumber>{room_no < 10 ? "0" + room_no : room_no}</RoomNumber>
-          <h1>{title.length > 9 ? title.slice(0, 9) + "..." : title}</h1>
+          <h1>{title.length > 15 ? title.slice(0, 15) + "..." : title}</h1>
           <ul>
             {users.map((user) => {
               return <li key={createKey()}>{user.name}</li>;
