@@ -6,8 +6,9 @@ import styled from "styled-components";
 
 import Header from "../../common/components/Header";
 import { useCharacter } from "../../common/hooks/useCharacter";
+import createKey from "../../common/utils/createKey";
 import mapSpots from "../../common/utils/mapSpot";
-import { soketCharacterApi } from "../../modules/api/socketApi";
+import { socketCharacterApi } from "../../modules/api/socketApi";
 import { authSliceActions } from "../../modules/slice/authSlice";
 import { roomListSliceActions } from "../../modules/slice/roomListSlice";
 import { roomSliceActions } from "../../modules/slice/roomSlice";
@@ -17,23 +18,13 @@ const Room = () => {
   const char = useCharacter("교감쌤");
   const roomInfo = useSelector((state) => state.room.info);
   const [moveCount, setMoveCount] = useState(0);
-
+  const socketUser = useSelector((state) => state.character.character);
   const error = useSelector((state) => state.room.error);
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
   const currentUser = useSelector((state) => state.auth.user);
-
   const history = useHistory();
   const dispatch = useDispatch();
   const params = useParams();
-
-  const userData = useSelector((state) => state.avartar.avartarInfo);
-
-  useEffect(() => {
-    soketCharacterApi.enterRoom({
-      roomId: roomInfo._id,
-      user: currentUser,
-    });
-  }, []);
 
   useEffect(() => {
     window.addEventListener("keydown", handleKeyDown);
@@ -66,6 +57,19 @@ const Room = () => {
     }
   }, [char.y, char.x]);
 
+  useEffect(() => {
+    socketCharacterApi.hello(
+      params.roomId,
+      char.x,
+      char.y,
+      // type
+      char.side,
+      char.isChatting,
+      currentUser.name,
+      currentUser.gender
+    );
+  }, []);
+
   const handleLogout = () => {
     window.Kakao.API.request({
       url: "/v1/user/unlink",
@@ -77,7 +81,9 @@ const Room = () => {
           })
         );
         dispatch(roomSliceActions.init());
+
         dispatch(authSliceActions.logoutRequest());
+        socketCharacterApi.exitUser();
       },
     });
   };
@@ -91,6 +97,7 @@ const Room = () => {
     );
     dispatch(roomSliceActions.init());
     dispatch(roomListSliceActions.getRooms());
+    socketCharacterApi.exitUser();
 
     history.push("/");
   };
@@ -100,9 +107,18 @@ const Room = () => {
       history.push("/error");
     }
     if (!isLoggedIn) {
-      history.push("/login");
+      history.push("/");
     }
   }, [error, isLoggedIn]);
+
+  useEffect(() => {
+    socketCharacterApi.changeCurrentCharacter(
+      char.x,
+      char.y,
+      char.side,
+      moveCount
+    );
+  }, [moveCount, char.side, char.x, char.y]);
 
   const handleKeyDown = (e) => {
     switch (e.code) {
@@ -113,6 +129,7 @@ const Room = () => {
           setMoveCount(0);
         }
         char.moveLeft();
+
         break;
       case "KeyW":
       case "ArrowUp":
@@ -121,6 +138,7 @@ const Room = () => {
           setMoveCount(0);
         }
         char.moveUp();
+
         break;
       case "KeyD":
       case "ArrowRight":
@@ -129,6 +147,7 @@ const Room = () => {
           setMoveCount(0);
         }
         char.moveRight();
+
         break;
       case "KeyS":
       case "ArrowDown":
@@ -137,6 +156,7 @@ const Room = () => {
           setMoveCount(0);
         }
         char.moveDown();
+
         break;
     }
   };
@@ -151,19 +171,21 @@ const Room = () => {
           leftOnClick={handleRoomsPage}
         />
         <Section>
-          {userData.map((val) => {
-            <h3>{val}</h3>;
+          {socketUser.map((user) => {
+            return (
+              <Character
+                key={createKey()}
+                roomId={user.roomId}
+                count={user.moveCount}
+                isChatting={user.isChatting}
+                x={user.x}
+                y={user.y}
+                side={user.side}
+                name={user.name}
+                type={user.type}
+              />
+            );
           })}
-          <Character
-            count={moveCount}
-            chairZone={char.charZone}
-            side={char.side}
-            x={char.x}
-            y={char.y}
-            isChatting={char.isChatting}
-            name={char.name}
-            roomId={params.roomId}
-          />
         </Section>
       </Main>
     </>
@@ -192,13 +214,6 @@ const Section = styled.section`
   background: url(/assets/pixelArt-bg.png) no-repeat center/cover;
   text-align: center;
   box-shadow: 1px 1px 10px 1px #756f6f;
-
-  // 임시! 테스트 후 무조건 삭제하기
-
-  h3 {
-    background-color: black;
-    color: yellow;
-  }
 `;
 
 export default Room;

@@ -28,14 +28,6 @@ function App() {
 
   return (
     <>
-      {/* <ul>
-        <li>
-          <Link to="/video">4 . 화상채팅페이지로</Link>
-        </li>
-        <li>
-          <Link to="/error">5 . 에러페이지로</Link>
-        </li>
-      </ul> */}
       <Switch>
         <Route path="/" exact>
           {user && user.name ? <Rooms /> : <Login />}

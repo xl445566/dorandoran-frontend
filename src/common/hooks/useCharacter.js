@@ -5,6 +5,9 @@ import { useEffect } from "react/cjs/react.development";
 import mapSpots from "../utils/mapSpot";
 
 export const useCharacter = (username) => {
+  // 캐릭터 위치
+  // 이거 지워야 하는거
+  // console.log('"지울 부분")
   const [pos, setPos] = useState({ x: 1, y: 5 });
   const [side, setSide] = useState("down");
   const [name, setName] = useState(username);

@@ -9,6 +9,9 @@ export const authSlice = createSlice({
     seatPosition: null,
   },
   reducers: {
+    test: (state) => {
+      state.error = "";
+    },
     setSeatPosition: (state, action) => {
       state.seatPosition = action.payload;
     },

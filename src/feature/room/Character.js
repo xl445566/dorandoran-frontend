@@ -6,12 +6,12 @@ import styled from "styled-components";
 
 import Profile from "../../common/components/Profile";
 
-const Character = ({ roomId, count, isChatting, x, y, side, name }) => {
+const Character = ({ roomId, count, isChatting, x, y, side, name, type }) => {
   const sides = {
     down: [0, -70],
-    left: [-70, -70],
-    right: [-141, -70],
-    up: [-208, -70],
+    left: [-71, -70],
+    right: [-142, -70],
+    up: [-213, -70],
   };
   const user = useSelector((state) => state.auth.user);
 
@@ -31,10 +31,11 @@ const Character = ({ roomId, count, isChatting, x, y, side, name }) => {
         <Container
           count={count}
           xPos={64}
-          yPos={72}
+          yPos={69}
           left={x * 60}
           top={y * 60}
           sidePos={sides[side]}
+          type={type}
         >
           <UserName>{name}</UserName>
         </Container>
@@ -49,7 +50,7 @@ const Container = styled.div`
   top: ${(props) => props.top}px;
   width: ${(props) => props.xPos}px;
   height: ${(props) => props.yPos}px;
-  background-image: url("/assets/character-big.png");
+  background-image: url(${(props) => props.type});
   background-position: ${(props) => props.count * props.sidePos[1]}px
     ${(props) => props.sidePos[0]}px;
 `;
