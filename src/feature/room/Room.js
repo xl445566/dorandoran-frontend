@@ -58,14 +58,14 @@ const Room = () => {
   }, [char.y, char.x]);
 
   useEffect(() => {
-    socketCharacterApi.hello(
-      params.roomId,
-      char.x,
-      char.y,
-      "/assets/characters/famale1.png",
-      char.side,
-      char.isChatting
-    );
+    socketCharacterApi.enterRoom({
+      roomId: params.roomId,
+      x: char.x,
+      y: char.y,
+      type: "/assets/characters/famale1.png",
+      side: char.side,
+      isChatting: char.isChatting,
+    });
   }, []);
 
   const handleLogout = () => {
