@@ -207,7 +207,6 @@ const VideoBox = styled.div`
   position: relative;
   width: 100%;
   height: 100%;
-
   video {
     width: 600px;
     height: 400px;

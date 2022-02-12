@@ -2,6 +2,7 @@ import { eventChannel } from "redux-saga";
 import { take, call, put } from "redux-saga/effects";
 import io from "socket.io-client";
 
+import { characterSliceActions } from "../slice/characterSlice";
 import { videoSliceActions } from "../slice/videoSlice";
 
 export const socketCharacter = io("http://localhost:4000/character", {
@@ -14,12 +15,12 @@ export const socketVideo = io("http://localhost:4000/video", {
 
 const createSocketCharacterChannel = (socketCharacter) => {
   return eventChannel((emit) => {
-    // socketCharacter.on("welcome", () => {
-    //   emit(videoSliceActions.test());
-    // });
-    console.log(emit);
+    socketCharacter.on("setCharacters", (character) => {
+      emit(characterSliceActions.charactersInRoom(character));
+    });
+
     return () => {
-      socketCharacter.off("welcome");
+      socketCharacter.off("setCharacters");
     };
   });
 };
