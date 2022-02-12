@@ -21,6 +21,7 @@ const GlobalStyle = createGlobalStyle`
     border: none;
     font-family: 'Noto Sans', sans-serif;
   }
+
   margin: 0;
   padding: 0;
   border: none;

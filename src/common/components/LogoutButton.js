@@ -12,13 +12,13 @@ const Logout = styled.button`
   border-bottom: 2px solid var(--black-color);
   background: url("/assets/logout.svg") no-repeat 0% 45%;
   font-size: 20px;
-  font-weight: bold;
   text-align: right;
+  font-weight: bold;
 
   &:hover {
     border-bottom: 2px solid var(--scarlet-color);
-    color: var(--scarlet-color);
     background: url("/assets/scarletLogout.svg") no-repeat 0% 45%;
+    color: var(--scarlet-color);
     transition: all 0.25s ease-out;
   }
 `;

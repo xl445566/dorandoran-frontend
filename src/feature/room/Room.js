@@ -16,9 +16,9 @@ import Character from "./Character";
 
 const Room = () => {
   const char = useCharacter("교감쌤");
-  const roomInfo = useSelector((state) => state.room.info);
   const [moveCount, setMoveCount] = useState(0);
-  const socketUser = useSelector((state) => state.character.character);
+  const roomInfo = useSelector((state) => state.room.info);
+  const characters = useSelector((state) => state.character.characters);
   const error = useSelector((state) => state.room.error);
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
   const currentUser = useSelector((state) => state.auth.user);
@@ -58,15 +58,14 @@ const Room = () => {
   }, [char.y, char.x]);
 
   useEffect(() => {
-    socketCharacterApi.hello(
-      params.roomId,
-      char.x,
-      char.y,
-      char.side,
-      char.isChatting,
-      currentUser.name,
-      currentUser.gender
-    );
+    socketCharacterApi.enterRoom({
+      roomId: params.roomId,
+      x: char.x,
+      y: char.y,
+      type: "/assets/characters/famale1.png",
+      side: char.side,
+      isChatting: char.isChatting,
+    });
   }, []);
 
   const handleLogout = () => {
@@ -94,6 +93,10 @@ const Room = () => {
         currentRoom: params.roomId,
       })
     );
+    dispatch(roomSliceActions.init());
+    dispatch(roomListSliceActions.getRooms());
+    socketCharacterApi.exitUser();
+
     dispatch(roomSliceActions.init());
     dispatch(roomListSliceActions.getRooms());
     socketCharacterApi.exitUser();
@@ -170,18 +173,18 @@ const Room = () => {
           leftOnClick={handleRoomsPage}
         />
         <Section>
-          {socketUser.map((user) => {
+          {characters.map((character) => {
             return (
               <Character
                 key={createKey()}
-                roomId={user.roomId}
-                count={user.moveCount}
-                isChatting={user.isChatting}
-                x={user.x}
-                y={user.y}
-                side={user.side}
-                name={user.name}
-                type={user.avartarImage}
+                roomId={character.roomId}
+                count={character.moveCount}
+                isChatting={character.isChatting}
+                x={character.x}
+                y={character.y}
+                side={character.side}
+                name={character.id}
+                type={character.type}
               />
             );
           })}

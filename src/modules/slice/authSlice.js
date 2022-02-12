@@ -7,6 +7,7 @@ export const authSlice = createSlice({
     error: "",
     user: null,
     seatPosition: null,
+    character: [],
   },
   reducers: {
     test: (state) => {
