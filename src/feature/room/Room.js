@@ -62,7 +62,6 @@ const Room = () => {
       params.roomId,
       char.x,
       char.y,
-      // type
       char.side,
       char.isChatting,
       currentUser.name,
@@ -182,7 +181,7 @@ const Room = () => {
                 y={user.y}
                 side={user.side}
                 name={user.name}
-                type={user.type}
+                type={user.avartarImage}
               />
             );
           })}

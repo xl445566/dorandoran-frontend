@@ -13,6 +13,8 @@ const Character = ({ roomId, count, isChatting, x, y, side, name, type }) => {
     right: [-142, -70],
     up: [-213, -70],
   };
+
+  console.log(type);
   const user = useSelector((state) => state.auth.user);
 
   return (
