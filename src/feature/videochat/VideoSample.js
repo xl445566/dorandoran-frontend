@@ -22,20 +22,6 @@ const VideoChat = () => {
   const history = useHistory();
   const params = useParams();
 
-  const myVideoRef = useRef(null);
-  const myStream = useRef(null);
-  const myPeerConnectionInstance = useRef(null);
-
-  const isEnter = useSelector((state) => state.video.isEnter);
-  const isOffer = useSelector((state) => state.video.isOffer);
-  const isAnswer = useSelector((state) => state.video.isAnswer);
-  const isIce = useSelector((state) => state.video.isIce);
-  const remoteIds = useSelector((state) => state.video.remoteIds);
-  const iceCandidate = useSelector((state) => state.video.iceCandidate);
-
-  const receiveOffer = useSelector((state) => state.video.offer);
-  const receiveAnswer = useSelector((state) => state.video.answer);
-
   useEffect(() => {
     if (error) {
       history.push("/error");
@@ -73,120 +59,9 @@ const VideoChat = () => {
       },
     });
   };
-  const handleIce = (data) => {
-    console.log("ice", data.candidate);
-    socketVideoApi.ice(params.roomId, data.candidate);
-  };
-
-  const handleAddTrack = (data) => {
-    console.log("got an stream from my peer");
-    console.log("Peer's stream", data.stream);
-    console.log("My stream", myStream.current);
-  };
-
-  const makeConnection = (stream) => {
-    if (!myPeerConnectionInstance.current) {
-      const myPeerConnection = new RTCPeerConnection();
-      myPeerConnectionInstance.current = myPeerConnection;
-    }
-
-    myPeerConnectionInstance.current.addEventListener(
-      "icecandidate",
-      handleIce
-    );
-    myPeerConnectionInstance.current.addEventListener("track", handleAddTrack);
-
-    stream
-      .getTracks()
-      .forEach((track) =>
-        myPeerConnectionInstance.current.addTrack(track, stream)
-      );
-  };
-
-  const getMedia = async () => {
-    const stream = await navigator.mediaDevices.getUserMedia({
-      video: true,
-    });
-    myVideoRef.current.srcObject = stream;
-    myStream.current = stream;
-    makeConnection(stream);
-  };
-
-  const makeOffer = async () => {
-    if (!myPeerConnectionInstance.current) {
-      const myPeerConnection = new RTCPeerConnection();
-      myPeerConnectionInstance.current = myPeerConnection;
-    }
-
-    const offer = await myPeerConnectionInstance.current.createOffer();
-    myPeerConnectionInstance.current.setLocalDescription(offer);
-
-    console.log("sent the offer");
-    dispatch(videoSliceActions.changeIsEnter());
-
-    socketVideoApi.offer(params.roomId, offer);
-  };
-
-  const makeAnswer = async () => {
-    if (!myPeerConnectionInstance.current) {
-      const myPeerConnection = new RTCPeerConnection();
-      myPeerConnectionInstance.current = myPeerConnection;
-    }
-
-    console.log("received the offer");
-    myPeerConnectionInstance.current.setRemoteDescription(receiveOffer);
-    const answer = await myPeerConnectionInstance.current.createAnswer();
-    myPeerConnectionInstance.current.setLocalDescription(answer);
-    socketVideoApi.answer(params.roomId, answer);
-    dispatch(videoSliceActions.changeIsOffer());
-
-    console.log("sent the answer");
-  };
-
-  const completeLocalAndRemoteDescription = async () => {
-    if (!myPeerConnectionInstance.current) {
-      const myPeerConnection = new RTCPeerConnection();
-      myPeerConnectionInstance.current = myPeerConnection;
-    }
-
-    console.log("receive the answer");
-    myPeerConnectionInstance.current.setRemoteDescription(receiveAnswer);
-    // dispatch(videoSliceActions.changeIsAnswer());
-  };
-
-  useEffect(() => {
-    getMedia();
-    socketVideoApi.enterRoom(params.roomId);
-  }, []);
-
-  useEffect(() => {
-    if (isEnter) {
-      makeOffer();
-    }
-  }, [isEnter]);
-
-  useEffect(() => {
-    if (isOffer) {
-      makeAnswer();
-    }
-  }, [isOffer]);
-
-  useEffect(() => {
-    if (isAnswer || receiveAnswer) {
-      completeLocalAndRemoteDescription();
-    }
-  }, [isAnswer, receiveAnswer]);
-
-  useEffect(() => {
-    if (iceCandidate || isIce) {
-      myPeerConnectionInstance.current.addIceCandidate(iceCandidate);
-      dispatch(videoSliceActions.changeIsIce());
-    }
-  }, [iceCandidate, isIce]);
 
   return (
     <>
-      <h1>{remoteIds.length === 0 ? false : remoteIds}</h1>
       <VideoChatContainer>
         <Header
           leftOnClick={handleRoomPage}
@@ -196,7 +71,7 @@ const VideoChat = () => {
         />
         <VideoWrapper>
           <VideoBox>
-            <video autoPlay playsInline ref={myVideoRef} />
+            <video autoPlay playsInline />
             <UserName>나</UserName>
           </VideoBox>
           {/* <VideoBox>

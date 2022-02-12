@@ -4,15 +4,42 @@ export const videoSlice = createSlice({
   name: "video",
   initialState: {
     remoteIds: [],
-    isWelcome: false,
+    offer: null,
+    answer: null,
+    iceCandidate: null,
+    isEnter: false,
+    isOffer: false,
+    isAnswer: false,
+    isIce: false,
   },
   reducers: {
     saveRemoteId: (state, action) => {
-      state.isWelcome = true;
-      state.remoteIds = state.remoteIds.push(action.payload);
+      state.isEnter = true;
+      state.remoteIds.push(action.payload);
     },
-    changeIsWelcome: (state) => {
-      state.isWelcome = false;
+    changeIsEnter: (state) => {
+      state.isEnter = false;
+    },
+    saveOffer: (state, action) => {
+      state.offer = action.payload;
+      state.isOffer = true;
+    },
+    changeIsOffer: (state) => {
+      state.isOffer = false;
+    },
+    saveAnswer: (state, action) => {
+      state.answer = action.payload;
+      state.isAnswer = true;
+    },
+    changeIsAnswer: (state) => {
+      state.isAnswer = false;
+    },
+    saveIceCandidate: (state, action) => {
+      state.isIce = true;
+      state.iceCandidate = action.payload;
+    },
+    changeIsIce: (state) => {
+      state.isIce = false;
     },
   },
 });
