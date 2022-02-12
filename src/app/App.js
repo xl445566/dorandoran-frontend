@@ -7,7 +7,7 @@ import { Switch, Route, useHistory } from "react-router-dom";
 import Login from "../feature/auth/Login";
 import Room from "../feature/room/Room";
 import Rooms from "../feature/rooms/Rooms";
-import VideoSample from "../feature/videochat/VideoChat";
+import VideoChat from "../feature/videochat/VideoChat";
 import { authSliceActions } from "../modules/slice/authSlice";
 
 function App() {
@@ -36,7 +36,7 @@ function App() {
           <Room />
         </Route>
         <Route path="/video/:roomId">
-          <VideoSample />
+          <VideoChat />
         </Route>
         <Route path="/error">
           <h1>에러페이지</h1>

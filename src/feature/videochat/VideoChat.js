@@ -7,9 +7,9 @@ import styled from "styled-components";
 import Header from "../../common/components/Header";
 import mapSpots from "../../common/utils/mapSpot";
 import { socketVideoApi } from "../../modules/api/socketApi";
+import { socketVideo } from "../../modules/saga/socketSaga";
 import { authSliceActions } from "../../modules/slice/authSlice";
 import { roomSliceActions } from "../../modules/slice/roomSlice";
-import { videoSliceActions } from "../../modules/slice/videoSlice";
 
 const VideoChat = () => {
   const error = useSelector((state) => state.room.error);
@@ -17,24 +17,9 @@ const VideoChat = () => {
   const seatPosition = useSelector((state) => state.auth.seatPosition);
   const currentUser = useSelector((state) => state.auth.user);
   const roomInfo = useSelector((state) => state.room.info);
-
   const dispatch = useDispatch();
   const history = useHistory();
   const params = useParams();
-
-  const myVideoRef = useRef(null);
-  const myStream = useRef(null);
-  const myPeerConnectionInstance = useRef(null);
-
-  const isEnter = useSelector((state) => state.video.isEnter);
-  const isOffer = useSelector((state) => state.video.isOffer);
-  const isAnswer = useSelector((state) => state.video.isAnswer);
-  const isIce = useSelector((state) => state.video.isIce);
-  const remoteIds = useSelector((state) => state.video.remoteIds);
-  const iceCandidate = useSelector((state) => state.video.iceCandidate);
-
-  const receiveOffer = useSelector((state) => state.video.offer);
-  const receiveAnswer = useSelector((state) => state.video.answer);
 
   useEffect(() => {
     if (error) {
@@ -73,120 +58,135 @@ const VideoChat = () => {
       },
     });
   };
-  const handleIce = (data) => {
-    console.log("ice", data.candidate);
-    socketVideoApi.ice(params.roomId, data.candidate);
-  };
 
-  const handleAddTrack = (data) => {
-    console.log("got an stream from my peer");
-    console.log("Peer's stream", data.stream);
-    console.log("My stream", myStream.current);
-  };
-
-  const makeConnection = (stream) => {
-    if (!myPeerConnectionInstance.current) {
-      const myPeerConnection = new RTCPeerConnection();
-      myPeerConnectionInstance.current = myPeerConnection;
-    }
-
-    myPeerConnectionInstance.current.addEventListener(
-      "icecandidate",
-      handleIce
-    );
-    myPeerConnectionInstance.current.addEventListener("track", handleAddTrack);
-
-    stream
-      .getTracks()
-      .forEach((track) =>
-        myPeerConnectionInstance.current.addTrack(track, stream)
-      );
-  };
-
-  const getMedia = async () => {
-    const stream = await navigator.mediaDevices.getUserMedia({
-      video: true,
-    });
-    myVideoRef.current.srcObject = stream;
-    myStream.current = stream;
-    makeConnection(stream);
-  };
-
-  const makeOffer = async () => {
-    if (!myPeerConnectionInstance.current) {
-      const myPeerConnection = new RTCPeerConnection();
-      myPeerConnectionInstance.current = myPeerConnection;
-    }
-
-    const offer = await myPeerConnectionInstance.current.createOffer();
-    myPeerConnectionInstance.current.setLocalDescription(offer);
-
-    console.log("sent the offer");
-    dispatch(videoSliceActions.changeIsEnter());
-
-    socketVideoApi.offer(params.roomId, offer);
-  };
-
-  const makeAnswer = async () => {
-    if (!myPeerConnectionInstance.current) {
-      const myPeerConnection = new RTCPeerConnection();
-      myPeerConnectionInstance.current = myPeerConnection;
-    }
-
-    console.log("received the offer");
-    myPeerConnectionInstance.current.setRemoteDescription(receiveOffer);
-    const answer = await myPeerConnectionInstance.current.createAnswer();
-    myPeerConnectionInstance.current.setLocalDescription(answer);
-    socketVideoApi.answer(params.roomId, answer);
-    dispatch(videoSliceActions.changeIsOffer());
-
-    console.log("sent the answer");
-  };
-
-  const completeLocalAndRemoteDescription = async () => {
-    if (!myPeerConnectionInstance.current) {
-      const myPeerConnection = new RTCPeerConnection();
-      myPeerConnectionInstance.current = myPeerConnection;
-    }
-
-    console.log("receive the answer");
-    myPeerConnectionInstance.current.setRemoteDescription(receiveAnswer);
-    // dispatch(videoSliceActions.changeIsAnswer());
-  };
+  const userVideo = useRef();
+  const partnerVideo = useRef();
+  const peerRef = useRef();
+  const userStream = useRef();
+  const otherUser = useRef();
 
   useEffect(() => {
-    getMedia();
-    socketVideoApi.enterRoom(params.roomId);
+    const init = async () => {
+      const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+      userVideo.current.srcObject = stream;
+      userStream.current = stream;
+
+      socketVideoApi.joinRoom(params.roomId);
+
+      socketVideo.on("otherUser", (userId) => {
+        callUser(userId);
+        otherUser.current = userId;
+      });
+
+      socketVideo.on("userJoined", (userId) => {
+        otherUser.current = userId;
+      });
+
+      socketVideo.on("offer", handleRecieveCall);
+      socketVideo.on("answer", handleAnswer);
+      socketVideo.on("iceCandidate", handleNewIceCandidateMessage);
+    };
+
+    init();
   }, []);
 
-  useEffect(() => {
-    if (isEnter) {
-      makeOffer();
+  const handleNegotiationNeededEvent = async (userId) => {
+    try {
+      const offer = await peerRef.current.createOffer();
+      await peerRef.current.setLocalDescription(offer);
+      const payload = {
+        target: userId,
+        caller: socketVideo.id,
+        sdp: peerRef.current.localDescription,
+      };
+      socketVideoApi.offer(payload);
+    } catch (error) {
+      console.log("handleNegotiationNeededEvent ERROR:::::", error);
     }
-  }, [isEnter]);
+  };
 
-  useEffect(() => {
-    if (isOffer) {
-      makeAnswer();
+  const handleRecieveCall = async (incoming) => {
+    try {
+      peerRef.current = createPeer();
+      const description = new RTCSessionDescription(incoming.sdp);
+      await peerRef.current.setRemoteDescription(description);
+      userStream.current
+        .getTracks()
+        .forEach((track) =>
+          peerRef.current.addTrack(track, userStream.current)
+        );
+      const answer = await peerRef.current.createAnswer();
+      await peerRef.current.setLocalDescription(answer);
+      const payload = {
+        target: incoming.caller,
+        caller: socketVideo.id,
+        sdp: peerRef.current.localDescription,
+      };
+      socketVideoApi.answer(payload);
+    } catch (error) {
+      console.log("handleRecieveCall ERROR::::", error);
     }
-  }, [isOffer]);
+  };
 
-  useEffect(() => {
-    if (isAnswer || receiveAnswer) {
-      completeLocalAndRemoteDescription();
+  const handleAnswer = async (message) => {
+    try {
+      const description = await new RTCSessionDescription(message.sdp);
+      await peerRef.current.setRemoteDescription(description);
+    } catch (error) {
+      console.log("handleAnswer ERROR::::", error);
     }
-  }, [isAnswer, receiveAnswer]);
+  };
 
-  useEffect(() => {
-    if (iceCandidate || isIce) {
-      myPeerConnectionInstance.current.addIceCandidate(iceCandidate);
-      dispatch(videoSliceActions.changeIsIce());
+  const handleIceCandidateEvent = (event) => {
+    if (event.candidate) {
+      const payload = {
+        target: otherUser.current,
+        candidate: event.candidate,
+      };
+      socketVideoApi.iceCandidate(payload);
     }
-  }, [iceCandidate, isIce]);
+  };
+
+  const handleNewIceCandidateMessage = (incoming) => {
+    const candidate = new RTCIceCandidate(incoming);
+
+    peerRef.current.addIceCandidate(candidate);
+  };
+
+  const handleTrackEvent = (event) => {
+    partnerVideo.current.srcObject = event.streams[0];
+  };
+
+  const createPeer = (userId) => {
+    const peer = new RTCPeerConnection({
+      iceServers: [
+        {
+          urls: "stun:stun.stunprotocol.org",
+        },
+        {
+          urls: "turn:numb.viagenie.ca",
+          credential: "muazkh",
+          username: "webrtc@live.com",
+        },
+      ],
+    });
+
+    peer.onicecandidate = handleIceCandidateEvent;
+    peer.ontrack = handleTrackEvent;
+    peer.onnegotiationneeded = () => handleNegotiationNeededEvent(userId);
+
+    return peer;
+  };
+
+  const callUser = (userId) => {
+    peerRef.current = createPeer(userId);
+    userStream.current
+      .getTracks()
+      .forEach((track) => peerRef.current.addTrack(track, userStream.current));
+  };
 
   return (
     <>
-      <h1>{remoteIds.length === 0 ? false : remoteIds}</h1>
       <VideoChatContainer>
         <Header
           leftOnClick={handleRoomPage}
@@ -196,36 +196,18 @@ const VideoChat = () => {
         />
         <VideoWrapper>
           <VideoBox>
-            <video autoPlay playsInline ref={myVideoRef} />
+            <video autoPlay playsInline ref={userVideo} />
             <UserName>나</UserName>
           </VideoBox>
-          {/* <VideoBox>
-            <video
-              className="remotePeer"
-              autoPlay
-              playsInline
-              ref={remoteVideoRef1}
-            />
-            <UserName>상대방- 1</UserName>
-          </VideoBox>
           <VideoBox>
             <video
               className="remotePeer"
               autoPlay
               playsInline
-              ref={remoteVideoRef2}
+              ref={partnerVideo}
             />
-            <UserName>상대방 -2</UserName>
+            <UserName>상대방</UserName>
           </VideoBox>
-          <VideoBox>
-            <video
-              className="remotePeer"
-              autoPlay
-              playsInline
-              ref={remoteVideoRef3}
-            />
-            <UserName>상대방 -3</UserName>
-          </VideoBox> */}
         </VideoWrapper>
         <EmojiWrapper>
           <EmojiButton />

@@ -7,16 +7,16 @@ export const socketCharacterApi = {
 };
 
 export const socketVideoApi = {
-  enterRoom: (roomName) => {
-    socketVideo.emit("enterRoom", roomName);
+  joinRoom: (roomName) => {
+    socketVideo.emit("joinRoom", roomName);
   },
-  offer: (roomName, offer) => {
-    socketVideo.emit("offer", roomName, offer);
+  offer: (payload) => {
+    socketVideo.emit("offer", payload);
   },
-  answer: (roomName, answer) => {
-    socketVideo.emit("answer", roomName, answer);
+  answer: (payload) => {
+    socketVideo.emit("answer", payload);
   },
-  ice: (roomName, candidate) => {
-    socketVideo.emit("ice", roomName, candidate);
+  iceCandidate: (payload) => {
+    socketVideo.emit("iceCandidate", payload);
   },
 };

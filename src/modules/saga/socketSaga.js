@@ -2,7 +2,7 @@ import { eventChannel } from "redux-saga";
 import { take, call, put } from "redux-saga/effects";
 import io from "socket.io-client";
 
-import { videoSliceActions } from "../slice/videoSlice";
+// import { videoSliceActions } from "../slice/videoSlice";
 
 export const socketCharacter = io("http://localhost:4000/character", {
   withCredentials: true,
@@ -36,27 +36,28 @@ export const watchSocketCharacterSaga = function* () {
 
 const createSocketVideoChannel = (socketVideo) => {
   return eventChannel((emit) => {
-    socketVideo.on("enterRoom", (remoteId) => {
-      emit(videoSliceActions.saveRemoteId(remoteId));
-    });
+    console.log(emit, socketVideo);
+    // socketVideo.on("enterRoom", (remoteId) => {
+    //   emit(videoSliceActions.saveRemoteId(remoteId));
+    // });
 
-    socketVideo.on("offer", (offer) => {
-      emit(videoSliceActions.saveOffer(offer));
-    });
+    // socketVideo.on("offer", (offer) => {
+    //   emit(videoSliceActions.saveOffer(offer));
+    // });
 
-    socketVideo.on("answer", (answer) => {
-      emit(videoSliceActions.saveAnswer(answer));
-    });
+    // socketVideo.on("answer", (answer) => {
+    //   emit(videoSliceActions.saveAnswer(answer));
+    // });
 
-    socketVideo.on("ice", (iceCandidate) => {
-      emit(videoSliceActions.saveIceCandidate(iceCandidate));
-    });
+    // socketVideo.on("ice", (iceCandidate) => {
+    //   emit(videoSliceActions.saveIceCandidate(iceCandidate));
+    // });
 
     return () => {
-      socketVideo.off("enterRoom");
-      socketVideo.off("offer");
-      socketVideo.off("answer");
-      socketVideo.off("ice");
+      // socketVideo.off("enterRoom");
+      // socketVideo.off("offer");
+      // socketVideo.off("answer");
+      // socketVideo.off("ice");
     };
   });
 };
