@@ -5,7 +5,10 @@ import { useEffect } from "react/cjs/react.development";
 import mapSpots from "../utils/mapSpot";
 
 export const useCharacter = (username) => {
-  const [pos, setPos] = useState({ x: 1, y: 5 });
+  const [pos, setPos] = useState({
+    x: 3,
+    y: 5,
+  });
   const [side, setSide] = useState("down");
   const [name, setName] = useState(username);
   const [isChatting, setIsChatting] = useState(false);
@@ -57,7 +60,7 @@ export const useCharacter = (username) => {
   };
 
   const canMove = (x, y) => {
-    if (mapSpots[y][x] !== undefined) {
+    if (mapSpots[y] !== undefined || mapSpots[y][x] !== undefined) {
       if (mapSpots[y][x] === 1) {
         setChairZone({ top: false, right: false, bottom: false, left: false });
         setIsChatting(false);

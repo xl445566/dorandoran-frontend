@@ -23,13 +23,11 @@ const createSocketCharacterChannel = (socketCharacter) => {
       emit(characterSliceActions.userInRoom(user));
     });
 
-    socketCharacter.on("movePosition", (user) => {
-      emit(characterSliceActions.movePosition(user));
+    socketCharacter.on("movePosition", (users) => {
+      emit(characterSliceActions.movePosition(users));
     });
-
     return () => {
       socketCharacter.off("visitedUser");
-      socketCharacter.off("onReceive");
       socketCharacter.off("userInRoom");
       socketCharacter.off("movePosition");
     };

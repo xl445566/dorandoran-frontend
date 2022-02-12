@@ -1,14 +1,14 @@
 import { socketCharacter, socketVideo } from "../saga/socketSaga";
 
-export const soketCharacterApi = {
-  hello: (roomId, image) => {
-    socketCharacter.emit("hello", roomId, image);
+export const socketCharacterApi = {
+  hello: (roomId, x, y, type, side, isChatting) => {
+    socketCharacter.emit("hello", roomId, x, y, type, side, isChatting);
   },
-  moveCharacter: (char) => {
-    socketCharacter.emit("moveCharacter", char);
+  changeCurrentCharacter: (x, y, side, moveCount) => {
+    socketCharacter.emit("changeCurrentCharacter", x, y, side, moveCount);
   },
-  exitUser: (roomId) => {
-    socketCharacter.emit("exitUser", roomId);
+  exitUser: () => {
+    socketCharacter.emit("exitUser");
   },
 };
 

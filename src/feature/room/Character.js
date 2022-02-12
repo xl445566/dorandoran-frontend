@@ -50,7 +50,7 @@ const Container = styled.div`
   top: ${(props) => props.top}px;
   width: ${(props) => props.xPos}px;
   height: ${(props) => props.yPos}px;
-  background-image: url(/assets/characters/${(props) => props.type}.png);
+  background-image: url(${(props) => props.type});
   background-position: ${(props) => props.count * props.sidePos[1]}px
     ${(props) => props.sidePos[0]}px;
 `;
