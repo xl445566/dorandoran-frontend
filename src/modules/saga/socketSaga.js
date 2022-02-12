@@ -15,21 +15,12 @@ export const socketVideo = io("http://localhost:4000/video", {
 
 const createSocketCharacterChannel = (socketCharacter) => {
   return eventChannel((emit) => {
-    socketCharacter.on("visitedUser", (user) => {
-      emit(characterSliceActions.charactersInRoom(user));
+    socketCharacter.on("setCharacters", (character) => {
+      emit(characterSliceActions.charactersInRoom(character));
     });
 
-    socketCharacter.on("userInRoom", (user) => {
-      emit(characterSliceActions.charactersInRoom(user));
-    });
-
-    socketCharacter.on("movePosition", (users) => {
-      emit(characterSliceActions.charactersInRoom(users));
-    });
     return () => {
-      socketCharacter.off("visitedUser");
-      socketCharacter.off("userInRoom");
-      socketCharacter.off("movePosition");
+      socketCharacter.off("setCharacters");
     };
   });
 };
