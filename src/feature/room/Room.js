@@ -18,7 +18,7 @@ const Room = () => {
   const char = useCharacter("교감쌤");
   const [moveCount, setMoveCount] = useState(0);
   const roomInfo = useSelector((state) => state.room.info);
-  const users = useSelector((state) => state.character.character);
+  const characters = useSelector((state) => state.character.characters);
   const error = useSelector((state) => state.room.error);
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
   const currentUser = useSelector((state) => state.auth.user);
@@ -169,18 +169,18 @@ const Room = () => {
           leftOnClick={handleRoomsPage}
         />
         <Section>
-          {users.map((user) => {
+          {characters.map((character) => {
             return (
               <Character
                 key={createKey()}
-                roomId={user.roomId}
-                count={user.moveCount}
-                isChatting={user.isChatting}
-                x={user.x}
-                y={user.y}
-                side={user.side}
-                name={user.id}
-                type={user.type}
+                roomId={character.roomId}
+                count={character.moveCount}
+                isChatting={character.isChatting}
+                x={character.x}
+                y={character.y}
+                side={character.side}
+                name={character.id}
+                type={character.type}
               />
             );
           })}
