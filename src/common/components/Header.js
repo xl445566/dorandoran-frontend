@@ -32,10 +32,10 @@ const Header = ({
 };
 
 const HeaderContainer = styled.header`
-  height: 10%;
   display: flex;
   justify-content: space-around;
   align-items: center;
+  height: 10%;
 `;
 
 const Title = styled.h1`

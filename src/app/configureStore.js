@@ -1,8 +1,9 @@
 import { configureStore } from "@reduxjs/toolkit";
-import logger from "redux-logger";
+// import logger from "redux-logger";
 import createSagaMiddleware from "redux-saga";
 
 import authSlice from "../modules/slice/authSlice";
+import characterSlice from "../modules/slice/characterSlice";
 import roomListSlice from "../modules/slice/roomListSlice";
 import roomSlice from "../modules/slice/roomSlice";
 import videoSlice from "../modules/slice/videoSlice";
@@ -16,10 +17,11 @@ const createStore = () => {
       auth: authSlice.reducer,
       room: roomSlice.reducer,
       roomList: roomListSlice.reducer,
+      character: characterSlice.reducer,
       video: videoSlice.reducer,
     },
     devTools: true,
-    middleware: [sagaMiddleware, logger],
+    middleware: [sagaMiddleware],
   });
 
   sagaMiddleware.run(rootSaga);

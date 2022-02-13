@@ -6,7 +6,7 @@ import styled from "styled-components";
 
 import Profile from "../../common/components/Profile";
 
-const Character = ({ roomId, count, isChatting, x, y, side, name }) => {
+const Character = ({ roomId, count, isChatting, x, y, side, name, type }) => {
   const sides = {
     down: [0, -70],
     left: [-71, -70],
@@ -35,6 +35,7 @@ const Character = ({ roomId, count, isChatting, x, y, side, name }) => {
           left={x * 60}
           top={y * 60}
           sidePos={sides[side]}
+          type={type}
         >
           <UserName>{name}</UserName>
         </Container>
@@ -49,7 +50,7 @@ const Container = styled.div`
   top: ${(props) => props.top}px;
   width: ${(props) => props.xPos}px;
   height: ${(props) => props.yPos}px;
-  background-image: url("/assets/male2.png");
+  background-image: url(${(props) => props.type});
   background-position: ${(props) => props.count * props.sidePos[1]}px
     ${(props) => props.sidePos[0]}px;
 `;

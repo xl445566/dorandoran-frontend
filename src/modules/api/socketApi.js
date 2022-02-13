@@ -1,8 +1,14 @@
 import { socketCharacter, socketVideo } from "../saga/socketSaga";
 
 export const socketCharacterApi = {
-  enterRoom: (roomName, peerId) => {
-    socketCharacter.emit("enterRoom", roomName, peerId);
+  enterRoom: (userInfo) => {
+    socketCharacter.emit("enterRoom", userInfo);
+  },
+  changeCurrentCharacter: (x, y, side, moveCount) => {
+    socketCharacter.emit("changeCurrentCharacter", x, y, side, moveCount);
+  },
+  exitUser: () => {
+    socketCharacter.emit("exitUser");
   },
 };
 
