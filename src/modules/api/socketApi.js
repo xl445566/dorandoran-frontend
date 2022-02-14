@@ -20,16 +20,16 @@ export const socketCharacterApi = {
 };
 
 export const socketVideoApi = {
-  enterRoom: (videoChatId) => {
-    socketVideo.emit("enterRoom", videoChatId);
+  enterRoom: (payload) => {
+    socketVideo.emit("enterRoom", payload);
   },
-  sendingSignalToConnectWebRTC: (payload) => {
-    socketVideo.emit("sendingSignalToConnectWebRTC", payload);
+  offer: (payload) => {
+    socketVideo.emit("offer", payload);
   },
-  returningSignalToConnectWebRTC: (payload) => {
-    socketVideo.emit("returningSignalToConnectWebRTC", payload);
+  answer: (payload) => {
+    socketVideo.emit("answer", payload);
   },
-  leaveVideoChat: () => {
-    socketVideo.emit("leaveVideoChat");
+  leaveRoom: () => {
+    socketVideo.emit("leaveRoom");
   },
 };

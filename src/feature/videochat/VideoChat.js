@@ -5,11 +5,11 @@ import { useHistory, useParams } from "react-router-dom";
 import styled from "styled-components";
 
 import Header from "../../common/components/Header";
+import useConnection from "../../common/hooks/useConnection";
 import mapSpots from "../../common/utils/mapSpot";
 import { socketVideo } from "../../modules/saga/socketSaga";
 import { authSliceActions } from "../../modules/slice/authSlice";
 import { roomSliceActions } from "../../modules/slice/roomSlice";
-import useVideo from "./useVideo";
 import Video from "./Video";
 
 const VideoChat = () => {
@@ -18,11 +18,13 @@ const VideoChat = () => {
   const seatPosition = useSelector((state) => state.auth.seatPosition);
   const currentUser = useSelector((state) => state.auth.user);
   const roomInfo = useSelector((state) => state.room.info);
+
   const dispatch = useDispatch();
   const history = useHistory();
   const params = useParams();
 
-  const { peers, userVideo } = useVideo(params.roomId);
+  const roomId = params.roomId;
+  const { peerList, myVideo } = useConnection(roomId);
 
   useEffect(() => {
     if (error) {
@@ -34,19 +36,20 @@ const VideoChat = () => {
     }
   }, [error, isLoggedIn]);
 
-  const stopStreamedVideo = (userVideo) => {
-    const stream = userVideo.current.srcObject;
+  const stopStreamedVideo = () => {
+    const stream = myVideo.current.srcObject;
     const tracks = stream.getTracks();
 
     tracks.forEach((track) => {
       track.stop();
     });
 
-    userVideo.current.srcObject = null;
+    myVideo.current.srcObject = null;
   };
 
   const handleRoomPage = () => {
-    stopStreamedVideo(userVideo);
+    stopStreamedVideo();
+
     history.push(`/room/${params.roomId}`);
 
     seatPosition.forEach((point) => {
@@ -74,10 +77,6 @@ const VideoChat = () => {
     });
   };
 
-  console.log("--------------------------------------");
-  console.log("peers", peers);
-  console.log("--------------------------------------");
-
   return (
     <>
       <VideoChatContainer>
@@ -89,14 +88,14 @@ const VideoChat = () => {
         />
         <VideoWrapper>
           <VideoBox>
-            <video autoPlay playsInline muted ref={userVideo} />
+            <video autoPlay playsInline muted ref={myVideo} />
             <UserName>{socketVideo.id}</UserName>
           </VideoBox>
-          {peers.map((peer) => {
+          {peerList.map((connection) => {
             return (
-              <VideoBox key={peer.peerID}>
-                <Video peer={peer.peer} />
-                <UserName>{peer.peerID}</UserName>
+              <VideoBox key={connection.id}>
+                <Video peerConnection={connection.peer} />
+                <UserName>{connection.id}</UserName>
               </VideoBox>
             );
           })}

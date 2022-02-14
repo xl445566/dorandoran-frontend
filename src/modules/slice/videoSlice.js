@@ -3,17 +3,14 @@ import { createSlice } from "@reduxjs/toolkit";
 export const videoSlice = createSlice({
   name: "video",
   initialState: {
-    isVideoConnected: false,
-    videoChatId: "",
+    error: "",
   },
   reducers: {
-    joinVideoChat: (state, action) => {
-      state.isVideoConnected = true;
-      state.videoChatId = action.payload.videoChatId;
+    saveError: (state, action) => {
+      state.error = action.payload;
     },
-    leaveVideoChat: (state) => {
-      state.isVideoConnected = false;
-      state.videoChatId = null;
+    init: (state) => {
+      state.error = "";
     },
   },
 });
