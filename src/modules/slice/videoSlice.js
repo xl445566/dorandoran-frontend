@@ -3,43 +3,17 @@ import { createSlice } from "@reduxjs/toolkit";
 export const videoSlice = createSlice({
   name: "video",
   initialState: {
-    remoteIds: [],
-    offer: null,
-    answer: null,
-    iceCandidate: null,
-    isEnter: false,
-    isOffer: false,
-    isAnswer: false,
-    isIce: false,
+    isVideoConnected: false,
+    videoChatId: "",
   },
   reducers: {
-    saveRemoteId: (state, action) => {
-      state.isEnter = true;
-      state.remoteIds.push(action.payload);
+    joinVideoChat: (state, action) => {
+      state.isVideoConnected = true;
+      state.videoChatId = action.payload.videoChatId;
     },
-    changeIsEnter: (state) => {
-      state.isEnter = false;
-    },
-    saveOffer: (state, action) => {
-      state.offer = action.payload;
-      state.isOffer = true;
-    },
-    changeIsOffer: (state) => {
-      state.isOffer = false;
-    },
-    saveAnswer: (state, action) => {
-      state.answer = action.payload;
-      state.isAnswer = true;
-    },
-    changeIsAnswer: (state) => {
-      state.isAnswer = false;
-    },
-    saveIceCandidate: (state, action) => {
-      state.isIce = true;
-      state.iceCandidate = action.payload;
-    },
-    changeIsIce: (state) => {
-      state.isIce = false;
+    leaveVideoChat: (state) => {
+      state.isVideoConnected = false;
+      state.videoChatId = null;
     },
   },
 });

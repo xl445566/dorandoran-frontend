@@ -1,12 +1,11 @@
 import React from "react";
 
 import { useSelector } from "react-redux";
-import { Redirect } from "react-router-dom";
 import styled from "styled-components";
 
 import Profile from "../../common/components/Profile";
 
-const Character = ({ roomId, count, isChatting, x, y, side, name, type }) => {
+const Character = ({ count, isChatting, x, y, side, name, type }) => {
   const sides = {
     down: [0, -70],
     left: [-71, -70],
@@ -14,7 +13,6 @@ const Character = ({ roomId, count, isChatting, x, y, side, name, type }) => {
     up: [-213, -70],
   };
   const user = useSelector((state) => state.auth.user);
-
   return (
     <>
       {isChatting ? (
@@ -25,7 +23,6 @@ const Character = ({ roomId, count, isChatting, x, y, side, name, type }) => {
             type={user.profile}
             text={user.name}
           />
-          <Redirect to={`/video/${roomId}`} />
         </>
       ) : (
         <Container

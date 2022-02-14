@@ -4,8 +4,15 @@ export const socketCharacterApi = {
   enterRoom: (userInfo) => {
     socketCharacter.emit("enterRoom", userInfo);
   },
-  changeCurrentCharacter: (x, y, side, moveCount) => {
-    socketCharacter.emit("changeCurrentCharacter", x, y, side, moveCount);
+  changeCurrentCharacter: (x, y, side, moveCount, isChatting) => {
+    socketCharacter.emit(
+      "changeCurrentCharacter",
+      x,
+      y,
+      side,
+      moveCount,
+      isChatting
+    );
   },
   exitUser: () => {
     socketCharacter.emit("exitUser");
@@ -13,16 +20,16 @@ export const socketCharacterApi = {
 };
 
 export const socketVideoApi = {
-  joinRoom: (roomName) => {
-    socketVideo.emit("joinRoom", roomName);
+  enterRoom: (videoChatId) => {
+    socketVideo.emit("enterRoom", videoChatId);
   },
-  offer: (payload) => {
-    socketVideo.emit("offer", payload);
+  sendingSignalToConnectWebRTC: (payload) => {
+    socketVideo.emit("sendingSignalToConnectWebRTC", payload);
   },
-  answer: (payload) => {
-    socketVideo.emit("answer", payload);
+  returningSignalToConnectWebRTC: (payload) => {
+    socketVideo.emit("returningSignalToConnectWebRTC", payload);
   },
-  iceCandidate: (payload) => {
-    socketVideo.emit("iceCandidate", payload);
+  leaveVideoChat: () => {
+    socketVideo.emit("leaveVideoChat");
   },
 };

@@ -18,7 +18,7 @@ const RoomCreate = ({ isShow, handleModalShowChange }) => {
   const history = useHistory();
 
   useEffect(() => {
-    if (isComplete) {
+    if (isComplete && roomInfo) {
       history.push(`/room/${roomInfo._id}`);
 
       dispatch(roomSliceActions.changeIsComplted());
