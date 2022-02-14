@@ -1,76 +1,28 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 
-import Peer from "peerjs";
 import { useDispatch, useSelector } from "react-redux";
-import { useHistory, useParams } from "react-router-dom";
+import { useHistory, useLocation, useParams } from "react-router-dom";
 import styled from "styled-components";
 
 import Header from "../../common/components/Header";
-import mapSpots from "../../common/utils/mapSpot";
 import {
-  peerAnswer,
-  peerCall,
-  setMediaStream,
-  handlePeerDisconnect,
-} from "../../common/utils/mediaUtils";
-import { soketVideoApi } from "../../modules/api/socketApi";
+  socketVideoApi,
+  socketCharacterApi,
+} from "../../modules/api/socketApi";
+import { socketVideo } from "../../modules/saga/socketSaga";
 import { authSliceActions } from "../../modules/slice/authSlice";
 import { roomSliceActions } from "../../modules/slice/roomSlice";
-import { videoSliceActions } from "../../modules/slice/videoSlice";
 
 const VideoChat = () => {
-  const [peerId, setPeerId] = useState("");
-
-  const peerInstance = useRef(null);
-  const myVideoRef = useRef(null);
-  const remoteVideoRef1 = useRef(null);
-  const remoteVideoRef2 = useRef(null);
-  const remoteVideoRef3 = useRef(null);
-
+  const location = useLocation();
   const error = useSelector((state) => state.room.error);
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
-  const seatPosition = useSelector((state) => state.auth.seatPosition);
   const currentUser = useSelector((state) => state.auth.user);
-  const isUpdate = useSelector((state) => state.video.isUpdate);
-  const remotePeerId = useSelector((state) => state.video.remotePeerId);
   const roomInfo = useSelector((state) => state.room.info);
-
   const dispatch = useDispatch();
   const history = useHistory();
   const params = useParams();
-
-  useEffect(() => {
-    const peer = new Peer();
-    peerInstance.current = peer;
-    setMediaStream(myVideoRef.current);
-
-    peer.on("open", (id) => {
-      setPeerId(id);
-      soketVideoApi.enterRoom(params.roomId, id);
-    });
-
-    peer.on("call", (call) => {
-      peerAnswer(
-        call,
-        remoteVideoRef1.current,
-        remoteVideoRef2.current,
-        remoteVideoRef3.current
-      );
-    });
-  }, []);
-
-  useEffect(() => {
-    if (isUpdate) {
-      peerCall(
-        peerInstance.current,
-        remotePeerId,
-        remoteVideoRef1.current,
-        remoteVideoRef2.current,
-        remoteVideoRef3.current
-      );
-      dispatch(videoSliceActions.initIsUpdate());
-    }
-  }, [remotePeerId, isUpdate]);
+  const getPositionParams = location.state.position;
 
   useEffect(() => {
     if (error) {
@@ -83,34 +35,11 @@ const VideoChat = () => {
   }, [error, isLoggedIn]);
 
   const handleRoomPage = () => {
-    const stream = myVideoRef.current.srcObject;
-    const tracks = stream.getTracks();
-    tracks.forEach((track) => {
-      track.stop();
-    });
-    myVideoRef.current.srcObject = null;
-    handlePeerDisconnect(peerInstance.current);
-
-    seatPosition.forEach((point) => {
-      mapSpots[point[0]][point[1]] = 1;
-    });
-
+    socketCharacterApi.exitChattingRoom(getPositionParams);
     history.push(`/room/${params.roomId}`);
   };
 
   const handleLogout = () => {
-    const stream = myVideoRef.current.srcObject;
-    const tracks = stream.getTracks();
-    tracks.forEach((track) => {
-      track.stop();
-    });
-    myVideoRef.current.srcObject = null;
-    handlePeerDisconnect(peerInstance.current);
-
-    seatPosition.forEach((point) => {
-      mapSpots[point[0]][point[1]] = 1;
-    });
-
     window.Kakao.API.request({
       url: "/v1/user/unlink",
       success: function () {
@@ -120,53 +49,155 @@ const VideoChat = () => {
             currentRoom: params.roomId,
           })
         );
-        dispatch(roomSliceActions.init());
+
         dispatch(authSliceActions.logoutRequest());
       },
     });
   };
 
+  const peerRef = useRef();
+
+  const userVideo = useRef();
+  const userStream = useRef();
+
+  const otherUser = useRef();
+  const partnerVideo = useRef();
+
+  useEffect(() => {
+    async function init() {
+      const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+      userVideo.current.srcObject = stream;
+      userStream.current = stream;
+
+      socketVideoApi.joinRoom(params.roomId);
+
+      socketVideo.on("otherUser", (partnerId) => {
+        console.log("새로운 유저가 기존 유저에게 CALL <otherUser>", partnerId);
+        otherUser.current = partnerId;
+        callUser(partnerId);
+      });
+
+      socketVideo.on("userJoined", (partnerId) => {
+        console.log(
+          partnerId,
+          "기존 유저에게 새로운 유저 알림 <userJoined>",
+          partnerId
+        );
+        otherUser.current = partnerId;
+      });
+
+      socketVideo.on("offer", handleRecieveCall);
+      socketVideo.on("answer", handleAnswer);
+      socketVideo.on("iceCandidate", handleNewIceCandidateMessage);
+    }
+    init();
+  }, []);
+
+  function callUser(partnerId) {
+    console.log("callUser 전화 발생");
+    peerRef.current = createPeer(partnerId);
+    userStream.current
+      .getTracks()
+      .forEach((track) => peerRef.current.addTrack(track, userStream.current));
+  }
+
+  function createPeer(userId) {
+    const peer = new RTCPeerConnection();
+    peer.onicecandidate = handleIceCandidateEvent;
+    peer.ontrack = handleTrackEvent;
+    peer.onnegotiationneeded = () => handleNegotiationNeededEvent(userId);
+    return peer;
+  }
+
+  async function handleNegotiationNeededEvent(userId) {
+    try {
+      console.log("offer 를 보냅니다.");
+      const offer = await peerRef.current.createOffer();
+      await peerRef.current.setLocalDescription(offer);
+      const payload = {
+        target: userId,
+        caller: socketVideo.id,
+        sdp: peerRef.current.localDescription,
+      };
+      socketVideoApi.offer(payload);
+    } catch (error) {
+      console.log("handleNegotiationNeededEvent ERROR:::::", error);
+    }
+  }
+
+  async function handleRecieveCall(incoming) {
+    console.log("offer가 왔습니다. -> answer를 보냅니다.");
+    try {
+      peerRef.current = createPeer();
+      const description = new RTCSessionDescription(incoming.sdp);
+      await peerRef.current.setRemoteDescription(description);
+      userStream.current
+        .getTracks()
+        .forEach((track) =>
+          peerRef.current.addTrack(track, userStream.current)
+        );
+      const answer = await peerRef.current.createAnswer();
+      await peerRef.current.setLocalDescription(answer);
+      const payload = {
+        target: incoming.caller,
+        caller: socketVideo.id,
+        sdp: peerRef.current.localDescription,
+      };
+      socketVideoApi.answer(payload);
+    } catch (error) {
+      console.log("handleRecieveCall ERROR::::", error);
+    }
+  }
+
+  async function handleAnswer(message) {
+    try {
+      console.log("answer가 왔습니다.");
+      const description = await new RTCSessionDescription(message.sdp);
+      await peerRef.current.setRemoteDescription(description);
+    } catch (error) {
+      console.log("handleAnswer ERROR::::", error);
+    }
+  }
+
+  function handleIceCandidateEvent(event) {
+    console.log("peer.current", peerRef.current);
+    if (event.candidate) {
+      const payload = {
+        target: otherUser.current,
+        candidate: event.candidate,
+      };
+      socketVideoApi.iceCandidate(payload);
+    }
+  }
+
+  function handleNewIceCandidateMessage(incoming) {
+    console.log("ice candidate 발견!!!");
+    const candidate = new RTCIceCandidate(incoming);
+    peerRef.current.addIceCandidate(candidate);
+  }
+
+  function handleTrackEvent(event) {
+    console.log("track event 발생", event.streams);
+    partnerVideo.current.srcObject = event.streams[0];
+  }
+
   return (
     <>
-      <p>My PEER ID: {peerId}</p>
       <VideoChatContainer>
         <Header
           leftOnClick={handleRoomPage}
           rightOnClick={handleLogout}
           text="방 으로 가기"
-          title={roomInfo.title ? roomInfo.title : false}
+          title={roomInfo ? roomInfo.title : false}
         />
         <VideoWrapper>
           <VideoBox>
-            <video autoPlay playsInline ref={myVideoRef} />
-            <UserName>나</UserName>
+            <video autoPlay playsInline ref={userVideo} />
+            <UserName>나 - {socketVideo.id}</UserName>
           </VideoBox>
           <VideoBox>
-            <video
-              className="remotePeer"
-              autoPlay
-              playsInline
-              ref={remoteVideoRef1}
-            />
-            <UserName>상대방- 1</UserName>
-          </VideoBox>
-          <VideoBox>
-            <video
-              className="remotePeer"
-              autoPlay
-              playsInline
-              ref={remoteVideoRef2}
-            />
-            <UserName>상대방 -2</UserName>
-          </VideoBox>
-          <VideoBox>
-            <video
-              className="remotePeer"
-              autoPlay
-              playsInline
-              ref={remoteVideoRef3}
-            />
-            <UserName>상대방 -3</UserName>
+            <video autoPlay playsInline ref={partnerVideo} />
+            <UserName>상대방 - 1</UserName>
           </VideoBox>
         </VideoWrapper>
         <EmojiWrapper>

@@ -3,7 +3,6 @@ import { take, call, put } from "redux-saga/effects";
 import io from "socket.io-client";
 
 import { characterSliceActions } from "../slice/characterSlice";
-import { videoSliceActions } from "../slice/videoSlice";
 
 export const socketCharacter = io("http://localhost:4000/character", {
   withCredentials: true,
@@ -19,8 +18,17 @@ const createSocketCharacterChannel = (socketCharacter) => {
       emit(characterSliceActions.charactersInRoom(character));
     });
 
+    socketCharacter.on("setChairPosition", (chairPosition) => {
+      emit(characterSliceActions.doNotComeChair(chairPosition));
+    });
+
+    socketCharacter.on("setCurrentUserPosition", (userPosition) => {
+      emit(characterSliceActions.doNotComeChair(userPosition));
+    });
     return () => {
       socketCharacter.off("setCharacters");
+      socketCharacter.off("setChairPosition");
+      socketCharacter.off("setCurrentUserPosition");
     };
   });
 };
@@ -37,25 +45,28 @@ export const watchSocketCharacterSaga = function* () {
 
 const createSocketVideoChannel = (socketVideo) => {
   return eventChannel((emit) => {
-    socketVideo.on("welcome", (remoteId) => {
-      console.log("새로 들어온 사람", remoteId);
-      emit(videoSliceActions.saveRemotePeer(remoteId));
-    });
+    console.log(emit, socketVideo);
+    // socketVideo.on("enterRoom", (remoteId) => {
+    //   emit(videoSliceActions.saveRemoteId(remoteId));
+    // });
 
-    socketVideo.on("roomChange", (users) => {
-      console.log("현재 유저 리스트", users);
-      emit(videoSliceActions.saveUserList(users));
-    });
+    // socketVideo.on("offer", (offer) => {
+    //   emit(videoSliceActions.saveOffer(offer));
+    // });
 
-    socketVideo.on("bye", (leavePeerId) => {
-      console.log("나간 사람: ", leavePeerId);
-      emit(videoSliceActions.saveLeavePeerId(leavePeerId));
-    });
+    // socketVideo.on("answer", (answer) => {
+    //   emit(videoSliceActions.saveAnswer(answer));
+    // });
+
+    // socketVideo.on("ice", (iceCandidate) => {
+    //   emit(videoSliceActions.saveIceCandidate(iceCandidate));
+    // });
 
     return () => {
-      socketVideo.off("welcome");
-      socketVideo.off("roomChange");
-      socketVideo.off("bye");
+      // socketVideo.off("enterRoom");
+      // socketVideo.off("offer");
+      // socketVideo.off("answer");
+      // socketVideo.off("ice");
     };
   });
 };

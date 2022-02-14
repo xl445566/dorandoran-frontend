@@ -4,10 +4,14 @@ export const characterSlice = createSlice({
   name: "character",
   initialState: {
     characters: [],
+    chairPosition: [],
   },
   reducers: {
     charactersInRoom: (state, action) => {
       state.characters = action.payload;
+    },
+    doNotComeChair: (state, action) => {
+      state.chairPosition = action.payload;
     },
   },
 });

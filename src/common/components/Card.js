@@ -4,15 +4,19 @@ import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import styled, { keyframes } from "styled-components";
 
+import { socketCharacterApi } from "../../modules/api/socketApi";
 import { roomSliceActions } from "../../modules/slice/roomSlice";
+import { useCharacter } from "../hooks/useCharacter";
 import createKey from "../utils/createKey";
 import { makeRandomRoomImage } from "../utils/makeRoomResource";
 
 const Card = ({ roomInfo, setIsShowModal }) => {
+  const char = useCharacter();
   const dispatch = useDispatch();
   const history = useHistory();
   const { title, users, room_no, _id } = roomInfo;
   const currentUser = useSelector((state) => state.auth.user._id);
+  const currentUserInfo = useSelector((state) => state.auth.user);
   const images = makeRandomRoomImage();
 
   const joinedUser = () => {
@@ -37,6 +41,18 @@ const Card = ({ roomInfo, setIsShowModal }) => {
     } else {
       setIsShowModal(true);
     }
+
+    socketCharacterApi.enterRoom({
+      roomId: _id,
+      x: char.x,
+      y: char.y,
+      type: "/assets/characters/",
+      side: char.side,
+      isChatting: char.isChatting,
+      name: currentUserInfo.name,
+      gender: currentUserInfo.gender,
+      profile: currentUserInfo.profile,
+    });
   };
 
   return (

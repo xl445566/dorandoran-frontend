@@ -65,6 +65,7 @@ const Rooms = () => {
     window.Kakao.API.request({
       url: "/v1/user/unlink",
       success: function () {
+        dispatch(roomSliceActions.init());
         dispatch(authSliceActions.logoutRequest());
       },
     });
