@@ -74,7 +74,6 @@ const Room = () => {
       history.push("/");
     }
 
-    console.log("char.chairZone", char.chairZone);
     if (char.isChatting) {
       socketCharacterApi.enterChattingRoom(
         char.chairZone,

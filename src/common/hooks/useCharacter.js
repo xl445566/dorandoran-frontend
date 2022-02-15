@@ -1,14 +1,9 @@
-import { useState } from "react";
-
-import { useEffect } from "react/cjs/react.development";
+import { useState, useEffect } from "react";
 
 import mapSpots from "../utils/mapSpot";
-
+import { randomPos } from "../utils/randomPos";
 export const useCharacter = (username) => {
-  const [pos, setPos] = useState({
-    x: 3,
-    y: 5,
-  });
+  const [pos, setPos] = useState(randomPos(mapSpots));
 
   const [side, setSide] = useState("down");
   const [name, setName] = useState(username);

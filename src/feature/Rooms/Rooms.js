@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
+import { FaChevronLeft, FaChevronRight, FaComment } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import styled from "styled-components";
@@ -96,24 +96,45 @@ const Rooms = () => {
         type="refresh"
       />
       <MainBody>
-        <Pagination>
-          <button onClick={handlePrevClick}>
-            <FaChevronLeft size="60" className="icon" />
-          </button>
-          {!isLoading && (
-            <ChatRoomList
-              setIsShowModal={setIsNotJoinModal}
-              roomList={roomList}
-            />
-          )}
-          <button onClick={handleNextClick}>
-            <FaChevronRight size="60" className="icon" />
-          </button>
-        </Pagination>
+        {roomList.length === 0 ? (
+          <NoSpaceArea>
+            <FaComment size="60" className="scarlet-icon" />
+            <h1>{`현재 ${currentAddress}에는 방이 없어요!`}</h1>
+            <p>방 만들기를 클릭하여 새로 만들어주세요</p>
+          </NoSpaceArea>
+        ) : (
+          <Pagination>
+            <button onClick={handlePrevClick}>
+              <FaChevronLeft size="60" className="icon" />
+            </button>
+            {!isLoading && (
+              <ChatRoomList
+                setIsShowModal={setIsNotJoinModal}
+                roomList={roomList}
+              />
+            )}
+            <button onClick={handleNextClick}>
+              <FaChevronRight size="60" className="icon" />
+            </button>
+          </Pagination>
+        )}
       </MainBody>
     </Entry>
   );
 };
+
+const NoSpaceArea = styled.div`
+  text-align: center;
+
+  h1 {
+    margin: 25px 0px 15px;
+    font-size: 50px;
+  }
+  p {
+    color: var(--dark-gray-color);
+    font-size: 30px;
+  }
+`;
 
 const Entry = styled.main`
   height: 100%;
@@ -127,6 +148,9 @@ const MainBody = styled.section`
   align-items: center;
   justify-content: space-around;
 
+  .scarlet-icon {
+    color: var(--scarlet-color);
+  }
   .icon {
     color: var(--black-color);
   }
