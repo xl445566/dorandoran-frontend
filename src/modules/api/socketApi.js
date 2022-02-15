@@ -26,8 +26,8 @@ export const socketCharacterApi = {
 };
 
 export const socketVideoApi = {
-  joinRoom: (roomName) => {
-    socketVideo.emit("joinRoom", roomName);
+  enterRoom: (payload) => {
+    socketVideo.emit("enterRoom", payload);
   },
   offer: (payload) => {
     socketVideo.emit("offer", payload);
@@ -35,7 +35,7 @@ export const socketVideoApi = {
   answer: (payload) => {
     socketVideo.emit("answer", payload);
   },
-  iceCandidate: (payload) => {
-    socketVideo.emit("iceCandidate", payload);
+  leaveRoom: () => {
+    socketVideo.emit("leaveRoom");
   },
 };

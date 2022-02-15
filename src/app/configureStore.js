@@ -21,7 +21,7 @@ const createStore = () => {
       video: videoSlice.reducer,
     },
     devTools: true,
-    middleware: [logger, sagaMiddleware],
+    middleware: [sagaMiddleware, logger],
   });
 
   sagaMiddleware.run(rootSaga);

@@ -11,7 +11,6 @@ const Character = ({ count, isChatting, x, y, side, name, type, profile }) => {
     right: [-142, -70],
     up: [-213, -70],
   };
-
   return (
     <>
       {isChatting ? (

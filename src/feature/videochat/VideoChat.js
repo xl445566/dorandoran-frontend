@@ -5,6 +5,7 @@ import { useHistory, useLocation, useParams } from "react-router-dom";
 import styled from "styled-components";
 
 import Header from "../../common/components/Header";
+import useConnection from "../../common/hooks/useConnection";
 import {
   socketVideoApi,
   socketCharacterApi,
@@ -12,6 +13,7 @@ import {
 import { socketVideo } from "../../modules/saga/socketSaga";
 import { authSliceActions } from "../../modules/slice/authSlice";
 import { roomSliceActions } from "../../modules/slice/roomSlice";
+import Video from "./Video";
 
 const VideoChat = () => {
   const location = useLocation();
@@ -24,6 +26,9 @@ const VideoChat = () => {
   const params = useParams();
   const getPositionParams = location.state.position;
 
+  const roomId = params.roomId;
+  const { peerList, myVideo } = useConnection(roomId);
+
   useEffect(() => {
     if (error) {
       history.push("/error");
@@ -34,12 +39,26 @@ const VideoChat = () => {
     }
   }, [error, isLoggedIn]);
 
+  const stopStreamedVideo = () => {
+    const stream = myVideo.current.srcObject;
+    const tracks = stream.getTracks();
+
+    tracks.forEach((track) => {
+      track.stop();
+    });
+
+    myVideo.current.srcObject = null;
+  };
+
   const handleRoomPage = () => {
+    stopStreamedVideo();
     socketCharacterApi.exitChattingRoom(getPositionParams);
     history.push(`/room/${params.roomId}`);
   };
 
   const handleLogout = () => {
+    stopStreamedVideo();
+
     window.Kakao.API.request({
       url: "/v1/user/unlink",
       success: function () {
@@ -192,13 +211,17 @@ const VideoChat = () => {
         />
         <VideoWrapper>
           <VideoBox>
-            <video autoPlay playsInline ref={userVideo} />
-            <UserName>나 - {socketVideo.id}</UserName>
+            <video autoPlay playsInline muted ref={myVideo} />
+            <UserName>{socketVideo.id}</UserName>
           </VideoBox>
-          <VideoBox>
-            <video autoPlay playsInline ref={partnerVideo} />
-            <UserName>상대방 - 1</UserName>
-          </VideoBox>
+          {peerList.map((connection) => {
+            return (
+              <VideoBox key={connection.id}>
+                <Video peerConnection={connection.peer} />
+                <UserName>{connection.id}</UserName>
+              </VideoBox>
+            );
+          })}
         </VideoWrapper>
         <EmojiWrapper>
           <EmojiButton />

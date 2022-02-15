@@ -13,6 +13,7 @@ import { authSliceActions } from "../../modules/slice/authSlice";
 import { roomListSliceActions } from "../../modules/slice/roomListSlice";
 import { roomSliceActions } from "../../modules/slice/roomSlice";
 import Character from "./Character";
+
 const Room = () => {
   const char = useCharacter("교감쌤");
   const [moveCount, setMoveCount] = useState(0);
@@ -32,6 +33,7 @@ const Room = () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
   }, [moveCount]);
+
   const handleLogout = () => {
     window.Kakao.API.request({
       url: "/v1/user/unlink",
