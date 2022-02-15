@@ -13,6 +13,10 @@ export const characterSlice = createSlice({
     doNotComeChair: (state, action) => {
       state.chairPosition = action.payload;
     },
+    allInit: (state) => {
+      state.characters = [];
+      state.chairPosition = [];
+    },
   },
 });
 

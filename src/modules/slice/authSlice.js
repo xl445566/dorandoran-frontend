@@ -48,6 +48,12 @@ export const authSlice = createSlice({
       state.isLoggedIn = true;
       state.error = action.payload;
     },
+    allInit: (state) => {
+      state.isLoggedIn = false;
+      state.error = "";
+      state.user = null;
+      state.character = [];
+    },
   },
 });
 

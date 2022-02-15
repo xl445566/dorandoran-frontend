@@ -65,6 +65,13 @@ export const roomSlice = createSlice({
     changeIsShowModal: (state) => {
       state.isShowModal = !state.isShowModal;
     },
+    allInit: (state) => {
+      state.isComplete = false;
+      state.isLoading = false;
+      state.isShowModal = false;
+      state.error = "";
+      state.info = null;
+    },
   },
 });
 
