@@ -5,10 +5,11 @@ import Peer from "simple-peer";
 import { socketVideoApi } from "../../modules/api/socketApi";
 import { socketVideo } from "../../modules/saga/socketSaga";
 
-const useConnection = (roomId) => {
+const useConnection = (roomId, userName) => {
   const myVideo = useRef();
   const connectionList = useRef([]);
   const [peerList, setPeerList] = useState([]);
+  const [participants, setParticipants] = useState([]);
 
   useEffect(() => {
     const init = async () => {
@@ -18,7 +19,19 @@ const useConnection = (roomId) => {
         });
 
         myVideo.current.srcObject = stream;
-        socketVideoApi.enterRoom(roomId);
+        socketVideoApi.enterRoom(roomId, userName);
+
+        socketVideo.on("participants", (participantArray) => {
+          const people = [];
+
+          participantArray.forEach((name) => {
+            if (name !== userName) {
+              people.push(name);
+            }
+          });
+
+          setParticipants(people);
+        });
 
         socketVideo.on("enterRoom", (otherUsers) => {
           const peers = [];
@@ -46,6 +59,7 @@ const useConnection = (roomId) => {
             payload.caller,
             stream
           );
+
           const connection = {
             id: payload.caller,
             peer,
@@ -61,10 +75,14 @@ const useConnection = (roomId) => {
             (connection) => connection.id === payload.caller
           );
 
+          setParticipants((participants) => [
+            ...participants,
+            payload.userName,
+          ]);
           connection.peer.signal(payload.signal);
         });
 
-        socketVideo.on("exitRoom", (partnerId) => {
+        socketVideo.on("exitRoom", (partnerId, leaveUserName) => {
           const disConnection = connectionList.current.find(
             (connection) => connection.id === partnerId
           );
@@ -81,6 +99,16 @@ const useConnection = (roomId) => {
           setPeerList((peerConnection) =>
             peerConnection.filter((peer) => peer.id !== partnerId)
           );
+
+          const people = [];
+
+          participants.forEach((name) => {
+            if (name !== leaveUserName) {
+              people.push(name);
+            }
+          });
+
+          setParticipants(people);
         });
       } catch (error) {
         console.log(error);
@@ -92,13 +120,15 @@ const useConnection = (roomId) => {
     return () => {
       connectionList.current = [];
       setPeerList([]);
+      setParticipants([]);
 
+      socketVideo.off("participants");
       socketVideo.off("enterRoom");
       socketVideo.off("offer");
       socketVideo.off("answer");
       socketVideo.off("exitRoom");
 
-      socketVideoApi.leaveRoom();
+      socketVideoApi.leaveRoom(userName);
     };
   }, []);
 
@@ -142,6 +172,7 @@ const useConnection = (roomId) => {
   return {
     peerList,
     myVideo,
+    participants,
   };
 };
 

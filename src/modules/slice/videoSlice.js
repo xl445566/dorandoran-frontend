@@ -4,6 +4,7 @@ export const videoSlice = createSlice({
   name: "video",
   initialState: {
     error: "",
+    event: "",
   },
   reducers: {
     saveError: (state, action) => {
@@ -11,6 +12,9 @@ export const videoSlice = createSlice({
     },
     init: (state) => {
       state.error = "";
+    },
+    receiveEvent: (state, action) => {
+      state.event = action.payload;
     },
   },
 });

@@ -20,6 +20,7 @@ const Rooms = () => {
   const error = useSelector((state) => state.roomList.error);
   const isComplete = useSelector((state) => state.room.isComplete);
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+  const isShowModal = useSelector((state) => state.room.isShowModal);
   const currentAddress = useSelector(
     (state) => state.auth.user.current_address
   );
@@ -27,11 +28,6 @@ const Rooms = () => {
   const history = useHistory();
   const dispatch = useDispatch();
   const [isCreateRoomModal, setIsCreateRoomModal] = useState(false);
-  const isShowModal = useSelector((state) => state.room.isShowModal);
-
-  const handleModalShowChange = () => {
-    setIsCreateRoomModal(isCreateRoomModal ? false : true);
-  };
 
   useEffect(() => {
     if (isComplete) {
@@ -48,6 +44,10 @@ const Rooms = () => {
       history.push("/");
     }
   }, [isComplete, error, isLoggedIn]);
+
+  const handleModalShowChange = () => {
+    setIsCreateRoomModal(isCreateRoomModal ? false : true);
+  };
 
   const handleNextClick = () => {
     dispatch(roomListSliceActions.getNextRooms(roomList));
