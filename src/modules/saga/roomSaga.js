@@ -20,13 +20,37 @@ const joinUserSaga = function* ({ payload }) {
     );
 
     if (response.data.message) {
-      yield put(roomSliceActions.joinedUserFailure(response));
+      yield put(roomSliceActions.joinedUserFailure(response.data.message));
       return;
     }
 
     yield put(roomSliceActions.joinedUserSuccess());
   } catch (error) {
     yield put(roomSliceActions.joinedUserFailure(error));
+  }
+};
+
+const checkCountUserSaga = function* ({ payload }) {
+  try {
+    const response = yield call(() =>
+      axios.post(
+        "http://localhost:4000/rooms/checkUserCount",
+        {
+          roomId: payload._id,
+        },
+        {
+          withCredentials: true,
+        }
+      )
+    );
+    if (response.data.message) {
+      yield put(roomSliceActions.checkCountUserFailure(response.data.message));
+      return;
+    }
+
+    yield put(roomSliceActions.checkCountUserSuccess(response.data.userCount));
+  } catch (error) {
+    yield put(roomSliceActions.checkCountUserFailure(error));
   }
 };
 
@@ -81,6 +105,10 @@ const createRoomSaga = function* ({ payload }) {
 
 export function* watchJoinUser() {
   yield takeEvery(roomSliceActions.joinUser, joinUserSaga);
+}
+
+export function* watchCountUser() {
+  yield takeEvery(roomSliceActions.checkCountUser, checkCountUserSaga);
 }
 
 export function* watchDelteUser() {

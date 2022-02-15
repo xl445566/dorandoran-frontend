@@ -52,11 +52,3 @@ export const makeRandomRoomImage = () => {
 
   return roomImages[randomIndex];
 };
-
-export const makeRandomGenderImage = () => {
-  const randomImage = ["1.png", "2.png"];
-
-  const randomIndex = Math.floor(Math.random() * 3);
-
-  return randomImage[randomIndex];
-};

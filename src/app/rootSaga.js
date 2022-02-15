@@ -15,6 +15,7 @@ import {
   watchJoinUser,
   watchDelteUser,
   watchCreateRoom,
+  watchCountUser,
 } from "../modules/saga/roomSaga";
 import {
   watchSocketCharacterSaga,
@@ -35,5 +36,6 @@ export default function* rootSaga() {
     watchDelteUser(),
     watchSocketCharacterSaga(),
     watchSocketVideoSaga(),
+    watchCountUser(),
   ]);
 }

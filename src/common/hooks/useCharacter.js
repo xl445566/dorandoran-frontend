@@ -1,23 +1,14 @@
-import { useState } from "react";
-
-import { useEffect } from "react/cjs/react.development";
+import { useState, useEffect } from "react";
 
 import mapSpots from "../utils/mapSpot";
+import { randomPos } from "../utils/randomPos";
 
 export const useCharacter = (username) => {
-  const [pos, setPos] = useState({
-    x: 3,
-    y: 5,
-  });
+  const [pos, setPos] = useState(randomPos(mapSpots));
   const [side, setSide] = useState("down");
   const [name, setName] = useState(username);
   const [isChatting, setIsChatting] = useState(false);
-  const [chairZone, setChairZone] = useState({
-    top: false,
-    right: false,
-    bottom: false,
-    left: false,
-  });
+  const [chairZone, setChairZone] = useState("");
 
   useEffect(() => {
     setName(username);
@@ -62,29 +53,29 @@ export const useCharacter = (username) => {
   const canMove = (x, y) => {
     if (mapSpots[y] !== undefined || mapSpots[y][x] !== undefined) {
       if (mapSpots[y][x] === 1) {
-        setChairZone({ top: false, right: false, bottom: false, left: false });
+        setChairZone("");
         setIsChatting(false);
 
         return true;
       }
       if (mapSpots[y][x] === 2) {
         setIsChatting(true);
-        setChairZone({ top: true });
+        setChairZone("top");
 
         return true;
       } else if (mapSpots[y][x] === 3) {
         setIsChatting(true);
-        setChairZone({ right: true });
+        setChairZone("right");
 
         return true;
       } else if (mapSpots[y][x] === 4) {
         setIsChatting(true);
-        setChairZone({ bottom: true });
+        setChairZone("bottom");
 
         return true;
       } else if (mapSpots[y][x] === 5) {
         setIsChatting(true);
-        setChairZone({ left: true });
+        setChairZone("left");
 
         return true;
       }

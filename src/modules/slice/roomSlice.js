@@ -5,8 +5,10 @@ export const roomSlice = createSlice({
   initialState: {
     isComplete: false,
     isLoading: false,
+    isUpdate: false,
     error: "",
     info: null,
+    currentUserCount: 0,
   },
   reducers: {
     joinUser: (state) => {
@@ -49,10 +51,22 @@ export const roomSlice = createSlice({
       state.isComplete = false;
     },
     init: (state) => {
-      state.isComplete = false;
-      state.isLoading = false;
-      state.error = "";
       state.info = null;
+    },
+    checkCountUser: (state) => {
+      state.isLoading = true;
+    },
+    checkCountUserSuccess: (state, action) => {
+      state.isLoading = false;
+      state.isUpdate = true;
+      state.currentUserCount = action.payload;
+    },
+    checkCountUserFailure: (state, action) => {
+      state.isLoading = false;
+      state.error = action.payload;
+    },
+    changeIsUpdate: (state) => {
+      state.isUpdate = false;
     },
   },
 });
