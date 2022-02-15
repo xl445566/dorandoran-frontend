@@ -30,6 +30,7 @@ const Rooms = () => {
   const [isNotJoinModal, setIsNotJoinModal] = useState(false);
 
   const handleModalShowChange = () => {
+    console.log("rooms에서 handleModalShowChange");
     setIsCreateRoomModal(isCreateRoomModal ? false : true);
   };
 

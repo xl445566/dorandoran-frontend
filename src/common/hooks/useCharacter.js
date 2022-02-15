@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-import mapSpots from "../utils/mapSpot";
+import mapSpots from "../../feature/room/resource/mapSpot";
 import { randomPos } from "../utils/randomPos";
 export const useCharacter = (username) => {
   const [pos, setPos] = useState(randomPos(mapSpots));

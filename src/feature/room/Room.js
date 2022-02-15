@@ -7,12 +7,12 @@ import styled from "styled-components";
 import Header from "../../common/components/Header";
 import { useCharacter } from "../../common/hooks/useCharacter";
 import createKey from "../../common/utils/createKey";
-import mapSpots from "../../common/utils/mapSpot";
 import { socketCharacterApi } from "../../modules/api/socketApi";
 import { authSliceActions } from "../../modules/slice/authSlice";
 import { roomListSliceActions } from "../../modules/slice/roomListSlice";
 import { roomSliceActions } from "../../modules/slice/roomSlice";
 import Character from "./Character";
+import mapSpots from "./resource/mapSpot";
 
 const Room = () => {
   const char = useCharacter("교감쌤");
