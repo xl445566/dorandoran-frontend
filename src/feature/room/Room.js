@@ -92,6 +92,7 @@ const Room = () => {
   }, [error, isLoggedIn, char.isChatting]);
 
   const chairPosition = useSelector((state) => state.character.chairPosition);
+
   useEffect(() => {
     if (chairPosition) {
       chairPosition.forEach((position) => {
