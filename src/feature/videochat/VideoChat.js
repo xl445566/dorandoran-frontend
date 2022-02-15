@@ -8,7 +8,10 @@ import Header from "../../common/components/Header";
 import useConnection from "../../common/hooks/useConnection";
 import createKey from "../../common/utils/createKey";
 import { makeEmoticons } from "../../common/utils/makeRoomResource";
-import { socketVideoApi } from "../../modules/api/socketApi";
+import {
+  socketVideoApi,
+  socketCharacterApi,
+} from "../../modules/api/socketApi";
 import { authSliceActions } from "../../modules/slice/authSlice";
 import { roomSliceActions } from "../../modules/slice/roomSlice";
 import Video from "./Video";
