@@ -1,6 +1,7 @@
 import axios from "axios";
 import { call, takeEvery, put } from "redux-saga/effects";
 
+import history from "../../common/utils/history";
 import { roomSliceActions } from "../slice/roomSlice";
 
 const joinUserSaga = function* ({ payload }) {
@@ -79,6 +80,52 @@ const createRoomSaga = function* ({ payload }) {
   }
 };
 
+const getCurrentRoomInfoSaga = function* ({ payload }) {
+  try {
+    const response = yield call(() =>
+      axios.post(
+        "http://localhost:4000/rooms/detail",
+        {
+          roomId: payload._id,
+        },
+        {
+          withCredentials: true,
+        }
+      )
+    );
+
+    if (response.data.message) {
+      yield put(
+        roomSliceActions.getCurrentRoomInfoFailure(response.data.message)
+      );
+      return;
+    }
+
+    if (response.data.room.users.length < 4) {
+      yield put(roomSliceActions.getCurrentRoomInfoSuccess());
+      yield put(
+        roomSliceActions.joinUser({
+          currentUser: payload.currentUser,
+          currentRoom: payload._id,
+        })
+      );
+      yield put(
+        roomSliceActions.saveInfo({
+          title: response.data.room.title,
+          users: response.data.room.users,
+          room_no: response.data.room.room_no,
+          _id: response.data.room._id,
+        })
+      );
+      history.push(`/room/${response.data.room._id}`);
+    } else {
+      yield put(roomSliceActions.changeIsShowModal());
+    }
+  } catch (error) {
+    yield put(roomSliceActions.getCurrentRoomInfoFailure(error));
+  }
+};
+
 export function* watchJoinUser() {
   yield takeEvery(roomSliceActions.joinUser, joinUserSaga);
 }
@@ -89,4 +136,8 @@ export function* watchDelteUser() {
 
 export function* watchCreateRoom() {
   yield takeEvery(roomSliceActions.createRoomRequest, createRoomSaga);
+}
+
+export function* watchGetCurrentRoomInfo() {
+  yield takeEvery(roomSliceActions.getCurrentRoomInfo, getCurrentRoomInfoSaga);
 }

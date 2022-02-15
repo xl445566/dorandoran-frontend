@@ -58,6 +58,8 @@ const VideoChat = () => {
   };
 
   const handleLogout = () => {
+    stopStreamedVideo();
+
     seatPosition.forEach((point) => {
       mapSpots[point[0]][point[1]] = 1;
     });

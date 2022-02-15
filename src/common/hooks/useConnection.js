@@ -24,7 +24,7 @@ const useConnection = (roomId) => {
           const peers = [];
 
           otherUsers.forEach((partnerId) => {
-            const peer = createPeer(partnerId, socketVideo.id, stream);
+            const peer = createSenderPeer(partnerId, socketVideo.id, stream);
 
             connectionList.current.push({
               id: partnerId,
@@ -41,7 +41,11 @@ const useConnection = (roomId) => {
         });
 
         socketVideo.on("offer", (payload) => {
-          const peer = addPeer(payload.signal, payload.caller, stream);
+          const peer = createReceivePeer(
+            payload.signal,
+            payload.caller,
+            stream
+          );
           const connection = {
             id: payload.caller,
             peer,
@@ -98,7 +102,7 @@ const useConnection = (roomId) => {
     };
   }, []);
 
-  function createPeer(partnerId, myId, stream) {
+  const createSenderPeer = (partnerId, myId, stream) => {
     const peer = new Peer({
       initiator: true,
       trickle: false,
@@ -114,16 +118,14 @@ const useConnection = (roomId) => {
     });
 
     return peer;
-  }
+  };
 
-  function addPeer(partnerSignal, caller, stream) {
+  const createReceivePeer = (partnerSignal, caller, stream) => {
     const peer = new Peer({
       initiator: false,
       trickle: false,
       stream,
     });
-
-    peer.signal(partnerSignal);
 
     peer.on("signal", (signal) => {
       socketVideoApi.answer({
@@ -132,8 +134,10 @@ const useConnection = (roomId) => {
       });
     });
 
+    peer.signal(partnerSignal);
+
     return peer;
-  }
+  };
 
   return {
     peerList,

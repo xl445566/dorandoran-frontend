@@ -27,7 +27,7 @@ const Rooms = () => {
   const history = useHistory();
   const dispatch = useDispatch();
   const [isCreateRoomModal, setIsCreateRoomModal] = useState(false);
-  const [isNotJoinModal, setIsNotJoinModal] = useState(false);
+  const isShowModal = useSelector((state) => state.room.isShowModal);
 
   const handleModalShowChange = () => {
     setIsCreateRoomModal(isCreateRoomModal ? false : true);
@@ -71,12 +71,12 @@ const Rooms = () => {
   };
 
   const changeJoinModalDisplay = () => {
-    isNotJoinModal ? setIsNotJoinModal(false) : setIsNotJoinModal(true);
+    dispatch(roomSliceActions.changeIsShowModal());
   };
 
   return (
     <Entry>
-      {isNotJoinModal && (
+      {isShowModal && (
         <Modal size="small">
           <RoomModal onClick={changeJoinModalDisplay} />
         </Modal>
@@ -99,12 +99,7 @@ const Rooms = () => {
           <button onClick={handlePrevClick}>
             <FaChevronLeft size="60" className="icon" />
           </button>
-          {!isLoading && (
-            <ChatRoomList
-              setIsShowModal={setIsNotJoinModal}
-              roomList={roomList}
-            />
-          )}
+          {!isLoading && <ChatRoomList roomList={roomList} />}
           <button onClick={handleNextClick}>
             <FaChevronRight size="60" className="icon" />
           </button>
