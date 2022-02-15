@@ -6,7 +6,9 @@ import styled from "styled-components";
 
 import Button from "../../common/components/Button";
 import Modal from "../../common/components/modal/Modal";
+import { useCharacter } from "../../common/hooks/useCharacter";
 import { makeRandomRoomName } from "../../common/utils/makeRoomResource";
+import { socketCharacterApi } from "../../modules/api/socketApi";
 import { roomSliceActions } from "../../modules/slice/roomSlice";
 
 const RoomCreate = ({ isShow, handleModalShowChange }) => {
@@ -17,13 +19,27 @@ const RoomCreate = ({ isShow, handleModalShowChange }) => {
   const dispatch = useDispatch();
   const history = useHistory();
 
+  const char = useCharacter();
+  const currentUser = useSelector((state) => state.auth.user);
   useEffect(() => {
     if (isComplete && roomInfo) {
       history.push(`/room/${roomInfo._id}`);
 
-      dispatch(roomSliceActions.changeIsComplted());
+      dispatch(roomSliceActions.changeIsCompleted());
+
+      socketCharacterApi.enterRoom({
+        roomId: roomInfo._id,
+        x: char.x,
+        y: char.y,
+        type: "/assets/characters/",
+        side: char.side,
+        isChatting: char.isChatting,
+        name: currentUser.name,
+        gender: currentUser.gender,
+        profile: currentUser.profile,
+      });
     }
-  }, [roomInfo]);
+  }, [isComplete]);
 
   const handleCreateButton = () => {
     const roomData = {

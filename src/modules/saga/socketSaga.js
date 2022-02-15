@@ -18,8 +18,17 @@ const createSocketCharacterChannel = (socketCharacter) => {
       emit(characterSliceActions.charactersInRoom(character));
     });
 
+    socketCharacter.on("setChairPosition", (chairPosition) => {
+      emit(characterSliceActions.doNotComeChair(chairPosition));
+    });
+
+    socketCharacter.on("setCurrentUserPosition", (userPosition) => {
+      emit(characterSliceActions.doNotComeChair(userPosition));
+    });
     return () => {
       socketCharacter.off("setCharacters");
+      socketCharacter.off("setChairPosition");
+      socketCharacter.off("setCurrentUserPosition");
     };
   });
 };

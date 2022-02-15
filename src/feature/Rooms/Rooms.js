@@ -35,7 +35,7 @@ const Rooms = () => {
 
   useEffect(() => {
     if (isComplete) {
-      dispatch(roomSliceActions.changeIsComplted());
+      dispatch(roomSliceActions.changeIsCompleted());
     } else {
       dispatch(roomListSliceActions.getRooms());
     }
@@ -65,6 +65,7 @@ const Rooms = () => {
     window.Kakao.API.request({
       url: "/v1/user/unlink",
       success: function () {
+        dispatch(roomSliceActions.init());
         dispatch(authSliceActions.logoutRequest());
       },
     });
@@ -114,18 +115,15 @@ const Entry = styled.main`
   background-color: #f6f8f9;
   color: var(--black-color);
 `;
-
 const MainBody = styled.section`
-  height: 90%;
   display: flex;
+  height: 90%;
   align-items: center;
   justify-content: space-around;
-
   .icon {
     color: var(--black-color);
   }
 `;
-
 const Pagination = styled.div`
   display: flex;
   justify-content: space-between;

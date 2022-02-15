@@ -1,27 +1,27 @@
 import React, { useEffect } from "react";
 
 import { useDispatch, useSelector } from "react-redux";
-import { useHistory, useParams } from "react-router-dom";
+import { useHistory, useLocation, useParams } from "react-router-dom";
 import styled from "styled-components";
 
 import Header from "../../common/components/Header";
 import useConnection from "../../common/hooks/useConnection";
-import mapSpots from "../../common/utils/mapSpot";
+import { socketCharacterApi } from "../../modules/api/socketApi";
 import { socketVideo } from "../../modules/saga/socketSaga";
 import { authSliceActions } from "../../modules/slice/authSlice";
 import { roomSliceActions } from "../../modules/slice/roomSlice";
 import Video from "./Video";
 
 const VideoChat = () => {
+  const location = useLocation();
   const error = useSelector((state) => state.room.error);
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
-  const seatPosition = useSelector((state) => state.auth.seatPosition);
   const currentUser = useSelector((state) => state.auth.user);
   const roomInfo = useSelector((state) => state.room.info);
-
   const dispatch = useDispatch();
   const history = useHistory();
   const params = useParams();
+  const getPositionParams = location.state.position;
 
   const roomId = params.roomId;
   const { peerList, myVideo } = useConnection(roomId);
@@ -49,20 +49,12 @@ const VideoChat = () => {
 
   const handleRoomPage = () => {
     stopStreamedVideo();
-
+    socketCharacterApi.exitChattingRoom(getPositionParams);
     history.push(`/room/${params.roomId}`);
-
-    seatPosition.forEach((point) => {
-      mapSpots[point[0]][point[1]] = 1;
-    });
   };
 
   const handleLogout = () => {
     stopStreamedVideo();
-
-    seatPosition.forEach((point) => {
-      mapSpots[point[0]][point[1]] = 1;
-    });
 
     window.Kakao.API.request({
       url: "/v1/user/unlink",

@@ -7,15 +7,15 @@ import styled from "styled-components";
 import Header from "../../common/components/Header";
 import { useCharacter } from "../../common/hooks/useCharacter";
 import createKey from "../../common/utils/createKey";
-import mapSpots from "../../common/utils/mapSpot";
 import { socketCharacterApi } from "../../modules/api/socketApi";
 import { authSliceActions } from "../../modules/slice/authSlice";
 import { roomListSliceActions } from "../../modules/slice/roomListSlice";
 import { roomSliceActions } from "../../modules/slice/roomSlice";
 import Character from "./Character";
+import mapSpots from "./resource/mapSpot";
 
 const Room = () => {
-  const char = useCharacter("교감쌤");
+  const char = useCharacter();
   const [moveCount, setMoveCount] = useState(0);
   const roomInfo = useSelector((state) => state.room.info);
   const characters = useSelector((state) => state.character.characters);
@@ -34,40 +34,6 @@ const Room = () => {
     };
   }, [moveCount]);
 
-  useEffect(() => {
-    if (
-      mapSpots[char.y][char.x] === 2 ||
-      mapSpots[char.y][char.x] === 3 ||
-      mapSpots[char.y][char.x] === 4 ||
-      mapSpots[char.y][char.x] === 5
-    ) {
-      // mapSpots[char.y - 1][char.x] = 0;
-      // mapSpots[char.y][char.x - 1] = 0;
-      // mapSpots[char.y][char.x + 1] = 0;
-      // mapSpots[char.y + 1][char.x] = 0;
-
-      dispatch(
-        authSliceActions.setSeatPosition([
-          [char.y - 1, char.x],
-          [char.y, char.x - 1],
-          [char.y, char.x + 1],
-          [char.y + 1, char.x],
-        ])
-      );
-    }
-  }, [char.y, char.x]);
-
-  useEffect(() => {
-    socketCharacterApi.enterRoom({
-      roomId: params.roomId,
-      x: char.x,
-      y: char.y,
-      type: "/assets/characters/famale1.png",
-      side: char.side,
-      isChatting: char.isChatting,
-    });
-  }, []);
-
   const handleLogout = () => {
     window.Kakao.API.request({
       url: "/v1/user/unlink",
@@ -79,8 +45,8 @@ const Room = () => {
           })
         );
         dispatch(roomSliceActions.init());
-
         dispatch(authSliceActions.logoutRequest());
+        socketCharacterApi.exitUser();
       },
     });
   };
@@ -104,13 +70,45 @@ const Room = () => {
     if (error) {
       history.push("/error");
     }
+
     if (!isLoggedIn) {
       history.push("/");
     }
+
     if (char.isChatting) {
-      history.push(`/video/${params.roomId}`);
+      socketCharacterApi.enterChattingRoom(
+        char.chairZone,
+        char.x,
+        char.y,
+        params.roomId
+      );
+
+      history.push({
+        pathname: `/video/${params.roomId}`,
+        state: { position: char.chairZone },
+      });
     }
   }, [error, isLoggedIn, char.isChatting]);
+
+  const chairPosition = useSelector((state) => state.character.chairPosition);
+
+  useEffect(() => {
+    if (chairPosition) {
+      chairPosition.forEach((position) => {
+        if (position.inToRoom) {
+          mapSpots[position.y - 1][position.x] = 0;
+          mapSpots[position.y][position.x - 1] = 0;
+          mapSpots[position.y][position.x + 1] = 0;
+          mapSpots[position.y + 1][position.x] = 0;
+        } else {
+          mapSpots[position.y - 1][position.x] = 1;
+          mapSpots[position.y][position.x - 1] = 1;
+          mapSpots[position.y][position.x + 1] = 1;
+          mapSpots[position.y + 1][position.x] = 1;
+        }
+      });
+    }
+  }, [chairPosition]);
 
   useEffect(() => {
     socketCharacterApi.changeCurrentCharacter(
@@ -177,15 +175,14 @@ const Room = () => {
             return (
               <Character
                 key={createKey()}
-                roomId={character.roomId}
                 count={character.moveCount}
                 isChatting={character.isChatting}
                 x={character.x}
                 y={character.y}
                 side={character.side}
-                name={character.id}
+                name={character.name}
                 type={character.type}
-                chairZone={char.chairZone}
+                profile={character.profile}
               />
             );
           })}

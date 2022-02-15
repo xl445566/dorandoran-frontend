@@ -17,6 +17,12 @@ export const socketCharacterApi = {
   exitUser: () => {
     socketCharacter.emit("exitUser");
   },
+  enterChattingRoom: (posIndex, x, y, roomId) => {
+    socketCharacter.emit("enterChattingRoom", posIndex, x, y, roomId);
+  },
+  exitChattingRoom: (posIndex) => {
+    socketCharacter.emit("exitChattingRoom", posIndex);
+  },
 };
 
 export const socketVideoApi = {

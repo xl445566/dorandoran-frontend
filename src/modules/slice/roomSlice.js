@@ -56,7 +56,7 @@ export const roomSlice = createSlice({
     saveInfo: (state, action) => {
       state.info = action.payload;
     },
-    changeIsComplted: (state) => {
+    changeIsCompleted: (state) => {
       state.isComplete = false;
     },
     init: (state) => {
@@ -64,6 +64,13 @@ export const roomSlice = createSlice({
     },
     changeIsShowModal: (state) => {
       state.isShowModal = !state.isShowModal;
+    },
+    allInit: (state) => {
+      state.isComplete = false;
+      state.isLoading = false;
+      state.isShowModal = false;
+      state.error = "";
+      state.info = null;
     },
   },
 });
