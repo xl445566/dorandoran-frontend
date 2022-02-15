@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import styled from "styled-components";
 
-const NotFound = () => {
+const Error = () => {
   const history = useHistory();
   const roomListError = useSelector((state) => state.roomList.error.response);
   const roomError = useSelector((state) => state.room.error.response);
@@ -20,7 +20,7 @@ const NotFound = () => {
           <TitleImg>
             <img
               src="/assets/logo/error_logo.svg"
-              alt="에러를 표시하는 물에 빠지는 로고"
+              alt="에러를 표시하는, 물에 빠지는 로고"
             />
           </TitleImg>
           <Title>
@@ -28,6 +28,7 @@ const NotFound = () => {
               (roomError && roomError.status)}
           </Title>
           <SubTitle>
+            {/* 현재 테스트중입니다 */}
             {/* {(roomListError && roomListError.data.message) ||
               (roomError && roomError.data.message) ||
               "페이지를 찾을 수 없습니다. 이전페이지로 이동하시겠어요?"} */}
@@ -92,4 +93,4 @@ const Button = styled.button`
   font-weight: 500;
 `;
 
-export default NotFound;
+export default Error;

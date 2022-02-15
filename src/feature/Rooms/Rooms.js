@@ -35,7 +35,7 @@ const Rooms = () => {
 
   useEffect(() => {
     if (isComplete) {
-      dispatch(roomSliceActions.changeIsComplted());
+      dispatch(roomSliceActions.changeIsCompleted());
     } else {
       dispatch(roomListSliceActions.getRooms());
     }
@@ -116,8 +116,8 @@ const Entry = styled.main`
   color: var(--black-color);
 `;
 const MainBody = styled.section`
-  height: 90%;
   display: flex;
+  height: 90%;
   align-items: center;
   justify-content: space-around;
   .icon {

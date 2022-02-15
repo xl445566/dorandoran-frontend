@@ -15,7 +15,7 @@ import Character from "./Character";
 import mapSpots from "./resource/mapSpot";
 
 const Room = () => {
-  const char = useCharacter("교감쌤");
+  const char = useCharacter();
   const [moveCount, setMoveCount] = useState(0);
   const roomInfo = useSelector((state) => state.room.info);
   const characters = useSelector((state) => state.character.characters);
@@ -45,7 +45,6 @@ const Room = () => {
           })
         );
         dispatch(roomSliceActions.init());
-
         dispatch(authSliceActions.logoutRequest());
         socketCharacterApi.exitUser();
       },
