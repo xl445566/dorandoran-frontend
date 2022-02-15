@@ -1,8 +1,6 @@
 import React from "react";
-// import React, { useEffect } from "react";
 
 import { useDispatch, useSelector } from "react-redux";
-// import { useHistory } from "react-router-dom";
 import styled, { keyframes } from "styled-components";
 
 import { socketCharacterApi } from "../../modules/api/socketApi";
@@ -14,7 +12,6 @@ import { makeRandomRoomImage } from "../utils/makeRoomResource";
 const Card = ({ roomInfo }) => {
   const char = useCharacter();
   const dispatch = useDispatch();
-  // const history = useHistory();
   const currentUser = useSelector((state) => state.auth.user._id);
   const currentUserInfo = useSelector((state) => state.auth.user);
   const images = makeRandomRoomImage();
