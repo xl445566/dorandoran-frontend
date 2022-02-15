@@ -1,22 +1,28 @@
 import React from "react";
 
+import { useSelector } from "react-redux";
 import styled from "styled-components";
 
 import Profile from "../../common/components/Profile";
 
-const Character = ({ count, isChatting, x, y, side, name, type, profile }) => {
+const Character = ({ count, isChatting, x, y, side, name, type }) => {
   const sides = {
     down: [0, -70],
     left: [-71, -70],
     right: [-142, -70],
     up: [-213, -70],
   };
-
+  const user = useSelector((state) => state.auth.user);
   return (
     <>
       {isChatting ? (
         <>
-          <Profile left={x * 60} top={y * 60} type={profile} text={name} />
+          <Profile
+            left={x * 60}
+            top={y * 60}
+            type={user.profile}
+            text={user.name}
+          />
         </>
       ) : (
         <Container

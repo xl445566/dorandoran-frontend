@@ -17,17 +17,11 @@ export const socketCharacterApi = {
   exitUser: () => {
     socketCharacter.emit("exitUser");
   },
-  enterChattingRoom: (posIndex, x, y, roomId) => {
-    socketCharacter.emit("enterChattingRoom", posIndex, x, y, roomId);
-  },
-  exitChattingRoom: (posIndex) => {
-    socketCharacter.emit("exitChattingRoom", posIndex);
-  },
 };
 
 export const socketVideoApi = {
-  joinRoom: (roomName) => {
-    socketVideo.emit("joinRoom", roomName);
+  enterRoom: (payload) => {
+    socketVideo.emit("enterRoom", payload);
   },
   offer: (payload) => {
     socketVideo.emit("offer", payload);
@@ -35,7 +29,7 @@ export const socketVideoApi = {
   answer: (payload) => {
     socketVideo.emit("answer", payload);
   },
-  iceCandidate: (payload) => {
-    socketVideo.emit("iceCandidate", payload);
+  leaveRoom: () => {
+    socketVideo.emit("leaveRoom");
   },
 };

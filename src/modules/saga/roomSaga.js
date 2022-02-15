@@ -1,6 +1,7 @@
 import axios from "axios";
 import { call, takeEvery, put } from "redux-saga/effects";
 
+import history from "../../common/utils/history";
 import { roomSliceActions } from "../slice/roomSlice";
 
 const joinUserSaga = function* ({ payload }) {
@@ -20,37 +21,13 @@ const joinUserSaga = function* ({ payload }) {
     );
 
     if (response.data.message) {
-      yield put(roomSliceActions.joinedUserFailure(response.data.message));
+      yield put(roomSliceActions.joinedUserFailure(response));
       return;
     }
 
     yield put(roomSliceActions.joinedUserSuccess());
   } catch (error) {
     yield put(roomSliceActions.joinedUserFailure(error));
-  }
-};
-
-const checkCountUserSaga = function* ({ payload }) {
-  try {
-    const response = yield call(() =>
-      axios.post(
-        "http://localhost:4000/rooms/checkUserCount",
-        {
-          roomId: payload._id,
-        },
-        {
-          withCredentials: true,
-        }
-      )
-    );
-    if (response.data.message) {
-      yield put(roomSliceActions.checkCountUserFailure(response.data.message));
-      return;
-    }
-
-    yield put(roomSliceActions.checkCountUserSuccess(response.data.userCount));
-  } catch (error) {
-    yield put(roomSliceActions.checkCountUserFailure(error));
   }
 };
 
@@ -103,12 +80,54 @@ const createRoomSaga = function* ({ payload }) {
   }
 };
 
+const getCurrentRoomInfoSaga = function* ({ payload }) {
+  try {
+    const response = yield call(() =>
+      axios.post(
+        "http://localhost:4000/rooms/detail",
+        {
+          roomId: payload._id,
+        },
+        {
+          withCredentials: true,
+        }
+      )
+    );
+
+    if (response.data.message) {
+      yield put(
+        roomSliceActions.getCurrentRoomInfoFailure(response.data.message)
+      );
+      return;
+    }
+
+    if (response.data.room.users.length < 4) {
+      yield put(roomSliceActions.getCurrentRoomInfoSuccess());
+      yield put(
+        roomSliceActions.joinUser({
+          currentUser: payload.currentUser,
+          currentRoom: payload._id,
+        })
+      );
+      yield put(
+        roomSliceActions.saveInfo({
+          title: response.data.room.title,
+          users: response.data.room.users,
+          room_no: response.data.room.room_no,
+          _id: response.data.room._id,
+        })
+      );
+      history.push(`/room/${response.data.room._id}`);
+    } else {
+      yield put(roomSliceActions.changeIsShowModal());
+    }
+  } catch (error) {
+    yield put(roomSliceActions.getCurrentRoomInfoFailure(error));
+  }
+};
+
 export function* watchJoinUser() {
   yield takeEvery(roomSliceActions.joinUser, joinUserSaga);
-}
-
-export function* watchCountUser() {
-  yield takeEvery(roomSliceActions.checkCountUser, checkCountUserSaga);
 }
 
 export function* watchDelteUser() {
@@ -117,4 +136,8 @@ export function* watchDelteUser() {
 
 export function* watchCreateRoom() {
   yield takeEvery(roomSliceActions.createRoomRequest, createRoomSaga);
+}
+
+export function* watchGetCurrentRoomInfo() {
+  yield takeEvery(roomSliceActions.getCurrentRoomInfo, getCurrentRoomInfoSaga);
 }

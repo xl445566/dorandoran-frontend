@@ -15,12 +15,9 @@ import {
   watchJoinUser,
   watchDelteUser,
   watchCreateRoom,
-  watchCountUser,
+  watchGetCurrentRoomInfo,
 } from "../modules/saga/roomSaga";
-import {
-  watchSocketCharacterSaga,
-  watchSocketVideoSaga,
-} from "../modules/saga/socketSaga";
+import { watchSocketCharacterSaga } from "../modules/saga/socketSaga";
 
 export default function* rootSaga() {
   yield all([
@@ -35,7 +32,6 @@ export default function* rootSaga() {
     watchJoinUser(),
     watchDelteUser(),
     watchSocketCharacterSaga(),
-    watchSocketVideoSaga(),
-    watchCountUser(),
+    watchGetCurrentRoomInfo(),
   ]);
 }
