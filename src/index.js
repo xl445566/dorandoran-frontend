@@ -5,8 +5,8 @@ import { Provider } from "react-redux";
 import { BrowserRouter } from "react-router-dom";
 
 import store from "../src/app/configureStore";
+import GlobalStyle from "../src/app/GlobalStyle";
 import App from "./app/App";
-import GlobalStyle from "./common/components/GlobalStyle";
 import reportWebVitals from "./reportWebVitals";
 
 ReactDOM.render(

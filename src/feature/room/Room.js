@@ -41,10 +41,10 @@ const Room = () => {
       mapSpots[char.y][char.x] === 4 ||
       mapSpots[char.y][char.x] === 5
     ) {
-      mapSpots[char.y - 1][char.x] = 0;
-      mapSpots[char.y][char.x - 1] = 0;
-      mapSpots[char.y][char.x + 1] = 0;
-      mapSpots[char.y + 1][char.x] = 0;
+      // mapSpots[char.y - 1][char.x] = 0;
+      // mapSpots[char.y][char.x - 1] = 0;
+      // mapSpots[char.y][char.x + 1] = 0;
+      // mapSpots[char.y + 1][char.x] = 0;
 
       dispatch(
         authSliceActions.setSeatPosition([
@@ -107,16 +107,20 @@ const Room = () => {
     if (!isLoggedIn) {
       history.push("/");
     }
-  }, [error, isLoggedIn]);
+    if (char.isChatting) {
+      history.push(`/video/${params.roomId}`);
+    }
+  }, [error, isLoggedIn, char.isChatting]);
 
   useEffect(() => {
     socketCharacterApi.changeCurrentCharacter(
       char.x,
       char.y,
       char.side,
-      moveCount
+      moveCount,
+      char.isChatting
     );
-  }, [moveCount, char.side, char.x, char.y]);
+  }, [moveCount, char.side, char.x, char.y, char.isChatting]);
 
   const handleKeyDown = (e) => {
     switch (e.code) {
@@ -181,6 +185,7 @@ const Room = () => {
                 side={character.side}
                 name={character.id}
                 type={character.type}
+                chairZone={char.chairZone}
               />
             );
           })}

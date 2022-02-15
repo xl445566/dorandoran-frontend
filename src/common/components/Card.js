@@ -1,42 +1,28 @@
 import React from "react";
+// import React, { useEffect } from "react";
 
 import { useDispatch, useSelector } from "react-redux";
-import { useHistory } from "react-router-dom";
+// import { useHistory } from "react-router-dom";
 import styled, { keyframes } from "styled-components";
 
 import { roomSliceActions } from "../../modules/slice/roomSlice";
 import createKey from "../utils/createKey";
 import { makeRandomRoomImage } from "../utils/makeRoomResource";
 
-const Card = ({ roomInfo, setIsShowModal }) => {
+const Card = ({ roomInfo }) => {
   const dispatch = useDispatch();
-  const history = useHistory();
-  const { title, users, room_no, _id } = roomInfo;
+  // const history = useHistory();
   const currentUser = useSelector((state) => state.auth.user._id);
+  const { title, users, room_no, _id } = roomInfo;
   const images = makeRandomRoomImage();
 
   const joinedUser = () => {
-    if (users.length < 4) {
-      dispatch(
-        roomSliceActions.joinUser({
-          currentUser,
-          currentRoom: _id,
-        })
-      );
-
-      dispatch(
-        roomSliceActions.saveInfo({
-          title,
-          users,
-          room_no,
-          _id,
-        })
-      );
-
-      history.push(`/room/${_id}`);
-    } else {
-      setIsShowModal(true);
-    }
+    dispatch(
+      roomSliceActions.getCurrentRoomInfo({
+        _id,
+        currentUser,
+      })
+    );
   };
 
   return (

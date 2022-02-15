@@ -1,5 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
-// import logger from "redux-logger";
+import logger from "redux-logger";
 import createSagaMiddleware from "redux-saga";
 
 import authSlice from "../modules/slice/authSlice";
@@ -21,7 +21,7 @@ const createStore = () => {
       video: videoSlice.reducer,
     },
     devTools: true,
-    middleware: [sagaMiddleware],
+    middleware: [sagaMiddleware, logger],
   });
 
   sagaMiddleware.run(rootSaga);
