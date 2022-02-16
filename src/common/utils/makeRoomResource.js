@@ -52,3 +52,42 @@ export const makeRandomRoomImage = () => {
 
   return roomImages[randomIndex];
 };
+
+export const makeEmoticons = () => {
+  const emoticons = [
+    {
+      type: "angry",
+      src: "/assets/emoticons/angry.png",
+    },
+    {
+      type: "good",
+      src: "/assets/emoticons/good.png",
+    },
+    {
+      type: "heart",
+      src: "/assets/emoticons/heart.png",
+    },
+    {
+      type: "hifive",
+      src: "/assets/emoticons/hifive.png",
+    },
+    {
+      type: "laugh",
+      src: "/assets/emoticons/laugh.png",
+    },
+    {
+      type: "shame",
+      src: "/assets/emoticons/shame.png",
+    },
+    {
+      type: "smile",
+      src: "/assets/emoticons/smile.png",
+    },
+    {
+      type: "star",
+      src: "/assets/emoticons/star.png",
+    },
+  ];
+
+  return emoticons;
+};

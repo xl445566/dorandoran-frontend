@@ -6,6 +6,7 @@ import styled, { keyframes } from "styled-components";
 import { socketCharacterApi } from "../../modules/api/socketApi";
 import { roomSliceActions } from "../../modules/slice/roomSlice";
 import { useCharacter } from "../hooks/useCharacter";
+import constants from "../utils/constants";
 import createKey from "../utils/createKey";
 import { makeRandomRoomImage } from "../utils/makeRoomResource";
 
@@ -29,7 +30,7 @@ const Card = ({ roomInfo }) => {
       roomId: _id,
       x: char.x,
       y: char.y,
-      type: "/assets/characters/",
+      type: constants.ASSET_CHARACTERS,
       side: char.side,
       isChatting: char.isChatting,
       name: currentUserInfo.name,

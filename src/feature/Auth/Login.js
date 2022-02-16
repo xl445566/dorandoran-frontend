@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import styled from "styled-components";
 
+import constants from "../../common/utils/constants";
 import kakaoApi from "../../modules/api/kakaoApi";
 import { authSliceActions } from "../../modules/slice/authSlice";
 
@@ -11,17 +12,17 @@ const Login = () => {
   const [address, setAddress] = useState("");
   const [isAddress, setIsAddress] = useState(true);
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+  const kakaoError = useSelector((state) => state.auth.error);
   const history = useHistory();
   const dispatch = useDispatch();
+  const scope = constants.KAKAO_SCOPE;
 
   useEffect(() => {
     kakaoApi.getUserLocation(setAddress, setIsAddress);
   }, []);
 
   const handleLogin = () => {
-    const scope =
-      "profile_nickname, profile_image, account_email, gender, age_range";
-
+    dispatch(authSliceActions.cookieClear());
     window.Kakao.Auth.login({
       scope,
       success: async (response) => {
@@ -45,15 +46,13 @@ const Login = () => {
     });
   };
 
-  const jsKey = "6fe0be1f6b114e35d999d9c9ba281084";
-
   if (!window.Kakao.isInitialized()) {
-    window.Kakao.init(jsKey);
+    window.Kakao.init(constants.KAKAO_SDK_KEY);
   }
 
   useEffect(() => {
     if (isLoggedIn) {
-      history.push("/");
+      history.push(constants.ROUTE_MAIN);
     }
   }, [isLoggedIn]);
 
@@ -67,14 +66,14 @@ const Login = () => {
           <Title>
             도란
             <LogoImage>
-              <img src="/assets/logo.svg" alt="logo" />
+              <img src={constants.ASSET_LOGO} alt="logo" />
             </LogoImage>
             도란
           </Title>
           <SubTitle>우리동네 어르신들의 화상 채팅 방</SubTitle>
           <TitleImg>
             <img
-              src="/assets/cards/card12.png"
+              src={constants.ASSET_LOGIN_BACKGROUND}
               alt="할머니 할아버지가 즐겁게 달리는 이미지"
             />
           </TitleImg>
@@ -85,7 +84,7 @@ const Login = () => {
               </p>
               <RefreshButton onClick={handleReload}>
                 <span className="refreshImage">
-                  <img src="/assets/refresh.png" alt="새로고침 이미지" />
+                  <img src={constants.ASSET_REFRESH} alt="새로고침 이미지" />
                 </span>
                 새로고침
               </RefreshButton>
@@ -95,11 +94,14 @@ const Login = () => {
           {!address && isAddress && <p>사용자의 위치를 불러오고 있습니다..</p>}
           {address && (
             <Button onClick={handleLogin}>
-              <img
-                src="/kakao_login_large_narrow.png"
-                alt="kakao login image"
-              />
+              <img src={constants.ASSET_LOGIN_BUTTON} alt="kakao login image" />
             </Button>
+          )}
+          {kakaoError && (
+            <KakaoError>
+              카카오 계정에 이메일, 성별, 연령대 정보가 등록되어 있는지 확인 후
+              다시 시도 해주세요.
+            </KakaoError>
           )}
         </Section>
       </Main>
@@ -182,5 +184,11 @@ const RefreshButton = styled.button`
     margin-right: 5px;
     overflow: hidden;
   }
+`;
+
+const KakaoError = styled.p`
+  margin-top: 20px;
+  color: #95a5a6;
+  font-size: 20px;
 `;
 export default Login;

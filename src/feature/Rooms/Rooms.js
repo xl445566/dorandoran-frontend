@@ -7,6 +7,7 @@ import styled from "styled-components";
 
 import Header from "../../common/components/Header";
 import Modal from "../../common/components/modal/Modal";
+import constants from "../../common/utils/constants";
 import { authSliceActions } from "../../modules/slice/authSlice";
 import { roomListSliceActions } from "../../modules/slice/roomListSlice";
 import { roomSliceActions } from "../../modules/slice/roomSlice";
@@ -20,6 +21,7 @@ const Rooms = () => {
   const error = useSelector((state) => state.roomList.error);
   const isComplete = useSelector((state) => state.room.isComplete);
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+  const isShowModal = useSelector((state) => state.room.isShowModal);
   const currentAddress = useSelector(
     (state) => state.auth.user.current_address
   );
@@ -27,11 +29,6 @@ const Rooms = () => {
   const history = useHistory();
   const dispatch = useDispatch();
   const [isCreateRoomModal, setIsCreateRoomModal] = useState(false);
-  const isShowModal = useSelector((state) => state.room.isShowModal);
-
-  const handleModalShowChange = () => {
-    setIsCreateRoomModal(isCreateRoomModal ? false : true);
-  };
 
   useEffect(() => {
     if (isComplete) {
@@ -41,13 +38,17 @@ const Rooms = () => {
     }
 
     if (error) {
-      history.push("/error");
+      history.push(constants.ROUTE_ERROR);
     }
 
     if (!isLoggedIn) {
-      history.push("/");
+      history.push(constants.ROUTE_MAIN);
     }
   }, [isComplete, error, isLoggedIn]);
+
+  const handleModalShowChange = () => {
+    setIsCreateRoomModal(isCreateRoomModal ? false : true);
+  };
 
   const handleNextClick = () => {
     dispatch(roomListSliceActions.getNextRooms(roomList));
@@ -92,7 +93,7 @@ const Rooms = () => {
         rightOnClick={handleLogout}
         title={`${currentAddress} 노인정`}
         text="방 만들기"
-        size="small"
+        size={constants.SIZE_S}
         type="refresh"
       />
       <MainBody>

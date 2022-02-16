@@ -1,18 +1,19 @@
 import axios from "axios";
 import { call, takeEvery, put, takeLatest } from "redux-saga/effects";
 
+import constants from "../../common/utils/constants";
 import { roomListSliceActions } from "../slice/roomListSlice";
 
 const getRoomSaga = function* () {
   try {
     const response = yield call(() =>
-      axios.get("http://localhost:4000/rooms", {
+      axios.get(constants.REQUEST_ROOMLIST_ROOM, {
         withCredentials: true,
       })
     );
 
     if (response.data.message) {
-      yield put(roomListSliceActions.getRoomFailure(response.data.rooms));
+      yield put(roomListSliceActions.getRoomFailure(response.data.message));
       return;
     }
 
@@ -27,7 +28,7 @@ const getNextRoomSaga = function* ({ payload }) {
     const lastRoom = payload[payload.length - 1];
     const response = yield call(() =>
       axios.post(
-        "http://localhost:4000/rooms",
+        constants.REQUEST_ROOMLIST_ROOM,
         {
           lastRoom,
           direction: "next",
@@ -54,7 +55,7 @@ const getPrevRoomSaga = function* ({ payload }) {
     const lastRoom = payload[payload.length - 1];
     const response = yield call(() =>
       axios.post(
-        "http://localhost:4000/rooms",
+        constants.REQUEST_ROOMLIST_ROOM,
         {
           lastRoom,
           direction: "prev",
@@ -80,7 +81,7 @@ const getRefreshRoomSaga = function* ({ payload }) {
   try {
     const response = yield call(() =>
       axios.post(
-        "http://localhost:4000/rooms/refresh",
+        constants.REQUEST_ROOMLIST_REFRESH,
         {
           roomList: payload,
         },

@@ -1,13 +1,18 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useLocation, useParams } from "react-router-dom";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 
 import Header from "../../common/components/Header";
 import useConnection from "../../common/hooks/useConnection";
-import { socketCharacterApi } from "../../modules/api/socketApi";
-import { socketVideo } from "../../modules/saga/socketSaga";
+import constants from "../../common/utils/constants";
+import createKey from "../../common/utils/createKey";
+import { makeEmoticons } from "../../common/utils/makeRoomResource";
+import {
+  socketVideoApi,
+  socketCharacterApi,
+} from "../../modules/api/socketApi";
 import { authSliceActions } from "../../modules/slice/authSlice";
 import { roomSliceActions } from "../../modules/slice/roomSlice";
 import Video from "./Video";
@@ -23,18 +28,56 @@ const VideoChat = () => {
   const params = useParams();
   const getPositionParams = location.state.position;
 
-  const roomId = params.roomId;
-  const { peerList, myVideo } = useConnection(roomId);
+  const { participants, peerList, myVideo } = useConnection(
+    params.roomId,
+    currentUser?.name
+  );
+
+  const effectRef = useRef();
+  const effectWrapperRef = useRef();
+  const otherEffect = useRef();
+  const otherEffectWrapper = useRef();
+
+  const event = useSelector((state) => state.video.event);
+  const emoticons = makeEmoticons();
 
   useEffect(() => {
-    if (error) {
-      history.push("/error");
+    if (error || !currentUser) {
+      history.push(constants.ROUTE_ERROR);
     }
 
     if (!isLoggedIn) {
-      history.push("/");
+      history.push(constants.ROUTE_MAIN);
     }
-  }, [error, isLoggedIn]);
+
+    return () => {
+      stopStreamedVideo();
+    };
+  }, [error, isLoggedIn, currentUser]);
+
+  useEffect(() => {
+    let index = false;
+
+    for (let i = 0; i < peerList.length; i++) {
+      if (peerList[i].id === event.sender) {
+        index = i;
+      }
+    }
+
+    if (index > -1 && index !== false) {
+      otherEffectWrapper.current =
+        document.getElementsByClassName("otherEffectWrapeer")[index];
+
+      otherEffect.current =
+        document.getElementsByClassName("otherEffectWrapeer")[index];
+
+      otherEffectWrapper.current.hidden = false;
+
+      setTimeout(() => {
+        otherEffectWrapper.current.hidden = true;
+      }, 3000);
+    }
+  }, [event]);
 
   const stopStreamedVideo = () => {
     const stream = myVideo.current.srcObject;
@@ -71,6 +114,20 @@ const VideoChat = () => {
     });
   };
 
+  const handleEmoticonEffect = (event) => {
+    effectRef.current.src = event.target.src;
+    effectWrapperRef.current.hidden = false;
+
+    setTimeout(() => {
+      effectWrapperRef.current.hidden = true;
+    }, 3000);
+
+    socketVideoApi.sendEvent({
+      target: params.roomId,
+      content: event.target.src,
+    });
+  };
+
   return (
     <>
       <VideoChatContainer>
@@ -83,26 +140,35 @@ const VideoChat = () => {
         <VideoWrapper>
           <VideoBox>
             <video autoPlay playsInline muted ref={myVideo} />
-            <UserName>{socketVideo.id}</UserName>
+            <UserName>{currentUser?.name}</UserName>
+            <EffectWrapper hidden ref={effectWrapperRef}>
+              <img ref={effectRef} />
+            </EffectWrapper>
           </VideoBox>
           {peerList.map((connection) => {
             return (
-              <VideoBox key={connection.id}>
+              <VideoBox key={connection.id} data-user={connection.id}>
                 <Video peerConnection={connection.peer} />
-                <UserName>{connection.id}</UserName>
+                <UserName>{participants[connection.id]}</UserName>
+                <EffectWrapper className="otherEffectWrapeer" hidden>
+                  <img className="otherEffect" src={event.content} />
+                </EffectWrapper>
               </VideoBox>
             );
           })}
         </VideoWrapper>
         <EmojiWrapper>
-          <EmojiButton />
-          <EmojiButton />
-          <EmojiButton />
-          <EmojiButton />
-          <EmojiButton />
-          <EmojiButton />
-          <EmojiButton />
-          <EmojiButton />
+          {emoticons.map((emoticonObj) => {
+            return (
+              <EmojiButton key={createKey()} onClick={handleEmoticonEffect}>
+                <img
+                  src={emoticonObj.src}
+                  alt={`${emoticonObj.type}`}
+                  data-src={emoticonObj.src}
+                />
+              </EmojiButton>
+            );
+          })}
         </EmojiWrapper>
       </VideoChatContainer>
     </>
@@ -132,6 +198,7 @@ const VideoBox = styled.div`
   position: relative;
   width: 100%;
   height: 100%;
+
   video {
     width: 600px;
     height: 400px;
@@ -146,12 +213,39 @@ const VideoBox = styled.div`
 
 const UserName = styled.span`
   position: absolute;
-  bottom: 30px;
-  left: 30px;
+  bottom: 25px;
+  left: 25px;
   padding: 5px 15px;
   border-radius: 15px;
   background: var(--orange-color);
   color: var(--white-color);
+  font-size: 30px;
+`;
+
+const slide = keyframes`
+  from {
+      transform: scale(0.2) translateY(0) translateX(0);
+  }
+  to {
+      transform: scale(1.0) translateY(-15px) translateX(-15px);
+  }
+`;
+
+const EffectWrapper = styled.div`
+  position: absolute;
+  width: 70px;
+  height: 70px;
+  bottom: 15px;
+  right: 15px;
+  padding: 15px;
+  border-radius: 15px;
+  background: var(--white-color);
+  box-shadow: 10px 1px 10px 1px #655e584d;
+
+  animation-name: ${slide};
+  animation-duration: 0.5s;
+  animation-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  animation-fill-mode: both;
 `;
 
 const EmojiWrapper = styled.section`
@@ -159,9 +253,9 @@ const EmojiWrapper = styled.section`
   justify-content: center;
   align-items: center;
   width: 100%;
-  height: 100px;
+  height: 70px;
   margin: auto;
-  background: var(--dark-gray-color);
+  background: var(--light-gray-color);
 `;
 
 const EmojiButton = styled.button`
@@ -169,9 +263,14 @@ const EmojiButton = styled.button`
   height: 70px;
   margin-left: 45px;
   margin-right: 45px;
-  border: 2px solid var(--dark-gray-color);
   border-radius: 15%;
   background: var(--dark-grey-shadow-color);
+  transition: all 0.2s;
+
+  :hover {
+    border: 5px solid var(--orange-color);
+    background: var(--white-color);
+  }
 `;
 
 export default VideoChat;
