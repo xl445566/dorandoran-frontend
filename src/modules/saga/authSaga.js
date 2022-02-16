@@ -7,9 +7,13 @@ import { authSliceActions } from "../slice/authSlice";
 const loginSaga = function* ({ payload }) {
   try {
     const response = yield call(() =>
-      axios.post(constants.REQUEST_AUTH_LOGIN, payload, {
-        withCredentials: true,
-      })
+      axios.post(
+        process.env.REACT_APP_SERVER_URI + constants.REQUEST_AUTH_LOGIN,
+        payload,
+        {
+          withCredentials: true,
+        }
+      )
     );
 
     if (response.data.message) {
@@ -25,9 +29,12 @@ const loginSaga = function* ({ payload }) {
 const logoutSaga = function* () {
   try {
     const response = yield call(() =>
-      axios.get(constants.REQUEST_AUTH_LOGOUT, {
-        withCredentials: true,
-      })
+      axios.get(
+        process.env.REACT_APP_SERVER_URI + constants.REQUEST_AUTH_LOGOUT,
+        {
+          withCredentials: true,
+        }
+      )
     );
 
     if (response.data.message) {
@@ -44,9 +51,12 @@ const logoutSaga = function* () {
 const cookieClearSaga = function* () {
   try {
     yield call(() =>
-      axios.get(constants.REQUEST_AUTH_CLEAR, {
-        withCredentials: true,
-      })
+      axios.get(
+        process.env.REACT_APP_SERVER_URI + constants.REQUEST_AUTH_CLEAR,
+        {
+          withCredentials: true,
+        }
+      )
     );
 
     yield put(authSliceActions.cookieClearSuccess());

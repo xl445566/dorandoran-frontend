@@ -7,9 +7,12 @@ import { roomListSliceActions } from "../slice/roomListSlice";
 const getRoomSaga = function* () {
   try {
     const response = yield call(() =>
-      axios.get(constants.REQUEST_ROOMLIST_ROOM, {
-        withCredentials: true,
-      })
+      axios.get(
+        process.env.REACT_APP_SERVER_URI + constants.REQUEST_ROOMLIST_ROOM,
+        {
+          withCredentials: true,
+        }
+      )
     );
 
     if (response.data.message) {
@@ -28,7 +31,7 @@ const getNextRoomSaga = function* ({ payload }) {
     const lastRoom = payload[payload.length - 1];
     const response = yield call(() =>
       axios.post(
-        constants.REQUEST_ROOMLIST_ROOM,
+        process.env.REACT_APP_SERVER_URI + constants.REQUEST_ROOMLIST_ROOM,
         {
           lastRoom,
           direction: "next",
@@ -55,7 +58,7 @@ const getPrevRoomSaga = function* ({ payload }) {
     const lastRoom = payload[payload.length - 1];
     const response = yield call(() =>
       axios.post(
-        constants.REQUEST_ROOMLIST_ROOM,
+        process.env.REACT_APP_SERVER_URI + constants.REQUEST_ROOMLIST_ROOM,
         {
           lastRoom,
           direction: "prev",
@@ -81,7 +84,7 @@ const getRefreshRoomSaga = function* ({ payload }) {
   try {
     const response = yield call(() =>
       axios.post(
-        constants.REQUEST_ROOMLIST_REFRESH,
+        process.env.REACT_APP_SERVER_URI + constants.REQUEST_ROOMLIST_REFRESH,
         {
           roomList: payload,
         },
