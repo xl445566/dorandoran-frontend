@@ -2,14 +2,15 @@ import { eventChannel } from "redux-saga";
 import { take, call, put } from "redux-saga/effects";
 import io from "socket.io-client";
 
+import constants from "../../common/utils/constants";
 import { characterSliceActions } from "../slice/characterSlice";
 import { videoSliceActions } from "../slice/videoSlice";
 
-export const socketCharacter = io("http://localhost:4000/character", {
+export const socketCharacter = io(constants.CONNECT_SOCKET_CHARACTER, {
   withCredentials: true,
 });
 
-export const socketVideo = io("http://localhost:4000/video", {
+export const socketVideo = io(constants.CONNECT_SOCKET_VIDEO, {
   withCredentials: true,
 });
 

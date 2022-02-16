@@ -16,6 +16,9 @@ export const videoSlice = createSlice({
     receiveEvent: (state, action) => {
       state.event = action.payload;
     },
+    clearError: (state) => {
+      state.error = "";
+    },
   },
 });
 

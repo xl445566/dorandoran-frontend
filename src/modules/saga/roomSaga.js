@@ -1,6 +1,7 @@
 import axios from "axios";
 import { call, takeEvery, put } from "redux-saga/effects";
 
+import constants from "../../common/utils/constants";
 import history from "../../common/utils/history";
 import { roomSliceActions } from "../slice/roomSlice";
 
@@ -9,7 +10,7 @@ const joinUserSaga = function* ({ payload }) {
     const { currentRoom, currentUser } = payload;
     const response = yield call(() =>
       axios.post(
-        "http://localhost:4000/rooms/joinedUser",
+        constants.REQUEST_ROOM_JOIN,
         {
           currentRoom,
           currentUser,
@@ -37,7 +38,7 @@ const deleteUserSaga = function* ({ payload }) {
 
     const response = yield call(() =>
       axios.post(
-        "http://localhost:4000/rooms/deleteUser",
+        constants.REQUEST_ROOM_LEAVE,
         {
           currentRoom,
           currentUser,
@@ -64,7 +65,7 @@ const createRoomSaga = function* ({ payload }) {
     let response;
     yield call(async () => {
       response = await axios.post(
-        "http://localhost:4000/rooms/new",
+        constants.REQUEST_ROOM_CREATE,
         {
           roomData: payload,
         },
@@ -84,7 +85,7 @@ const getCurrentRoomInfoSaga = function* ({ payload }) {
   try {
     const response = yield call(() =>
       axios.post(
-        "http://localhost:4000/rooms/detail",
+        constants.REQUEST_ROOM_DETAIL,
         {
           roomId: payload._id,
         },

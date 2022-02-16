@@ -1,6 +1,6 @@
 import React from "react";
 
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 import styled from "styled-components";
 
@@ -10,36 +10,17 @@ import { roomSliceActions } from "../../modules/slice/roomSlice";
 import { videoSliceActions } from "../../modules/slice/videoSlice";
 import constants from "../utils/constants";
 
-const Error = () => {
+const NotFound = () => {
   const history = useHistory();
   const dispatch = useDispatch();
 
-  const authError = useSelector(
-    (state) => state.auth.error.response || state.auth.error
-  );
-  const roomListError = useSelector(
-    (state) => state.roomList.error.response || state.roomList.error
-  );
-  const roomError = useSelector(
-    (state) => state.room.error.response || state.room.error
-  );
-  const videoError = useSelector(
-    (state) => state.video.error.response || state.video.error
-  );
-
-  const handleLoginPage = () => {
+  const handleMainPage = () => {
     dispatch(authSliceActions.clearError());
     dispatch(roomListSliceActions.clearError());
     dispatch(roomSliceActions.clearError());
     dispatch(videoSliceActions.clearError());
     history.push(constants.ROUTE_MAIN);
   };
-
-  const title =
-    authError?.status ||
-    roomListError?.status ||
-    roomError?.status ||
-    videoError?.status;
 
   return (
     <>
@@ -51,13 +32,13 @@ const Error = () => {
               alt="에러를 표시하는, 물에 빠지는 로고"
             />
           </TitleImg>
-          <Title>{title}</Title>
+          <Title>404</Title>
           <SubTitle>
-            <p>에러가 발생했습니다.</p>
+            <p>페이지를 찾을 수 없습니다.</p>
             <p>메인 페이지로 이동하시겠습니까 ?</p>
             <p>로그인을 하지 않았을 경우, 로그인 페이지로 이동합니다.</p>
           </SubTitle>
-          <Button onClick={handleLoginPage}>메인 페이지로</Button>
+          <Button onClick={handleMainPage}>메인 페이지로</Button>
         </Section>
       </Main>
     </>
@@ -112,11 +93,12 @@ const Button = styled.button`
   color: var(--white-color);
   font-size: 35px;
   font-weight: 500;
+  transition: all 0.2s;
 
   :hover {
-    background: var(--orange-color);
+    background: var(--dark-gray-color);
     color: var(--white-color);
   }
 `;
 
-export default Error;
+export default NotFound;

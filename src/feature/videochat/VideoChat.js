@@ -6,6 +6,7 @@ import styled, { keyframes } from "styled-components";
 
 import Header from "../../common/components/Header";
 import useConnection from "../../common/hooks/useConnection";
+import constants from "../../common/utils/constants";
 import createKey from "../../common/utils/createKey";
 import { makeEmoticons } from "../../common/utils/makeRoomResource";
 import {
@@ -29,10 +30,8 @@ const VideoChat = () => {
 
   const { participants, peerList, myVideo } = useConnection(
     params.roomId,
-    currentUser.name
+    currentUser?.name
   );
-
-  console.log("참가자 :", participants);
 
   const effectRef = useRef();
   const effectWrapperRef = useRef();
@@ -43,14 +42,42 @@ const VideoChat = () => {
   const emoticons = makeEmoticons();
 
   useEffect(() => {
-    if (error) {
-      history.push("/error");
+    if (error || !currentUser) {
+      history.push(constants.ROUTE_ERROR);
     }
 
     if (!isLoggedIn) {
-      history.push("/");
+      history.push(constants.ROUTE_MAIN);
     }
-  }, [error, isLoggedIn]);
+
+    return () => {
+      stopStreamedVideo();
+    };
+  }, [error, isLoggedIn, currentUser]);
+
+  useEffect(() => {
+    let index = false;
+
+    for (let i = 0; i < peerList.length; i++) {
+      if (peerList[i].id === event.sender) {
+        index = i;
+      }
+    }
+
+    if (index > -1 && index !== false) {
+      otherEffectWrapper.current =
+        document.getElementsByClassName("otherEffectWrapeer")[index];
+
+      otherEffect.current =
+        document.getElementsByClassName("otherEffectWrapeer")[index];
+
+      otherEffectWrapper.current.hidden = false;
+
+      setTimeout(() => {
+        otherEffectWrapper.current.hidden = true;
+      }, 3000);
+    }
+  }, [event]);
 
   const stopStreamedVideo = () => {
     const stream = myVideo.current.srcObject;
@@ -87,30 +114,6 @@ const VideoChat = () => {
     });
   };
 
-  useEffect(() => {
-    let index = false;
-
-    for (let i = 0; i < peerList.length; i++) {
-      if (peerList[i].id === event.sender) {
-        index = i;
-      }
-    }
-
-    if (index > -1 && index !== false) {
-      otherEffectWrapper.current =
-        document.getElementsByClassName("otherEffectWrapeer")[index];
-
-      otherEffect.current =
-        document.getElementsByClassName("otherEffectWrapeer")[index];
-
-      otherEffectWrapper.current.hidden = false;
-
-      setTimeout(() => {
-        otherEffectWrapper.current.hidden = true;
-      }, 3000);
-    }
-  }, [event]);
-
   const handleEmoticonEffect = (event) => {
     effectRef.current.src = event.target.src;
     effectWrapperRef.current.hidden = false;
@@ -137,16 +140,16 @@ const VideoChat = () => {
         <VideoWrapper>
           <VideoBox>
             <video autoPlay playsInline muted ref={myVideo} />
-            <UserName>{currentUser.name}</UserName>
+            <UserName>{currentUser?.name}</UserName>
             <EffectWrapper hidden ref={effectWrapperRef}>
               <img ref={effectRef} />
             </EffectWrapper>
           </VideoBox>
-          {peerList.map((connection, index) => {
+          {peerList.map((connection) => {
             return (
               <VideoBox key={connection.id} data-user={connection.id}>
                 <Video peerConnection={connection.peer} />
-                <UserName>{participants[index]}</UserName>
+                <UserName>{participants[connection.id]}</UserName>
                 <EffectWrapper className="otherEffectWrapeer" hidden>
                   <img className="otherEffect" src={event.content} />
                 </EffectWrapper>

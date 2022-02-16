@@ -1,7 +1,8 @@
 import { configureStore } from "@reduxjs/toolkit";
-// import logger from "redux-logger";
+import logger from "redux-logger";
 import createSagaMiddleware from "redux-saga";
 
+import constants from "../common/utils/constants";
 import authSlice from "../modules/slice/authSlice";
 import characterSlice from "../modules/slice/characterSlice";
 import roomListSlice from "../modules/slice/roomListSlice";
@@ -21,7 +22,10 @@ const createStore = () => {
       video: videoSlice.reducer,
     },
     devTools: true,
-    middleware: [sagaMiddleware],
+    middleware:
+      process.env.NODE_ENV === constants.DEV
+        ? [sagaMiddleware, logger]
+        : [sagaMiddleware],
   });
 
   sagaMiddleware.run(rootSaga);

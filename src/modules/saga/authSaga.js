@@ -1,15 +1,17 @@
 import axios from "axios";
 import { call, takeEvery, put } from "redux-saga/effects";
 
+import constants from "../../common/utils/constants";
 import { authSliceActions } from "../slice/authSlice";
 
 const loginSaga = function* ({ payload }) {
   try {
     const response = yield call(() =>
-      axios.post("http://localhost:4000/auth/login", payload, {
+      axios.post(constants.REQUEST_AUTH_LOGIN, payload, {
         withCredentials: true,
       })
     );
+
     if (response.data.message) {
       yield put(authSliceActions.loginFailure(response.data));
       return;
@@ -23,7 +25,7 @@ const loginSaga = function* ({ payload }) {
 const logoutSaga = function* () {
   try {
     const response = yield call(() =>
-      axios.get("http://localhost:4000/auth/logout", {
+      axios.get(constants.REQUEST_AUTH_LOGOUT, {
         withCredentials: true,
       })
     );
@@ -42,7 +44,7 @@ const logoutSaga = function* () {
 const cookieClearSaga = function* () {
   try {
     yield call(() =>
-      axios.get("http://localhost:4000/auth/", {
+      axios.get(constants.REQUEST_AUTH_CLEAR, {
         withCredentials: true,
       })
     );

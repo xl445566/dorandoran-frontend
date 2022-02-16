@@ -6,6 +6,7 @@ import styled from "styled-components";
 
 import Header from "../../common/components/Header";
 import { useCharacter } from "../../common/hooks/useCharacter";
+import constants from "../../common/utils/constants";
 import createKey from "../../common/utils/createKey";
 import { socketCharacterApi } from "../../modules/api/socketApi";
 import { authSliceActions } from "../../modules/slice/authSlice";
@@ -68,11 +69,11 @@ const Room = () => {
 
   useEffect(() => {
     if (error) {
-      history.push("/error");
+      history.push(constants.ROUTE_ERROR);
     }
 
     if (!isLoggedIn) {
-      history.push("/");
+      history.push(constants.ROUTE_MAIN);
     }
 
     if (char.isChatting) {

@@ -7,6 +7,7 @@ import styled from "styled-components";
 
 import Header from "../../common/components/Header";
 import Modal from "../../common/components/modal/Modal";
+import constants from "../../common/utils/constants";
 import { authSliceActions } from "../../modules/slice/authSlice";
 import { roomListSliceActions } from "../../modules/slice/roomListSlice";
 import { roomSliceActions } from "../../modules/slice/roomSlice";
@@ -37,11 +38,11 @@ const Rooms = () => {
     }
 
     if (error) {
-      history.push("/error");
+      history.push(constants.ROUTE_ERROR);
     }
 
     if (!isLoggedIn) {
-      history.push("/");
+      history.push(constants.ROUTE_MAIN);
     }
   }, [isComplete, error, isLoggedIn]);
 
@@ -92,7 +93,7 @@ const Rooms = () => {
         rightOnClick={handleLogout}
         title={`${currentAddress} 노인정`}
         text="방 만들기"
-        size="small"
+        size={constants.SIZE_S}
         type="refresh"
       />
       <MainBody>

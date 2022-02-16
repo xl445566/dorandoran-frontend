@@ -5,6 +5,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { Switch, Route, useHistory, Router } from "react-router-dom";
 
 import Error from "../common/components/Error";
+import NotFound from "../common/components/NotFound";
+import constants from "../common/utils/constants";
 import history from "../common/utils/history";
 import Login from "../feature/auth/Login";
 import Room from "../feature/room/Room";
@@ -24,7 +26,7 @@ function App() {
   useEffect(() => {
     if (!user) {
       dispatch(authSliceActions.cookieClear());
-      routerHistory.push("/");
+      routerHistory.push(constants.ROUTE_MAIN);
     }
   }, [user]);
 
@@ -32,17 +34,20 @@ function App() {
     <>
       <Router history={history}>
         <Switch>
-          <Route path="/" exact>
+          <Route path={constants.ROUTE_MAIN} exact>
             {user && user.name ? <Rooms /> : <Login />}
           </Route>
-          <Route path="/room/:roomId">
+          <Route path={constants.ROUTE_ROOM}>
             <Room />
           </Route>
-          <Route path="/video/:roomId">
+          <Route path={constants.ROUTE_VIDEO}>
             <VideoChat />
           </Route>
-          <Route path="/error">
+          <Route path={constants.ROUTE_ERROR}>
             <Error />
+          </Route>
+          <Route path={constants.ROUTE_NOTFOUND}>
+            <NotFound />
           </Route>
         </Switch>
       </Router>
