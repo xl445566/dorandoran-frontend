@@ -12,11 +12,8 @@ import { authSliceActions } from "../../modules/slice/authSlice";
 import { roomListSliceActions } from "../../modules/slice/roomListSlice";
 import { roomSliceActions } from "../../modules/slice/roomSlice";
 import Character from "./Character";
-<<<<<<< HEAD
-=======
 import mapSpots from "./resource/mapSpot";
 
->>>>>>> main
 const Room = () => {
   const char = useCharacter();
   const [moveCount, setMoveCount] = useState(0);
@@ -186,10 +183,7 @@ const Room = () => {
                 name={character.name}
                 type={character.type}
                 profile={character.profile}
-<<<<<<< HEAD
                 chairZone={char.chairZone}
-=======
->>>>>>> main
               />
             );
           })}
