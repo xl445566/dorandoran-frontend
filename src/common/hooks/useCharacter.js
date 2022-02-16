@@ -1,18 +1,13 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
-import mapSpots from "../utils/mapSpot";
+import mapSpots from "../../feature/room/resource/mapSpot";
 import { randomPos } from "../utils/randomPos";
-
-export const useCharacter = (username) => {
+export const useCharacter = () => {
   const [pos, setPos] = useState(randomPos(mapSpots));
+
   const [side, setSide] = useState("down");
-  const [name, setName] = useState(username);
   const [isChatting, setIsChatting] = useState(false);
   const [chairZone, setChairZone] = useState("");
-
-  useEffect(() => {
-    setName(username);
-  }, [username]);
 
   const moveLeft = () => {
     setPos((pos) => ({
@@ -85,7 +80,6 @@ export const useCharacter = (username) => {
   };
 
   return {
-    name,
     x: pos.x,
     y: pos.y,
     side,

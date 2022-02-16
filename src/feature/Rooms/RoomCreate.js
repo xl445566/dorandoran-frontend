@@ -25,7 +25,7 @@ const RoomCreate = ({ isShow, handleModalShowChange }) => {
     if (isComplete && roomInfo) {
       history.push(`/room/${roomInfo._id}`);
 
-      dispatch(roomSliceActions.changeIsComplted());
+      dispatch(roomSliceActions.changeIsCompleted());
 
       socketCharacterApi.enterRoom({
         roomId: roomInfo._id,

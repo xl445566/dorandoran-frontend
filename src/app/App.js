@@ -4,6 +4,7 @@ import { useBeforeunload } from "react-beforeunload";
 import { useDispatch, useSelector } from "react-redux";
 import { Switch, Route, useHistory, Router } from "react-router-dom";
 
+import Error from "../common/components/Error";
 import history from "../common/utils/history";
 import Login from "../feature/auth/Login";
 import Room from "../feature/room/Room";
@@ -41,8 +42,7 @@ function App() {
             <VideoChat />
           </Route>
           <Route path="/error">
-            <h1>에러페이지</h1>
-            <p>에러내용</p>
+            <Error />
           </Route>
         </Switch>
       </Router>
