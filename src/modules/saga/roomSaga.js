@@ -10,7 +10,7 @@ const joinUserSaga = function* ({ payload }) {
     const { currentRoom, currentUser } = payload;
     const response = yield call(() =>
       axios.post(
-        constants.REQUEST_ROOM_JOIN,
+        process.env.REACT_APP_SERVER_URI + constants.REQUEST_ROOM_JOIN,
         {
           currentRoom,
           currentUser,
@@ -38,7 +38,7 @@ const deleteUserSaga = function* ({ payload }) {
 
     const response = yield call(() =>
       axios.post(
-        constants.REQUEST_ROOM_LEAVE,
+        process.env.REACT_APP_SERVER_URI + constants.REQUEST_ROOM_LEAVE,
         {
           currentRoom,
           currentUser,
@@ -65,7 +65,7 @@ const createRoomSaga = function* ({ payload }) {
     let response;
     yield call(async () => {
       response = await axios.post(
-        constants.REQUEST_ROOM_CREATE,
+        process.env.REACT_APP_SERVER_URI + constants.REQUEST_ROOM_CREATE,
         {
           roomData: payload,
         },
@@ -85,7 +85,7 @@ const getCurrentRoomInfoSaga = function* ({ payload }) {
   try {
     const response = yield call(() =>
       axios.post(
-        constants.REQUEST_ROOM_DETAIL,
+        process.env.REACT_APP_SERVER_URI + constants.REQUEST_ROOM_DETAIL,
         {
           roomId: payload._id,
         },
