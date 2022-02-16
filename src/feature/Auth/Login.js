@@ -23,6 +23,7 @@ const Login = () => {
 
   const handleLogin = () => {
     dispatch(authSliceActions.cookieClear());
+
     window.Kakao.Auth.login({
       scope,
       success: async (response) => {
