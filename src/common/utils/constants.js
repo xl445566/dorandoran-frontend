@@ -22,7 +22,7 @@ const constants = {
   REQUEST_AUTH_LOGOUT: "/auth/logout",
   REQUEST_AUTH_CLEAR: "/auth",
   REQUEST_ROOMLIST_ROOM: "/rooms",
-  REQUEST_ROOMLIST_REFRESH: "/refresh",
+  REQUEST_ROOMLIST_REFRESH: "/rooms/refresh",
   REQUEST_ROOM_JOIN: "/rooms/joinedUser",
   REQUEST_ROOM_LEAVE: "/rooms/deleteUser",
   REQUEST_ROOM_CREATE: "/rooms/new",
