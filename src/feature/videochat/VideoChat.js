@@ -76,6 +76,7 @@ const VideoChat = () => {
   }, [event]);
 
   const handleRoomPage = () => {
+    socketCharacterApi.exitChattingRoom(getPositionParams, params.roomId);
     stopStreamedVideo(myVideo.current);
 
     socketCharacterApi.exitChattingRoom(getPositionParams);
@@ -83,6 +84,7 @@ const VideoChat = () => {
   };
 
   const handleLogout = () => {
+    socketCharacterApi.exitChattingRoom(getPositionParams, params.roomId);
     stopStreamedVideo(myVideo.current);
 
     window.Kakao.API.request({
