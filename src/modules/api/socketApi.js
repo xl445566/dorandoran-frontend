@@ -17,11 +17,11 @@ export const socketCharacterApi = {
   exitUser: () => {
     socketCharacter.emit("exitUser");
   },
-  enterChattingRoom: (posIndex, x, y) => {
-    socketCharacter.emit("enterChattingRoom", posIndex, x, y);
+  enterChattingRoom: (posIndex, x, y, roomId) => {
+    socketCharacter.emit("enterChattingRoom", posIndex, x, y, roomId);
   },
-  exitChattingRoom: (posIndex, roomId) => {
-    socketCharacter.emit("exitChattingRoom", posIndex, roomId);
+  exitChattingRoom: (posIndex) => {
+    socketCharacter.emit("exitChattingRoom", posIndex);
   },
 };
 
