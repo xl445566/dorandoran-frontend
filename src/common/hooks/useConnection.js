@@ -19,6 +19,7 @@ const useConnection = (roomId, userName) => {
       try {
         const stream = await navigator.mediaDevices.getUserMedia({
           video: true,
+          audio: true,
         });
 
         myVideo.current.srcObject = stream;

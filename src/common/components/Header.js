@@ -40,11 +40,11 @@ const HeaderContainer = styled.header`
   display: flex;
   justify-content: space-around;
   align-items: center;
-  height: 10%;
+  height: 115px;
 `;
 
 const Title = styled.h1`
-  padding: 0 6px;
+  padding: 0 5px;
   border-bottom: 3px solid var(--scarlet-color);
 `;
 
