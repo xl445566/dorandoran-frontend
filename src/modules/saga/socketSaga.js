@@ -2,17 +2,25 @@ import { eventChannel } from "redux-saga";
 import { take, call, put } from "redux-saga/effects";
 import io from "socket.io-client";
 
-import constants from "../../common/utils/constants";
 import { characterSliceActions } from "../slice/characterSlice";
 import { videoSliceActions } from "../slice/videoSlice";
 
 export const socketCharacter = io(
-  `${process.env.REACT_APP_SERVER_URI}${constants.CONNECT_SOCKET_CHARACTER}`
+  `${process.env.REACT_APP_SERVER_URI}/character`,
+  {
+    transports: ["websocket"],
+    cors: {
+      origin: `${process.env.REACT_APP_SERVER_URI}/character`,
+    },
+  }
 );
 
-export const socketVideo = io(
-  `${process.env.REACT_APP_SERVER_URI}${constants.CONNECT_SOCKET_VIDEO}`
-);
+export const socketVideo = io(`${process.env.REACT_APP_SERVER_URI}/video`, {
+  transports: ["websocket"],
+  cors: {
+    origin: `${process.env.REACT_APP_SERVER_URI}/video`,
+  },
+});
 
 const createSocketCharacterChannel = (socketCharacter) => {
   return eventChannel((emit) => {
