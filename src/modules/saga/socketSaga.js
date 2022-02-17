@@ -7,17 +7,11 @@ import { characterSliceActions } from "../slice/characterSlice";
 import { videoSliceActions } from "../slice/videoSlice";
 
 export const socketCharacter = io(
-  process.env.REACT_APP_SERVER_URI + constants.CONNECT_SOCKET_CHARACTER,
-  {
-    withCredentials: true,
-  }
+  `${process.env.REACT_APP_SERVER_URI}${constants.CONNECT_SOCKET_CHARACTER}`
 );
 
 export const socketVideo = io(
-  process.env.REACT_APP_SERVER_URI + constants.CONNECT_SOCKET_VIDEO,
-  {
-    withCredentials: true,
-  }
+  `${process.env.REACT_APP_SERVER_URI}${constants.CONNECT_SOCKET_VIDEO}`
 );
 
 const createSocketCharacterChannel = (socketCharacter) => {
@@ -33,6 +27,7 @@ const createSocketCharacterChannel = (socketCharacter) => {
     socketCharacter.on("setCurrentUserPosition", (userPosition) => {
       emit(characterSliceActions.doNotComeChair(userPosition));
     });
+
     return () => {
       socketCharacter.off("setCharacters");
       socketCharacter.off("setChairPosition");
