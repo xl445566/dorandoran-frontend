@@ -203,7 +203,7 @@ const Main = styled.main`
 
 const MapWrapper = styled.section`
   position: relative;
-  height: 800px;
+  height: 1000px;
 `;
 
 const Map = styled.div`
