@@ -49,10 +49,6 @@ const VideoChat = () => {
     if (!isLoggedIn) {
       history.push(constants.ROUTE_MAIN);
     }
-
-    return () => {
-      stopStreamedVideo();
-    };
   }, [error, isLoggedIn, currentUser]);
 
   useEffect(() => {
@@ -79,25 +75,15 @@ const VideoChat = () => {
     }
   }, [event]);
 
-  const stopStreamedVideo = () => {
-    const stream = myVideo.current.srcObject;
-    const tracks = stream.getTracks();
-
-    tracks.forEach((track) => {
-      track.stop();
-    });
-
-    myVideo.current.srcObject = null;
-  };
-
   const handleRoomPage = () => {
-    stopStreamedVideo();
+    stopStreamedVideo(myVideo.current);
+
     socketCharacterApi.exitChattingRoom(getPositionParams);
     history.push(`/room/${params.roomId}`);
   };
 
   const handleLogout = () => {
-    stopStreamedVideo();
+    stopStreamedVideo(myVideo.current);
 
     window.Kakao.API.request({
       url: "/v1/user/unlink",
@@ -114,12 +100,25 @@ const VideoChat = () => {
     });
   };
 
+  const stopStreamedVideo = (videoEl) => {
+    const stream = videoEl.srcObject;
+    const tracks = stream.getTracks();
+
+    tracks.forEach((track) => {
+      track.stop();
+    });
+
+    videoEl.srcObject = null;
+  };
+
   const handleEmoticonEffect = (event) => {
     effectRef.current.src = event.target.src;
     effectWrapperRef.current.hidden = false;
 
     setTimeout(() => {
-      effectWrapperRef.current.hidden = true;
+      if (effectWrapperRef.current) {
+        effectWrapperRef.current.hidden = true;
+      }
     }, 3000);
 
     socketVideoApi.sendEvent({
