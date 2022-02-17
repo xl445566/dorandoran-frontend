@@ -127,6 +127,10 @@ const MainBody = styled.section`
 `;
 const Pagination = styled.div`
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
+
+  button {
+    padding: 50px;
+  }
 `;
 export default Rooms;
