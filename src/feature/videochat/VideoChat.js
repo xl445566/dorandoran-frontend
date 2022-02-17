@@ -76,16 +76,15 @@ const VideoChat = () => {
   }, [event]);
 
   const handleRoomPage = () => {
-    socketCharacterApi.exitChattingRoom(getPositionParams);
     stopStreamedVideo(myVideo.current);
-
     socketCharacterApi.exitChattingRoom(getPositionParams);
+
     history.push(`/room/${params.roomId}`);
   };
 
   const handleLogout = () => {
-    socketCharacterApi.exitChattingRoom(getPositionParams);
     stopStreamedVideo(myVideo.current);
+    socketCharacterApi.exitChattingRoom(getPositionParams);
 
     window.Kakao.API.request({
       url: "/v1/user/unlink",
