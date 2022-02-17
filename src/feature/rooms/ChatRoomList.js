@@ -26,9 +26,10 @@ const ChatRoomList = ({ roomList }) => {
 
 const ChatRoomContainer = styled.ul`
   display: grid;
-  grid-template-columns: repeat(3, minmax(3vw, auto));
+  grid-template-columns: repeat(3, 320px);
+  grid-template-row: repeat(2, 320px);
   gap: 10px;
-  width: 80%;
+  width: 100%;
 `;
 
 export default ChatRoomList;

@@ -80,7 +80,7 @@ const slideDown = keyframes`
 const ChatRoom = styled.li`
   border: 1px solid var(--light-grey-shadow-color);
   border-radius: 15px;
-  background: var(--white-color);
+  background: var(--light-gray-color);
   box-shadow: 10px 1px 10px 1px #655e584d;
   overflow: hidden;
   cursor: pointer;
@@ -89,8 +89,13 @@ const ChatRoom = styled.li`
   animation-name: ${slideUp};
   animation-fill-mode: both;
 
+  .img-container {
+    height: 50%;
+  }
   .text-container {
+    height: 50%;
     padding: 8px;
+    padding-bottom: 16px;
     background-color: var(--white-color);
   }
 
