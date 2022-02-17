@@ -27,8 +27,6 @@ const constants = {
   REQUEST_ROOM_LEAVE: "/rooms/deleteUser",
   REQUEST_ROOM_CREATE: "/rooms/new",
   REQUEST_ROOM_DETAIL: "/rooms/detail",
-  CONNECT_SOCKET_CHARACTER: "/character",
-  CONNECT_SOCKET_VIDEO: "/video",
 };
 
 export default constants;
