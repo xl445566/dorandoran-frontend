@@ -8,7 +8,7 @@ const loginSaga = function* ({ payload }) {
   try {
     const uri = process.env.REACT_APP_SERVER_URI + constants.REQUEST_AUTH_LOGIN;
 
-    console.log(uri);
+    console.log("hello, world: ", uri);
 
     const response = yield call(() =>
       axios.post(uri, payload, {
