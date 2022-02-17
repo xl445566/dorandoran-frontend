@@ -6,14 +6,14 @@ import { authSliceActions } from "../slice/authSlice";
 
 const loginSaga = function* ({ payload }) {
   try {
+    const uri = process.env.REACT_APP_SERVER_URI + constants.REQUEST_AUTH_LOGIN;
+
+    console.log(uri);
+
     const response = yield call(() =>
-      axios.post(
-        process.env.REACT_APP_SERVER_URI + constants.REQUEST_AUTH_LOGIN,
-        payload,
-        {
-          withCredentials: true,
-        }
-      )
+      axios.post(uri, payload, {
+        withCredentials: true,
+      })
     );
 
     if (response.data.message) {
