@@ -119,7 +119,7 @@ const RoomCreateWrapper = styled.div`
 
     .userSubject {
       width: 40%;
-      border-bottom: 3px solid var(--dark-gray-color);
+      border-bottom: 3px solid var(--light-gray-color);
       font-weight: 400;
     }
   }

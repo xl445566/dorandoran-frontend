@@ -171,23 +171,25 @@ const Room = () => {
           text="방 리스트로 가기"
           leftOnClick={handleRoomsPage}
         />
-        <Section>
-          {characters.map((character) => {
-            return (
-              <Character
-                key={createKey()}
-                count={character.moveCount}
-                isChatting={character.isChatting}
-                x={character.x}
-                y={character.y}
-                side={character.side}
-                name={character.name}
-                type={character.type}
-                profile={character.profile}
-              />
-            );
-          })}
-        </Section>
+        <MapWrapper>
+          <Map>
+            {characters.map((character) => {
+              return (
+                <Character
+                  key={createKey()}
+                  count={character.moveCount}
+                  isChatting={character.isChatting}
+                  x={character.x}
+                  y={character.y}
+                  side={character.side}
+                  name={character.name}
+                  type={character.type}
+                  profile={character.profile}
+                />
+              );
+            })}
+          </Map>
+        </MapWrapper>
       </Main>
     </>
   );
@@ -199,7 +201,12 @@ const Main = styled.main`
   background: var(--light-gray-color);
 `;
 
-const Section = styled.section`
+const MapWrapper = styled.section`
+  position: relative;
+  height: 1000px;
+`;
+
+const Map = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;

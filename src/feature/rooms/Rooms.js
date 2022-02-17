@@ -118,7 +118,7 @@ const Entry = styled.main`
 `;
 const MainBody = styled.section`
   display: flex;
-  height: 90%;
+  padding-top: 50px;
   align-items: center;
   justify-content: space-around;
   .icon {

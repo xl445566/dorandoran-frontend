@@ -251,7 +251,7 @@ const EmojiWrapper = styled.section`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 100%;
+  width: 1400px;
   height: 70px;
   margin: auto;
   background: var(--light-gray-color);
