@@ -12,7 +12,7 @@ const constants = {
   SIZE_M: "medium",
   SIZE_L: "large",
   ASSET_CHARACTERS: "/assets/characters/",
-  ASSET_REFRESH: "/assets/refresh.png",
+  ASSET_REFRESH: "/assets/refresh.svg",
   ASSET_LOGO: "/assets/logo.svg",
   ASSET_ERROR_LOGO: "/assets/logo/error_logo.svg",
   ASSET_LOGIN_BACKGROUND: "/assets/cards/card12.png",
