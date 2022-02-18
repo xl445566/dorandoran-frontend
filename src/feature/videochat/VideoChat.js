@@ -61,11 +61,12 @@ const VideoChat = () => {
     }
 
     if (index > -1 && index !== false) {
-      otherEffectWrapper.current =
-        document.getElementsByClassName("otherEffectWrapeer")[index];
+      otherEffectWrapper.current = document.getElementsByClassName(
+        "other-effect-wrapeer"
+      )[index];
 
       otherEffect.current =
-        document.getElementsByClassName("otherEffectWrapeer")[index];
+        document.getElementsByClassName("other-effect")[index];
 
       otherEffectWrapper.current.hidden = false;
 
@@ -150,8 +151,8 @@ const VideoChat = () => {
               <VideoBox key={connection.id} data-user={connection.id}>
                 <Video peerConnection={connection.peer} />
                 <UserName>{participants[connection.id]}</UserName>
-                <EffectWrapper className="otherEffectWrapeer" hidden>
-                  <img className="otherEffect" src={event.content} />
+                <EffectWrapper className="other-effect-wrapeer" hidden>
+                  <img className="other-effect" src={event.content} />
                 </EffectWrapper>
               </VideoBox>
             );
