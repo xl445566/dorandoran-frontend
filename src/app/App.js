@@ -8,9 +8,9 @@ import Error from "../common/components/Error";
 import NotFound from "../common/components/NotFound";
 import constants from "../common/utils/constants";
 import history from "../common/utils/history";
-import Login from "../feature/Auth/Login";
+import Login from "../feature/auth/Login";
 import Room from "../feature/room/Room";
-import Rooms from "../feature/Rooms/Rooms";
+import Rooms from "../feature/rooms/Rooms";
 import VideoChat from "../feature/videochat/VideoChat";
 import { authSliceActions } from "../modules/slice/authSlice";
 
