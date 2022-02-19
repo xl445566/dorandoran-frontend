@@ -3,13 +3,23 @@ import { take, call, put } from "redux-saga/effects";
 import io from "socket.io-client";
 
 import { characterSliceActions } from "../slice/characterSlice";
+import { videoSliceActions } from "../slice/videoSlice";
 
-export const socketCharacter = io("http://localhost:4000/character", {
-  withCredentials: true,
-});
+export const socketCharacter = io(
+  `${process.env.REACT_APP_SERVER_URI}/character`,
+  {
+    transports: ["websocket"],
+    cors: {
+      origin: `${process.env.REACT_APP_SERVER_URI}/character`,
+    },
+  }
+);
 
-export const socketVideo = io("http://localhost:4000/video", {
-  withCredentials: true,
+export const socketVideo = io(`${process.env.REACT_APP_SERVER_URI}/video`, {
+  transports: ["websocket"],
+  cors: {
+    origin: `${process.env.REACT_APP_SERVER_URI}/video`,
+  },
 });
 
 const createSocketCharacterChannel = (socketCharacter) => {
@@ -25,6 +35,7 @@ const createSocketCharacterChannel = (socketCharacter) => {
     socketCharacter.on("setCurrentUserPosition", (userPosition) => {
       emit(characterSliceActions.doNotComeChair(userPosition));
     });
+
     return () => {
       socketCharacter.off("setCharacters");
       socketCharacter.off("setChairPosition");
@@ -35,6 +46,28 @@ const createSocketCharacterChannel = (socketCharacter) => {
 
 export const watchSocketCharacterSaga = function* () {
   const channel = yield call(createSocketCharacterChannel, socketCharacter);
+
+  while (true) {
+    const action = yield take(channel);
+
+    yield put(action);
+  }
+};
+
+const createSocketVideoChannel = (socketVideo) => {
+  return eventChannel((emit) => {
+    socketVideo.on("receiveEvent", (payload) => {
+      emit(videoSliceActions.receiveEvent(payload));
+    });
+
+    return () => {
+      socketVideo.off("receiveEvent");
+    };
+  });
+};
+
+export const watchSocketVideoSaga = function* () {
+  const channel = yield call(createSocketVideoChannel, socketVideo);
 
   while (true) {
     const action = yield take(channel);

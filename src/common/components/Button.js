@@ -2,20 +2,22 @@ import React from "react";
 
 import styled from "styled-components";
 
+import constants from "../utils/constants";
+
 const Button = ({ onClick, text, type, size }) => {
   return (
     <>
-      {size === "small" && (
+      {size === constants.SIZE_S && (
         <Small onClick={onClick} type={type}>
           {text}
         </Small>
       )}
-      {size === "medium" && (
+      {size === constants.SIZE_M && (
         <Medium onClick={onClick} type={type}>
           {text}
         </Medium>
       )}
-      {size === "large" && (
+      {size === constants.SIZE_L && (
         <Large onClick={onClick} type={type}>
           {text}
         </Large>

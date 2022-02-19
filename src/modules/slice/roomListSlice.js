@@ -31,9 +31,7 @@ export const roomSlice = createSlice({
       state.isLoading = false;
       state.roomList = action.payload;
     },
-    allInit: (state) => {
-      state.isLoading = false;
-      state.roomList = [];
+    clearError: (state) => {
       state.error = "";
     },
   },

@@ -9,9 +9,6 @@ export const authSlice = createSlice({
     character: [],
   },
   reducers: {
-    test: (state) => {
-      state.error = "";
-    },
     cookieClear: (state) => {
       state.error = "";
       state.isLoggedIn = false;
@@ -48,11 +45,8 @@ export const authSlice = createSlice({
       state.isLoggedIn = true;
       state.error = action.payload;
     },
-    allInit: (state) => {
-      state.isLoggedIn = false;
+    clearError: (state) => {
       state.error = "";
-      state.user = null;
-      state.character = [];
     },
   },
 });
