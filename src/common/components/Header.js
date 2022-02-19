@@ -18,6 +18,7 @@ const Header = ({
   return (
     <HeaderContainer>
       <Button
+        data-testid={constants.SIZE_M}
         text={text ? text : null}
         size={constants.SIZE_M}
         onClick={leftOnClick}
