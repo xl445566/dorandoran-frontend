@@ -5,6 +5,7 @@ export const randomPos = (mapSpots) => {
     const x = Math.floor(Math.random() * 22) + 1;
     if (mapSpots[y][x] === 1) {
       isFinish = false;
+
       return {
         x,
         y,
