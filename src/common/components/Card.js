@@ -40,7 +40,7 @@ const Card = ({ roomInfo }) => {
 
   return (
     <>
-      <ChatRoom onClick={joinedUser}>
+      <ChatRoom data-testid="chatRoom" onClick={joinedUser}>
         <div className="img-container">
           <img src={images[0]} alt={images[1]} />
         </div>

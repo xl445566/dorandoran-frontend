@@ -6,17 +6,17 @@ const Button = ({ onClick, text, type, size }) => {
   return (
     <>
       {size === "small" && (
-        <Small onClick={onClick} type={type}>
+        <Small data-testid="small" onClick={onClick} type={type}>
           {text}
         </Small>
       )}
       {size === "medium" && (
-        <Medium onClick={onClick} type={type}>
+        <Medium data-testid="medium" onClick={onClick} type={type}>
           {text}
         </Medium>
       )}
       {size === "large" && (
-        <Large onClick={onClick} type={type}>
+        <Large data-testid="large" onClick={onClick} type={type}>
           {text}
         </Large>
       )}

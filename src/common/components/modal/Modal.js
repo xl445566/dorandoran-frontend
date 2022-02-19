@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 
+import PropTypes from "prop-types";
 import styled from "styled-components";
 
 const Modal = ({ size, children }) => {
@@ -18,7 +19,7 @@ const Modal = ({ size, children }) => {
         {!size ? (
           <Container>{children}</Container>
         ) : (
-          <SmallContainer>{children}</SmallContainer>
+          <SmallContainer data-testid="small">{children}</SmallContainer>
         )}
       </ModalWrapper>
     </>
@@ -83,3 +84,8 @@ const SmallContainer = styled.div`
   overflow: hidden;
   z-index: 10;
 `;
+
+Modal.propTypes = {
+  size: PropTypes.string,
+  children: PropTypes.object,
+};

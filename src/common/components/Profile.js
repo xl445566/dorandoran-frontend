@@ -5,7 +5,7 @@ import styled from "styled-components";
 
 const Profile = ({ type, text, left, top }) => {
   return (
-    <Container left={left} top={top}>
+    <Container data-testid="profile" left={left} top={top}>
       <ProfileImageWrapper>
         <img src={type} alt="카카오톡 프로필 이미지" />
       </ProfileImageWrapper>

@@ -16,7 +16,12 @@ const Header = ({
 }) => {
   return (
     <HeaderContainer>
-      <Button text={text ? text : null} size="medium" onClick={leftOnClick} />
+      <Button
+        data-testid="medium"
+        text={text ? text : null}
+        size="medium"
+        onClick={leftOnClick}
+      />
       <RoomInfo>
         <Button
           type={type}

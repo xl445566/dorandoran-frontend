@@ -67,7 +67,7 @@ const Login = () => {
           <Title>
             도란
             <LogoImage>
-              <img src="/assets/logo.svg" alt="logo" />
+              <img data-testid="img" src="/assets/logo.svg" alt="logo" />
             </LogoImage>
             도란
           </Title>
@@ -85,7 +85,7 @@ const Login = () => {
               </p>
               <RefreshButton onClick={handleReload}>
                 <span className="refreshImage">
-                  <img src="/assets/refresh.png" alt="새로고침 이미지" />
+                  <img src="/assets/refresh.svg" alt="새로고침 이미지" />
                 </span>
                 새로고침
               </RefreshButton>
