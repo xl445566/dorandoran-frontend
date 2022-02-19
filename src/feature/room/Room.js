@@ -46,7 +46,7 @@ const Room = () => {
         );
         dispatch(roomSliceActions.init());
         dispatch(authSliceActions.logoutRequest());
-        socketCharacterApi.exitUser();
+        socketCharacterApi.User();
       },
     });
   };

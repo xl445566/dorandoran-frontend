@@ -64,7 +64,7 @@ const useConnection = (roomId) => {
           connection.peer.signal(payload.signal);
         });
 
-        socketVideo.on("exitRoom", (partnerId) => {
+        socketVideo.on("Room", (partnerId) => {
           const disConnection = connectionList.current.find(
             (connection) => connection.id === partnerId
           );
