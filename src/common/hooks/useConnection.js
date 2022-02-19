@@ -1,24 +1,33 @@
 import { useEffect, useRef, useState } from "react";
 
+import { useDispatch } from "react-redux";
 import Peer from "simple-peer";
 
 import { socketVideoApi } from "../../modules/api/socketApi";
 import { socketVideo } from "../../modules/saga/socketSaga";
+import { videoSliceActions } from "../../modules/slice/videoSlice";
 
-const useConnection = (roomId) => {
+const useConnection = (roomId, userName) => {
   const myVideo = useRef();
   const connectionList = useRef([]);
   const [peerList, setPeerList] = useState([]);
+  const [participants, setParticipants] = useState({});
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const init = async () => {
       try {
         const stream = await navigator.mediaDevices.getUserMedia({
           video: true,
+          audio: true,
         });
 
         myVideo.current.srcObject = stream;
-        socketVideoApi.enterRoom(roomId);
+        socketVideoApi.enterRoom(roomId, userName);
+
+        socketVideo.on("participants", (participantObj) => {
+          setParticipants(participantObj);
+        });
 
         socketVideo.on("enterRoom", (otherUsers) => {
           const peers = [];
@@ -46,6 +55,7 @@ const useConnection = (roomId) => {
             payload.caller,
             stream
           );
+
           const connection = {
             id: payload.caller,
             peer,
@@ -64,7 +74,7 @@ const useConnection = (roomId) => {
           connection.peer.signal(payload.signal);
         });
 
-        socketVideo.on("exitRoom", (partnerId) => {
+        socketVideo.on("exitRoom", (partnerId, participantObj) => {
           const disConnection = connectionList.current.find(
             (connection) => connection.id === partnerId
           );
@@ -81,9 +91,11 @@ const useConnection = (roomId) => {
           setPeerList((peerConnection) =>
             peerConnection.filter((peer) => peer.id !== partnerId)
           );
+
+          setParticipants(participantObj);
         });
       } catch (error) {
-        console.log(error);
+        dispatch(videoSliceActions.saveError(error));
       }
     };
 
@@ -92,13 +104,15 @@ const useConnection = (roomId) => {
     return () => {
       connectionList.current = [];
       setPeerList([]);
+      setParticipants({});
 
+      socketVideo.off("participants");
       socketVideo.off("enterRoom");
       socketVideo.off("offer");
       socketVideo.off("answer");
       socketVideo.off("exitRoom");
 
-      socketVideoApi.leaveRoom();
+      socketVideoApi.leaveRoom(userName);
     };
   }, []);
 
@@ -142,6 +156,7 @@ const useConnection = (roomId) => {
   return {
     peerList,
     myVideo,
+    participants,
   };
 };
 

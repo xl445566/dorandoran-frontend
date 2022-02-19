@@ -13,7 +13,11 @@ const Video = ({ peerConnection }) => {
     };
   }, []);
 
-  return <video autoPlay playsInline ref={videoRef}></video>;
+  return (
+    <>
+      <video autoPlay playsInline ref={videoRef}></video>
+    </>
+  );
 };
 
 export default Video;

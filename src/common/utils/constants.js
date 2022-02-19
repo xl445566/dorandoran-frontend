@@ -1,0 +1,32 @@
+const constants = {
+  DEV: "development",
+  KAKAO_SDK_KEY: "6fe0be1f6b114e35d999d9c9ba281084",
+  KAKAO_SCOPE:
+    "profile_nickname, profile_image, account_email, gender, age_range",
+  ROUTE_MAIN: "/",
+  ROUTE_ROOM: "/room/:roomId",
+  ROUTE_VIDEO: "/video/:roomId",
+  ROUTE_ERROR: "/error",
+  ROUTE_NOTFOUND: "*",
+  SIZE_S: "small",
+  SIZE_M: "medium",
+  SIZE_L: "large",
+  ASSET_CHARACTERS: "/assets/characters/",
+  ASSET_REFRESH: "/assets/refresh.svg",
+  ASSET_LOGO: "/assets/logo.svg",
+  ASSET_ERROR_LOGO: "/assets/logo/error_logo.svg",
+  ASSET_LOGIN_BACKGROUND: "/assets/cards/card12.png",
+  ASSET_LOGIN_BUTTON: "/kakao_login_large_narrow.png",
+  ASSET_THINK: "/assets/think.svg",
+  REQUEST_AUTH_LOGIN: "/auth/login",
+  REQUEST_AUTH_LOGOUT: "/auth/logout",
+  REQUEST_AUTH_CLEAR: "/auth",
+  REQUEST_ROOMLIST_ROOM: "/rooms",
+  REQUEST_ROOMLIST_REFRESH: "/rooms/refresh",
+  REQUEST_ROOM_JOIN: "/rooms/joinedUser",
+  REQUEST_ROOM_LEAVE: "/rooms/deleteUser",
+  REQUEST_ROOM_CREATE: "/rooms/new",
+  REQUEST_ROOM_DETAIL: "/rooms/detail",
+};
+
+export default constants;

@@ -7,6 +7,7 @@ import styled from "styled-components";
 import Button from "../../common/components/Button";
 import Modal from "../../common/components/modal/Modal";
 import { useCharacter } from "../../common/hooks/useCharacter";
+import constants from "../../common/utils/constants";
 import { makeRandomRoomName } from "../../common/utils/makeRoomResource";
 import { socketCharacterApi } from "../../modules/api/socketApi";
 import { roomSliceActions } from "../../modules/slice/roomSlice";
@@ -31,7 +32,7 @@ const RoomCreate = ({ isShow, handleModalShowChange }) => {
         roomId: roomInfo._id,
         x: char.x,
         y: char.y,
-        type: "/assets/characters/",
+        type: constants.ASSET_CHARACTERS,
         side: char.side,
         isChatting: char.isChatting,
         name: currentUser.name,
@@ -58,7 +59,7 @@ const RoomCreate = ({ isShow, handleModalShowChange }) => {
         <Modal>
           <RoomCreateWrapper>
             <ImageWrapeer>
-              <img src="/assets/think.svg" alt="말 풍선 이미지" />
+              <img src={constants.ASSET_THINK} alt="말 풍선 이미지" />
             </ImageWrapeer>
             <h1 className="title">방 만들기</h1>
             <h1 className="roomName">
@@ -118,7 +119,7 @@ const RoomCreateWrapper = styled.div`
 
     .userSubject {
       width: 40%;
-      border-bottom: 3px solid var(--dark-gray-color);
+      border-bottom: 3px solid var(--light-gray-color);
       font-weight: 400;
     }
   }

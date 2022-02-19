@@ -6,6 +6,7 @@ import styled from "styled-components";
 
 import Header from "../../common/components/Header";
 import { useCharacter } from "../../common/hooks/useCharacter";
+import constants from "../../common/utils/constants";
 import createKey from "../../common/utils/createKey";
 import { socketCharacterApi } from "../../modules/api/socketApi";
 import { authSliceActions } from "../../modules/slice/authSlice";
@@ -68,11 +69,11 @@ const Room = () => {
 
   useEffect(() => {
     if (error) {
-      history.push("/error");
+      history.push(constants.ROUTE_ERROR);
     }
 
     if (!isLoggedIn) {
-      history.push("/");
+      history.push(constants.ROUTE_MAIN);
     }
 
     if (char.isChatting) {
@@ -170,23 +171,25 @@ const Room = () => {
           text="방 리스트로 가기"
           leftOnClick={handleRoomsPage}
         />
-        <Section>
-          {characters.map((character) => {
-            return (
-              <Character
-                key={createKey()}
-                count={character.moveCount}
-                isChatting={character.isChatting}
-                x={character.x}
-                y={character.y}
-                side={character.side}
-                name={character.name}
-                type={character.type}
-                profile={character.profile}
-              />
-            );
-          })}
-        </Section>
+        <MapWrapper>
+          <Map>
+            {characters.map((character) => {
+              return (
+                <Character
+                  key={createKey()}
+                  count={character.moveCount}
+                  isChatting={character.isChatting}
+                  x={character.x}
+                  y={character.y}
+                  side={character.side}
+                  name={character.name}
+                  type={character.type}
+                  profile={character.profile}
+                />
+              );
+            })}
+          </Map>
+        </MapWrapper>
       </Main>
     </>
   );
@@ -198,7 +201,12 @@ const Main = styled.main`
   background: var(--light-gray-color);
 `;
 
-const Section = styled.section`
+const MapWrapper = styled.section`
+  position: relative;
+  height: 800px;
+`;
+
+const Map = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;

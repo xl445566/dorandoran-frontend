@@ -6,6 +6,7 @@ import styled, { keyframes } from "styled-components";
 import { socketCharacterApi } from "../../modules/api/socketApi";
 import { roomSliceActions } from "../../modules/slice/roomSlice";
 import { useCharacter } from "../hooks/useCharacter";
+import constants from "../utils/constants";
 import createKey from "../utils/createKey";
 import { makeRandomRoomImage } from "../utils/makeRoomResource";
 
@@ -29,7 +30,7 @@ const Card = ({ roomInfo }) => {
       roomId: _id,
       x: char.x,
       y: char.y,
-      type: "/assets/characters/",
+      type: constants.ASSET_CHARACTERS,
       side: char.side,
       isChatting: char.isChatting,
       name: currentUserInfo.name,
@@ -79,7 +80,7 @@ const slideDown = keyframes`
 const ChatRoom = styled.li`
   border: 1px solid var(--light-grey-shadow-color);
   border-radius: 15px;
-  background: var(--white-color);
+  background: var(--light-gray-color);
   box-shadow: 10px 1px 10px 1px #655e584d;
   overflow: hidden;
   cursor: pointer;
@@ -88,8 +89,13 @@ const ChatRoom = styled.li`
   animation-name: ${slideUp};
   animation-fill-mode: both;
 
+  .img-container {
+    height: 50%;
+  }
   .text-container {
+    height: 50%;
     padding: 8px;
+    padding-bottom: 16px;
     background-color: var(--white-color);
   }
 

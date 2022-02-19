@@ -2,21 +2,23 @@ import React from "react";
 
 import styled from "styled-components";
 
+import constants from "../utils/constants";
+
 const Button = ({ onClick, text, type, size }) => {
   return (
     <>
-      {size === "small" && (
-        <Small data-testid="small" onClick={onClick} type={type}>
+      {size === constants.SIZE_S && (
+        <Small data-testid={constants.SIZE_S} onClick={onClick} type={type}>
           {text}
         </Small>
       )}
-      {size === "medium" && (
-        <Medium data-testid="medium" onClick={onClick} type={type}>
+      {size === constants.SIZE_M && (
+        <Medium data-testid={constants.SIZE_M} onClick={onClick} type={type}>
           {text}
         </Medium>
       )}
-      {size === "large" && (
-        <Large data-testid="large" onClick={onClick} type={type}>
+      {size === constants.SIZE_L && (
+        <Large data-testid={constants.SIZE_L} onClick={onClick} type={type}>
           {text}
         </Large>
       )}
