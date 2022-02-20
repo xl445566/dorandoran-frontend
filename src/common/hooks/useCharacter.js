@@ -2,29 +2,20 @@ import { useState } from "react";
 
 import mapSpots from "../../feature/room/resource/mapSpot";
 import { randomPos } from "../utils/randomPos";
+
 export const useCharacter = () => {
   const [pos, setPos] = useState(randomPos(mapSpots));
-
   const [side, setSide] = useState("down");
   const [isChatting, setIsChatting] = useState(false);
   const [chairZone, setChairZone] = useState("");
 
-  const moveLeft = () => {
+  const moveUp = () => {
     setPos((pos) => ({
-      x: canMove(pos.x - 1, pos.y) ? pos.x - 1 : pos.x,
-      y: pos.y,
+      x: pos.x,
+      y: canMove(pos.x, pos.y - 1) ? pos.y - 1 : pos.y,
     }));
 
-    setSide("left");
-  };
-
-  const moveRight = () => {
-    setPos((pos) => ({
-      x: canMove(pos.x + 1, pos.y) ? pos.x + 1 : pos.x,
-      y: pos.y,
-    }));
-
-    setSide("right");
+    setSide("up");
   };
 
   const moveDown = () => {
@@ -36,13 +27,22 @@ export const useCharacter = () => {
     setSide("down");
   };
 
-  const moveUp = () => {
+  const moveRight = () => {
     setPos((pos) => ({
-      x: pos.x,
-      y: canMove(pos.x, pos.y - 1) ? pos.y - 1 : pos.y,
+      x: canMove(pos.x + 1, pos.y) ? pos.x + 1 : pos.x,
+      y: pos.y,
     }));
 
-    setSide("up");
+    setSide("right");
+  };
+
+  const moveLeft = () => {
+    setPos((pos) => ({
+      x: canMove(pos.x - 1, pos.y) ? pos.x - 1 : pos.x,
+      y: pos.y,
+    }));
+
+    setSide("left");
   };
 
   const canMove = (x, y) => {
@@ -54,23 +54,23 @@ export const useCharacter = () => {
         return true;
       }
       if (mapSpots[y][x] === 2) {
-        setIsChatting(true);
         setChairZone("top");
+        setIsChatting(true);
 
         return true;
       } else if (mapSpots[y][x] === 3) {
-        setIsChatting(true);
         setChairZone("right");
+        setIsChatting(true);
 
         return true;
       } else if (mapSpots[y][x] === 4) {
-        setIsChatting(true);
         setChairZone("bottom");
+        setIsChatting(true);
 
         return true;
       } else if (mapSpots[y][x] === 5) {
-        setIsChatting(true);
         setChairZone("left");
+        setIsChatting(true);
 
         return true;
       }

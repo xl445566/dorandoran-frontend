@@ -8,11 +8,11 @@ import { socketVideo } from "../../modules/saga/socketSaga";
 import { videoSliceActions } from "../../modules/slice/videoSlice";
 
 const useConnection = (roomId, userName) => {
-  const myVideo = useRef();
-  const connectionList = useRef([]);
   const [peerList, setPeerList] = useState([]);
   const [participants, setParticipants] = useState({});
   const dispatch = useDispatch();
+  const myVideo = useRef();
+  const connectionList = useRef([]);
 
   useEffect(() => {
     const init = async () => {

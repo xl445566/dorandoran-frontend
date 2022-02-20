@@ -11,8 +11,8 @@ import { videoSliceActions } from "../../modules/slice/videoSlice";
 import constants from "../utils/constants";
 
 const NotFound = () => {
-  const history = useHistory();
   const dispatch = useDispatch();
+  const history = useHistory();
 
   const handleMainPage = () => {
     dispatch(authSliceActions.clearError());

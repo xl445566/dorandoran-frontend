@@ -1,5 +1,6 @@
 import React from "react";
 
+import PropTypes from "prop-types";
 import styled from "styled-components";
 
 import constants from "../utils/constants";
@@ -62,5 +63,15 @@ const RoomInfo = styled.div`
     top: 10px;
   }
 `;
+
+Header.propTypes = {
+  leftOnClick: PropTypes.func.isRequired,
+  centerOnClick: PropTypes.func,
+  rightOnClick: PropTypes.func.isRequired,
+  title: PropTypes.string.isRequired,
+  text: PropTypes.string.isRequired,
+  size: PropTypes.string,
+  type: PropTypes.string,
+};
 
 export default Header;

@@ -18,28 +18,26 @@ import { roomSliceActions } from "../../modules/slice/roomSlice";
 import Video from "./Video";
 
 const VideoChat = () => {
-  const location = useLocation();
   const error = useSelector((state) => state.room.error);
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
   const currentUser = useSelector((state) => state.auth.user);
   const roomInfo = useSelector((state) => state.room.info);
+  const event = useSelector((state) => state.video.event);
   const dispatch = useDispatch();
   const history = useHistory();
+  const location = useLocation();
   const params = useParams();
   const getPositionParams = location.state.position;
+  const effectRef = useRef();
+  const effectWrapperRef = useRef();
+  const otherEffect = useRef();
+  const otherEffectWrapper = useRef();
+  const emoticons = makeEmoticons();
 
   const { participants, peerList, myVideo } = useConnection(
     params.roomId,
     currentUser?.name
   );
-
-  const effectRef = useRef();
-  const effectWrapperRef = useRef();
-  const otherEffect = useRef();
-  const otherEffectWrapper = useRef();
-
-  const event = useSelector((state) => state.video.event);
-  const emoticons = makeEmoticons();
 
   useEffect(() => {
     if (error || !currentUser) {
@@ -242,7 +240,6 @@ const EffectWrapper = styled.div`
   border-radius: 15px;
   background: var(--white-color);
   box-shadow: 10px 1px 10px 1px #655e584d;
-
   animation-name: ${slide};
   animation-duration: 0.5s;
   animation-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94);

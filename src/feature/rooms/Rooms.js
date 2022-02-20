@@ -16,6 +16,7 @@ import ChatRoomList from "./ChatRoomList";
 import RoomCreate from "./RoomCreate";
 
 const Rooms = () => {
+  const [isCreateRoomModal, setIsCreateRoomModal] = useState(false);
   const roomList = useSelector((state) => state.roomList.roomList);
   const isLoading = useSelector((state) => state.roomList.isLoading);
   const error = useSelector((state) => state.roomList.error);
@@ -25,10 +26,8 @@ const Rooms = () => {
   const currentAddress = useSelector(
     (state) => state.auth.user.current_address
   );
-
-  const history = useHistory();
   const dispatch = useDispatch();
-  const [isCreateRoomModal, setIsCreateRoomModal] = useState(false);
+  const history = useHistory();
 
   useEffect(() => {
     if (isComplete) {
@@ -126,6 +125,7 @@ const NoSpaceArea = styled.div`
     margin: 25px 0px 15px;
     font-size: 50px;
   }
+
   p {
     color: var(--dark-gray-color);
     font-size: 30px;
@@ -137,15 +137,18 @@ const Entry = styled.main`
   background-color: #f6f8f9;
   color: var(--black-color);
 `;
+
 const MainBody = styled.section`
   display: flex;
   padding-top: 50px;
   align-items: center;
   justify-content: space-around;
+
   .icon {
     color: var(--black-color);
   }
 `;
+
 const Pagination = styled.div`
   display: flex;
   justify-content: space-around;
@@ -154,4 +157,5 @@ const Pagination = styled.div`
     padding: 50px;
   }
 `;
+
 export default Rooms;

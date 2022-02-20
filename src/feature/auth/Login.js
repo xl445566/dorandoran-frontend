@@ -13,13 +13,19 @@ const Login = () => {
   const [isAddress, setIsAddress] = useState(true);
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
   const kakaoError = useSelector((state) => state.auth.error);
-  const history = useHistory();
   const dispatch = useDispatch();
+  const history = useHistory();
   const scope = constants.KAKAO_SCOPE;
 
   useEffect(() => {
     kakaoApi.getUserLocation(setAddress, setIsAddress);
   }, []);
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      history.push(constants.ROUTE_MAIN);
+    }
+  }, [isLoggedIn]);
 
   const handleLogin = () => {
     dispatch(authSliceActions.cookieClear());
@@ -50,15 +56,10 @@ const Login = () => {
     window.Kakao.init(constants.KAKAO_SDK_KEY);
   }
 
-  useEffect(() => {
-    if (isLoggedIn) {
-      history.push(constants.ROUTE_MAIN);
-    }
-  }, [isLoggedIn]);
-
   const handleReload = () => {
     window.location.reload();
   };
+
   return (
     <>
       <Main>
@@ -165,6 +166,7 @@ const TitleImg = styled.div`
 const LocationErrorWrap = styled.div`
   width: 200px;
 `;
+
 const Button = styled.button`
   width: 200px;
 `;
@@ -179,10 +181,10 @@ const RefreshButton = styled.button`
 
   .refreshImage {
     display: inline-block;
-    vertical-align: sub;
     width: 15px;
     margin-right: 5px;
     overflow: hidden;
+    vertical-align: sub;
   }
 `;
 
@@ -191,4 +193,5 @@ const KakaoError = styled.p`
   color: #95a5a6;
   font-size: 20px;
 `;
+
 export default Login;

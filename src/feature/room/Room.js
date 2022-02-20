@@ -23,8 +23,9 @@ const Room = () => {
   const error = useSelector((state) => state.room.error);
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
   const currentUser = useSelector((state) => state.auth.user);
-  const history = useHistory();
+  const chairPosition = useSelector((state) => state.character.chairPosition);
   const dispatch = useDispatch();
+  const history = useHistory();
   const params = useParams();
 
   useEffect(() => {
@@ -34,6 +35,58 @@ const Room = () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
   }, [moveCount]);
+
+  useEffect(() => {
+    if (error) {
+      history.push(constants.ROUTE_ERROR);
+    }
+
+    if (!isLoggedIn) {
+      history.push(constants.ROUTE_MAIN);
+    }
+
+    if (char.isChatting) {
+      socketCharacterApi.enterChattingRoom(
+        char.chairZone,
+        char.x,
+        char.y,
+        params.roomId
+      );
+
+      history.push({
+        pathname: `/video/${params.roomId}`,
+        state: { position: char.chairZone },
+      });
+    }
+  }, [error, isLoggedIn, char.isChatting]);
+
+  useEffect(() => {
+    if (chairPosition) {
+      chairPosition.forEach((position) => {
+        if (position.inToRoom) {
+          mapSpots[position.y - 1][position.x] = 0;
+          mapSpots[position.y][position.x - 1] = 0;
+          mapSpots[position.y][position.x + 1] = 0;
+          mapSpots[position.y + 1][position.x] = 0;
+        } else {
+          mapSpots[position.y - 1][position.x] = 1;
+          mapSpots[position.y][position.x - 1] = 1;
+          mapSpots[position.y][position.x + 1] = 1;
+          mapSpots[position.y + 1][position.x] = 1;
+        }
+      });
+    }
+  }, [chairPosition]);
+
+  useEffect(() => {
+    socketCharacterApi.changeCurrentCharacter(
+      char.x,
+      char.y,
+      char.side,
+      moveCount,
+      char.isChatting
+    );
+  }, [moveCount, char.side, char.x, char.y, char.isChatting]);
 
   const handleLogout = () => {
     window.Kakao.API.request({
@@ -66,60 +119,6 @@ const Room = () => {
 
     history.push("/");
   };
-
-  useEffect(() => {
-    if (error) {
-      history.push(constants.ROUTE_ERROR);
-    }
-
-    if (!isLoggedIn) {
-      history.push(constants.ROUTE_MAIN);
-    }
-
-    if (char.isChatting) {
-      socketCharacterApi.enterChattingRoom(
-        char.chairZone,
-        char.x,
-        char.y,
-        params.roomId
-      );
-
-      history.push({
-        pathname: `/video/${params.roomId}`,
-        state: { position: char.chairZone },
-      });
-    }
-  }, [error, isLoggedIn, char.isChatting]);
-
-  const chairPosition = useSelector((state) => state.character.chairPosition);
-
-  useEffect(() => {
-    if (chairPosition) {
-      chairPosition.forEach((position) => {
-        if (position.inToRoom) {
-          mapSpots[position.y - 1][position.x] = 0;
-          mapSpots[position.y][position.x - 1] = 0;
-          mapSpots[position.y][position.x + 1] = 0;
-          mapSpots[position.y + 1][position.x] = 0;
-        } else {
-          mapSpots[position.y - 1][position.x] = 1;
-          mapSpots[position.y][position.x - 1] = 1;
-          mapSpots[position.y][position.x + 1] = 1;
-          mapSpots[position.y + 1][position.x] = 1;
-        }
-      });
-    }
-  }, [chairPosition]);
-
-  useEffect(() => {
-    socketCharacterApi.changeCurrentCharacter(
-      char.x,
-      char.y,
-      char.side,
-      moveCount,
-      char.isChatting
-    );
-  }, [moveCount, char.side, char.x, char.y, char.isChatting]);
 
   const handleKeyDown = (e) => {
     switch (e.code) {
