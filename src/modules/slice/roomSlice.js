@@ -6,9 +6,9 @@ export const roomSlice = createSlice({
     isComplete: false,
     isLoading: false,
     isShowModal: false,
+    isReload: false,
     error: "",
     info: null,
-    currentUserCount: 0,
   },
   reducers: {
     joinUser: (state) => {
@@ -50,9 +50,9 @@ export const roomSlice = createSlice({
     getCurrentRoomInfoSuccess: (state) => {
       state.isLoading = false;
     },
-    getCurrentRoomInfoFailure: (state, action) => {
+    getCurrentRoomInfoFailure: (state) => {
+      state.isReload = true;
       state.isLoading = false;
-      state.error = action.payload;
     },
     saveInfo: (state, action) => {
       state.info = action.payload;
@@ -65,6 +65,9 @@ export const roomSlice = createSlice({
     },
     changeIsShowModal: (state) => {
       state.isShowModal = !state.isShowModal;
+    },
+    changeIsReload: (state) => {
+      state.isReload = !state.isReload;
     },
     clearError: (state) => {
       state.error = "";

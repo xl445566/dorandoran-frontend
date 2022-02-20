@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 import PropTypes from "prop-types";
 import { useDispatch, useSelector } from "react-redux";
 import styled, { keyframes } from "styled-components";
 
 import { socketCharacterApi } from "../../modules/api/socketApi";
+import { roomListSliceActions } from "../../modules/slice/roomListSlice";
 import { roomSliceActions } from "../../modules/slice/roomSlice";
 import { useCharacter } from "../hooks/useCharacter";
 import constants from "../utils/constants";
@@ -13,11 +14,32 @@ import { makeRandomRoomImage } from "../utils/makeRoomResource";
 
 const Card = ({ roomInfo }) => {
   const char = useCharacter();
+  const isReload = useSelector((state) => state.room.isReload);
+  const isLoading = useSelector((state) => state.room.isLoading);
   const currentUser = useSelector((state) => state.auth.user._id);
   const currentUserInfo = useSelector((state) => state.auth.user);
   const dispatch = useDispatch();
   const images = makeRandomRoomImage();
   const { title, users, room_no, _id } = roomInfo;
+
+  useEffect(() => {
+    if (isReload) {
+      socketCharacterApi.enterRoom({
+        roomId: _id,
+        x: char.x,
+        y: char.y,
+        type: constants.ASSET_CHARACTERS,
+        side: char.side,
+        isChatting: char.isChatting,
+        name: currentUserInfo.name,
+        gender: currentUserInfo.gender,
+        profile: currentUserInfo.profile,
+      });
+
+      dispatch(roomListSliceActions.getRooms());
+      dispatch(roomSliceActions.changeIsReload());
+    }
+  }, [isReload, isLoading]);
 
   const joinedUser = () => {
     dispatch(
@@ -26,18 +48,6 @@ const Card = ({ roomInfo }) => {
         currentUser,
       })
     );
-
-    socketCharacterApi.enterRoom({
-      roomId: _id,
-      x: char.x,
-      y: char.y,
-      type: constants.ASSET_CHARACTERS,
-      side: char.side,
-      isChatting: char.isChatting,
-      name: currentUserInfo.name,
-      gender: currentUserInfo.gender,
-      profile: currentUserInfo.profile,
-    });
   };
 
   return (
