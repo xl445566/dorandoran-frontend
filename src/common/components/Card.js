@@ -15,7 +15,7 @@ import { makeRandomRoomImage } from "../utils/makeRoomResource";
 const Card = ({ roomInfo }) => {
   const char = useCharacter();
   const isReload = useSelector((state) => state.room.isReload);
-  const isLoading = useSelector((state) => state.room.isLoading);
+  const isEnter = useSelector((state) => state.room.isEnter);
   const currentUser = useSelector((state) => state.auth.user._id);
   const currentUserInfo = useSelector((state) => state.auth.user);
   const dispatch = useDispatch();
@@ -24,6 +24,11 @@ const Card = ({ roomInfo }) => {
 
   useEffect(() => {
     if (isReload) {
+      dispatch(roomListSliceActions.getRooms());
+      dispatch(roomSliceActions.changeIsReload());
+    }
+
+    if (isEnter) {
       socketCharacterApi.enterRoom({
         roomId: _id,
         x: char.x,
@@ -36,10 +41,9 @@ const Card = ({ roomInfo }) => {
         profile: currentUserInfo.profile,
       });
 
-      dispatch(roomListSliceActions.getRooms());
-      dispatch(roomSliceActions.changeIsReload());
+      dispatch(roomSliceActions.changeIsEnter());
     }
-  }, [isReload, isLoading]);
+  }, [isReload, isEnter]);
 
   const joinedUser = () => {
     dispatch(
