@@ -100,7 +100,7 @@ const Room = () => {
         );
         dispatch(roomSliceActions.init());
         dispatch(authSliceActions.logoutRequest());
-        socketCharacterApi.User();
+        socketCharacterApi.exitUser();
       },
     });
   };
