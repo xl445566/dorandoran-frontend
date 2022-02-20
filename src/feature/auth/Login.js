@@ -66,7 +66,7 @@ const Login = () => {
           <Title>
             도란
             <LogoImage>
-              <img src={constants.ASSET_LOGO} alt="logo" />
+              <img data-testid="img" src={constants.ASSET_LOGO} alt="logo" />
             </LogoImage>
             도란
           </Title>
