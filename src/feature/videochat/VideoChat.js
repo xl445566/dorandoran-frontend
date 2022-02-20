@@ -96,8 +96,9 @@ const VideoChat = () => {
             currentRoom: params.roomId,
           })
         );
-
+        dispatch(roomSliceActions.init());
         dispatch(authSliceActions.logoutRequest());
+        socketCharacterApi.exitUser();
       },
     });
   };
