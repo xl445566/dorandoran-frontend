@@ -74,11 +74,7 @@ const useConnection = (roomId, userName) => {
           connection.peer.signal(payload.signal);
         });
 
-<<<<<<< HEAD
-        socketVideo.on("Room", (partnerId) => {
-=======
         socketVideo.on("exitRoom", (partnerId, participantObj) => {
->>>>>>> main
           const disConnection = connectionList.current.find(
             (connection) => connection.id === partnerId
           );
