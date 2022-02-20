@@ -7,6 +7,7 @@ export const roomSlice = createSlice({
     isLoading: false,
     isShowModal: false,
     isReload: false,
+    isEnter: false,
     error: "",
     info: null,
   },
@@ -49,6 +50,7 @@ export const roomSlice = createSlice({
     },
     getCurrentRoomInfoSuccess: (state) => {
       state.isLoading = false;
+      state.isEnter = true;
     },
     getCurrentRoomInfoFailure: (state) => {
       state.isReload = true;
@@ -68,6 +70,9 @@ export const roomSlice = createSlice({
     },
     changeIsReload: (state) => {
       state.isReload = !state.isReload;
+    },
+    changeIsEnter: (state) => {
+      state.isEnter = !state.isEnter;
     },
     clearError: (state) => {
       state.error = "";
