@@ -188,10 +188,11 @@ const VideoWrapper = styled.section`
   align-items: center;
   justify-content: space-evenly;
   align-content: space-evenly;
-  grid-template-columns: repeat(2, minmax(600px, auto));
-  grid-template-rows: repeat(2, minmax(400px, auto));
+  grid-template-columns: repeat(2, minmax(500px, auto));
+  grid-template-rows: repeat(2, minmax(300px, auto));
   gap: 20px;
-  width: 1200px;
+  width: 1000px;
+  height: 700px;
   margin: auto;
 `;
 
@@ -201,8 +202,8 @@ const VideoBox = styled.div`
   height: 100%;
 
   video {
-    width: 600px;
-    height: 400px;
+    width: 500px;
+    height: 300px;
     border: 2px solid var(--orange-color);
     border-radius: 20px;
     box-sizing: border-box;
