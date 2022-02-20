@@ -37,4 +37,8 @@ ChatRoomList.propTypes = {
   roomList: PropTypes.arrayOf(PropTypes.object),
 };
 
+ChatRoomList.defaultProps = {
+  roomList: null,
+};
+
 export default ChatRoomList;
