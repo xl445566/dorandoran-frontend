@@ -8,6 +8,7 @@ export const roomSlice = createSlice({
     isShowModal: false,
     error: "",
     info: null,
+    currentUserCount: 0,
   },
   reducers: {
     joinUser: (state) => {

@@ -11,9 +11,6 @@ import { videoSliceActions } from "../../modules/slice/videoSlice";
 import constants from "../utils/constants";
 
 const Error = () => {
-  const history = useHistory();
-  const dispatch = useDispatch();
-
   const authError = useSelector(
     (state) => state.auth.error.response || state.auth.error
   );
@@ -27,6 +24,15 @@ const Error = () => {
     (state) => state.video.error.response || state.video.error
   );
 
+  const dispatch = useDispatch();
+  const history = useHistory();
+
+  const title =
+    authError?.status ||
+    roomListError?.status ||
+    roomError?.status ||
+    videoError?.status;
+
   const handleLoginPage = () => {
     dispatch(authSliceActions.clearError());
     dispatch(roomListSliceActions.clearError());
@@ -34,12 +40,6 @@ const Error = () => {
     dispatch(videoSliceActions.clearError());
     history.push(constants.ROUTE_MAIN);
   };
-
-  const title =
-    authError?.status ||
-    roomListError?.status ||
-    roomError?.status ||
-    videoError?.status;
 
   return (
     <>

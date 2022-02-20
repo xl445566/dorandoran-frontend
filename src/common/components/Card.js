@@ -1,5 +1,6 @@
 import React from "react";
 
+import PropTypes from "prop-types";
 import { useDispatch, useSelector } from "react-redux";
 import styled, { keyframes } from "styled-components";
 
@@ -12,9 +13,9 @@ import { makeRandomRoomImage } from "../utils/makeRoomResource";
 
 const Card = ({ roomInfo }) => {
   const char = useCharacter();
-  const dispatch = useDispatch();
   const currentUser = useSelector((state) => state.auth.user._id);
   const currentUserInfo = useSelector((state) => state.auth.user);
+  const dispatch = useDispatch();
   const images = makeRandomRoomImage();
   const { title, users, room_no, _id } = roomInfo;
 
@@ -81,17 +82,18 @@ const ChatRoom = styled.li`
   border: 1px solid var(--light-grey-shadow-color);
   border-radius: 15px;
   background: var(--light-gray-color);
-  box-shadow: 10px 1px 10px 1px #655e584d;
-  overflow: hidden;
-  cursor: pointer;
   animation-duration: 0.5s;
   animation-timing-function: ease-in-out;
   animation-name: ${slideUp};
   animation-fill-mode: both;
+  box-shadow: 10px 1px 10px 1px #655e584d;
+  cursor: pointer;
+  overflow: hidden;
 
   .img-container {
     height: 50%;
   }
+
   .text-container {
     height: 50%;
     padding: 8px;
@@ -135,5 +137,9 @@ const RoomNumber = styled.span`
   color: var(--scarlet-color);
   font-weight: bold;
 `;
+
+Card.propTypes = {
+  roomInfo: PropTypes.object,
+};
 
 export default Card;

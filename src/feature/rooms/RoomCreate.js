@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from "react";
 
+import PropTypes from "prop-types";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import styled from "styled-components";
@@ -13,15 +14,15 @@ import { socketCharacterApi } from "../../modules/api/socketApi";
 import { roomSliceActions } from "../../modules/slice/roomSlice";
 
 const RoomCreate = ({ isShow, handleModalShowChange }) => {
+  const char = useCharacter();
   const user = useSelector((state) => state.auth.user);
   const roomInfo = useSelector((state) => state.room.info);
   const isComplete = useSelector((state) => state.room.isComplete);
-  const roomNameRef = useRef();
+  const currentUser = useSelector((state) => state.auth.user);
   const dispatch = useDispatch();
   const history = useHistory();
+  const roomNameRef = useRef();
 
-  const char = useCharacter();
-  const currentUser = useSelector((state) => state.auth.user);
   useEffect(() => {
     if (isComplete && roomInfo) {
       history.push(`/room/${roomInfo._id}`);
@@ -148,5 +149,10 @@ const ImageWrapeer = styled.div`
   margin: auto;
   margin-bottom: 30px;
 `;
+
+RoomCreate.propTypes = {
+  isShow: PropTypes.bool.isRequired,
+  handleModalShowChange: PropTypes.func.isRequired,
+};
 
 export default RoomCreate;

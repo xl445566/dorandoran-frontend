@@ -26,8 +26,6 @@ const Modal = ({ size, children }) => {
   );
 };
 
-export default Modal;
-
 const ModalWrapper = styled.div`
   display: flex;
   justify-content: center;
@@ -51,8 +49,8 @@ const Overlay = styled.div`
   left: 0;
   width: 100%;
   height: 100%;
-  z-index: 1;
   background: #00000080;
+  z-index: 1;
 `;
 
 const Container = styled.div`
@@ -89,3 +87,5 @@ Modal.propTypes = {
   size: PropTypes.string,
   children: PropTypes.object,
 };
+
+export default Modal;

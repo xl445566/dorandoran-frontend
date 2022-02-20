@@ -18,6 +18,7 @@ const loginSaga = function* ({ payload }) {
       yield put(authSliceActions.loginFailure(response.data));
       return;
     }
+
     yield put(authSliceActions.loginSuccess(response.data));
   } catch (error) {
     yield put(authSliceActions.loginFailure(error));

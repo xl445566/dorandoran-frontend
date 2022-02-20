@@ -1,5 +1,6 @@
 import React from "react";
 
+import PropTypes from "prop-types";
 import styled from "styled-components";
 
 import Profile from "../../common/components/Profile";
@@ -11,6 +12,7 @@ const Character = ({ count, isChatting, x, y, side, name, type, profile }) => {
     right: [-142, -70],
     up: [-213, -70],
   };
+
   return (
     <>
       {isChatting ? (
@@ -36,8 +38,8 @@ const Character = ({ count, isChatting, x, y, side, name, type, profile }) => {
 
 const Container = styled.div`
   position: absolute;
-  left: ${(props) => props.left}px;
   top: ${(props) => props.top}px;
+  left: ${(props) => props.left}px;
   width: ${(props) => props.xPos}px;
   height: ${(props) => props.yPos}px;
   background-image: url(${(props) => props.type});
@@ -54,9 +56,20 @@ const UserName = styled.p`
   background: #0000007d;
   color: #fff;
   font-size: 15px;
-  white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
+  white-space: nowrap;
 `;
+
+Character.propTypes = {
+  count: PropTypes.number,
+  isChatting: PropTypes.bool.isRequired,
+  x: PropTypes.number.isRequired,
+  y: PropTypes.number.isRequired,
+  side: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
+  type: PropTypes.string.isRequired,
+  profile: PropTypes.string.isRequired,
+};
 
 export default Character;

@@ -19,8 +19,8 @@ const Profile = ({ type, text, left, top }) => {
 
 const Container = styled.div`
   position: absolute;
-  left: ${(props) => props.left}px;
   top: ${(props) => props.top}px;
+  left: ${(props) => props.left}px;
 `;
 
 const ProfileImageWrapper = styled.div`
@@ -55,9 +55,10 @@ const ChatOn = styled.span`
 `;
 
 Profile.propTypes = {
-  type: PropTypes.string,
-  gender: PropTypes.string,
-  text: PropTypes.string,
+  type: PropTypes.string.isRequired,
+  text: PropTypes.string.isRequired,
+  left: PropTypes.number.isRequired,
+  top: PropTypes.number,
 };
 
 export default Profile;

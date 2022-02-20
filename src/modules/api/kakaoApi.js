@@ -15,7 +15,6 @@ const getUserLocation = (setAddress, setIsAddress) => {
   const getAddr = (lat, lng) => {
     const geocoder = new window.kakao.maps.services.Geocoder();
     const coord = new window.kakao.maps.LatLng(lat, lng);
-
     const callback = function (result, status) {
       if (status === window.kakao.maps.services.Status.OK) {
         const address = result[0].address.address_name.split(" ", 2).join(" ");

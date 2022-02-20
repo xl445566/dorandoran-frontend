@@ -1,5 +1,6 @@
 import React from "react";
 
+import PropTypes from "prop-types";
 import styled from "styled-components";
 
 import Button from "../../common/components/Button";
@@ -28,5 +29,9 @@ const ModalContainer = styled.div`
     font-weight: 400;
   }
 `;
+
+RoomModal.propTypes = {
+  onClick: PropTypes.func.isRequired,
+};
 
 export default RoomModal;

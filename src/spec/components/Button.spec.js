@@ -50,6 +50,4 @@ describe("<Button/>", () => {
     userEvent.click(screen.getByText(text));
     expect(onClick).toHaveBeenCalledTimes(1);
   });
-
-  //bef
 });

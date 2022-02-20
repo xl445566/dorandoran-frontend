@@ -1,5 +1,6 @@
 import React from "react";
 
+import PropTypes from "prop-types";
 import styled from "styled-components";
 
 import constants from "../utils/constants";
@@ -93,5 +94,12 @@ const Large = styled.button`
       : null;
   }}
 `;
+
+Button.propTypes = {
+  onClick: PropTypes.func,
+  text: PropTypes.string.isRequired,
+  type: PropTypes.string,
+  size: PropTypes.string,
+};
 
 export default Button;

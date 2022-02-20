@@ -23,8 +23,9 @@ const Room = () => {
   const error = useSelector((state) => state.room.error);
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
   const currentUser = useSelector((state) => state.auth.user);
-  const history = useHistory();
+  const chairPosition = useSelector((state) => state.character.chairPosition);
   const dispatch = useDispatch();
+  const history = useHistory();
   const params = useParams();
 
   useEffect(() => {
@@ -34,38 +35,6 @@ const Room = () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
   }, [moveCount]);
-
-  const handleLogout = () => {
-    window.Kakao.API.request({
-      url: "/v1/user/unlink",
-      success: function () {
-        dispatch(
-          roomSliceActions.deleteUser({
-            currentUser: currentUser._id,
-            currentRoom: params.roomId,
-          })
-        );
-        dispatch(roomSliceActions.init());
-        dispatch(authSliceActions.logoutRequest());
-        socketCharacterApi.exitUser();
-      },
-    });
-  };
-
-  const handleRoomsPage = () => {
-    dispatch(
-      roomSliceActions.deleteUser({
-        currentUser: currentUser._id,
-        currentRoom: params.roomId,
-      })
-    );
-
-    dispatch(roomSliceActions.init());
-    dispatch(roomListSliceActions.getRooms());
-    socketCharacterApi.exitUser();
-
-    history.push("/");
-  };
 
   useEffect(() => {
     if (error) {
@@ -90,8 +59,6 @@ const Room = () => {
       });
     }
   }, [error, isLoggedIn, char.isChatting]);
-
-  const chairPosition = useSelector((state) => state.character.chairPosition);
 
   useEffect(() => {
     if (chairPosition) {
@@ -120,6 +87,38 @@ const Room = () => {
       char.isChatting
     );
   }, [moveCount, char.side, char.x, char.y, char.isChatting]);
+
+  const handleLogout = () => {
+    window.Kakao.API.request({
+      url: "/v1/user/unlink",
+      success: function () {
+        dispatch(
+          roomSliceActions.deleteUser({
+            currentUser: currentUser._id,
+            currentRoom: params.roomId,
+          })
+        );
+        dispatch(roomSliceActions.init());
+        dispatch(authSliceActions.logoutRequest());
+        socketCharacterApi.User();
+      },
+    });
+  };
+
+  const handleRoomsPage = () => {
+    dispatch(
+      roomSliceActions.deleteUser({
+        currentUser: currentUser._id,
+        currentRoom: params.roomId,
+      })
+    );
+
+    dispatch(roomSliceActions.init());
+    dispatch(roomListSliceActions.getRooms());
+    socketCharacterApi.exitUser();
+
+    history.push("/");
+  };
 
   const handleKeyDown = (e) => {
     switch (e.code) {

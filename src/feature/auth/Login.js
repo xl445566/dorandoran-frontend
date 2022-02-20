@@ -13,8 +13,8 @@ const Login = () => {
   const [isAddress, setIsAddress] = useState(true);
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
   const kakaoError = useSelector((state) => state.auth.error);
-  const history = useHistory();
   const dispatch = useDispatch();
+  const history = useHistory();
   const scope = constants.KAKAO_SCOPE;
 
   useEffect(() => {
@@ -166,6 +166,7 @@ const TitleImg = styled.div`
 const LocationErrorWrap = styled.div`
   width: 200px;
 `;
+
 const Button = styled.button`
   width: 200px;
 `;
@@ -180,10 +181,10 @@ const RefreshButton = styled.button`
 
   .refreshImage {
     display: inline-block;
-    vertical-align: sub;
     width: 15px;
     margin-right: 5px;
     overflow: hidden;
+    vertical-align: sub;
   }
 `;
 
@@ -192,4 +193,5 @@ const KakaoError = styled.p`
   color: #95a5a6;
   font-size: 20px;
 `;
+
 export default Login;

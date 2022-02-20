@@ -1,5 +1,6 @@
 import React from "react";
 
+import PropTypes from "prop-types";
 import styled from "styled-components";
 
 const LogoutButton = ({ onClick }) => {
@@ -22,5 +23,9 @@ const Logout = styled.button`
     transition: all 0.25s ease-out;
   }
 `;
+
+LogoutButton.propTypes = {
+  onClick: PropTypes.func.isRequired,
+};
 
 export default LogoutButton;
