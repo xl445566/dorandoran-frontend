@@ -142,4 +142,8 @@ Card.propTypes = {
   roomInfo: PropTypes.object,
 };
 
+Card.defaultProps = {
+  roomInfo: null,
+};
+
 export default Card;
