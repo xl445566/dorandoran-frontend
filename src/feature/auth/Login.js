@@ -21,6 +21,12 @@ const Login = () => {
     kakaoApi.getUserLocation(setAddress, setIsAddress);
   }, []);
 
+  useEffect(() => {
+    if (isLoggedIn) {
+      history.push(constants.ROUTE_MAIN);
+    }
+  }, [isLoggedIn]);
+
   const handleLogin = () => {
     dispatch(authSliceActions.cookieClear());
     window.Kakao.Auth.login({
@@ -50,15 +56,10 @@ const Login = () => {
     window.Kakao.init(constants.KAKAO_SDK_KEY);
   }
 
-  useEffect(() => {
-    if (isLoggedIn) {
-      history.push(constants.ROUTE_MAIN);
-    }
-  }, [isLoggedIn]);
-
   const handleReload = () => {
     window.location.reload();
   };
+
   return (
     <>
       <Main>
