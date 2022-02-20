@@ -15,7 +15,6 @@ import { makeRandomRoomImage } from "../utils/makeRoomResource";
 const Card = ({ roomInfo }) => {
   const char = useCharacter();
   const isReload = useSelector((state) => state.room.isReload);
-  const isEnter = useSelector((state) => state.room.isEnter);
   const currentUser = useSelector((state) => state.auth.user._id);
   const currentUserInfo = useSelector((state) => state.auth.user);
   const dispatch = useDispatch();
@@ -27,23 +26,7 @@ const Card = ({ roomInfo }) => {
       dispatch(roomListSliceActions.getRooms());
       dispatch(roomSliceActions.changeIsReload());
     }
-
-    if (isEnter) {
-      socketCharacterApi.enterRoom({
-        roomId: _id,
-        x: char.x,
-        y: char.y,
-        type: constants.ASSET_CHARACTERS,
-        side: char.side,
-        isChatting: char.isChatting,
-        name: currentUserInfo.name,
-        gender: currentUserInfo.gender,
-        profile: currentUserInfo.profile,
-      });
-
-      dispatch(roomSliceActions.changeIsEnter());
-    }
-  }, [isReload, isEnter]);
+  }, [isReload]);
 
   const joinedUser = () => {
     dispatch(
@@ -52,6 +35,18 @@ const Card = ({ roomInfo }) => {
         currentUser,
       })
     );
+
+    socketCharacterApi.enterRoom({
+      roomId: _id,
+      x: char.x,
+      y: char.y,
+      type: constants.ASSET_CHARACTERS,
+      side: char.side,
+      isChatting: char.isChatting,
+      name: currentUserInfo.name,
+      gender: currentUserInfo.gender,
+      profile: currentUserInfo.profile,
+    });
   };
 
   return (
